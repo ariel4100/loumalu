@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\Logincontroller;
 use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,7 +35,7 @@ Route::get('link', function () {
     echo $exitCode; // 0 exit code for no errors.
 });
 
-
+//Secciones
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('nosotros', [FrontendController::class, 'empresa'])->name('empresa');
 Route::get('descargas', [FrontendController::class, 'descargas'])->name('descargas');
@@ -54,4 +55,7 @@ Route::get('producto/{slug}', [FrontendController::class, 'producto'])->name('pr
 Route::get('blog/{slug?}', [FrontendController::class, 'novedades'])->name('novedades');
 Route::get('blog/noti/{slug}', [FrontendController::class, 'novedad'])->name('novedad');
 
+//Login Clientes
+Route::post('ingresar', [Logincontroller::class, 'login'])->name('auth.login');
+Route::post('registro', [Logincontroller::class, 'register'])->name('auth.registro');
 

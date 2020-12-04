@@ -55,7 +55,7 @@ class ContentController extends Controller
 //        dd($sliders);
         return Inertia::render('Admin/Section', [
             'contenido' => $contenido,
-            'timelines' => $contenidoMap->where('type','timeline')->values(),
+            'timelines' => $contenidoMap->where('type','texto')->values(),
             'imagenes' => $contenidoMap->where('type','img')->values(),
             'videos' => $contenidoMap->where('type','video')->values(),
             'images' => $contenidoMap->where('type','img')->values(),

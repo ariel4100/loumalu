@@ -1,7 +1,7 @@
 <template>
     <b-container fluid>
         <!-- User Interface controls -->
-        <b-row class="justify-content-between">
+        <b-row class="justify-content-between" v-if="search !== false">
             <b-col lg="6" class="my-1">
                 <b-form-group
                         label="Buscar:"
@@ -110,7 +110,7 @@
 <!--                </b-button>-->
                 <slot name="action" :item="row.item"></slot>
             </template>
-
+            <slot></slot>
             <template #row-details="row">
                 <b-card>
                     <ul>
@@ -141,7 +141,7 @@
 
 <script>
     export default {
-        props:['items','fields'],
+        props:['items','fields','onlyShow','search'],
         data() {
             return {
                 isBusy: false,
@@ -165,7 +165,7 @@
             fields_map(){
                 let campos = []
               if (this.fields){
-
+                  return this.fields
               }else{
                   campos = [
                       { key: 'title', label: 'Titulo', sortable: true, sortDirection: 'desc' },
@@ -177,23 +177,29 @@
                 return campos
             },
             items_map(){
+
                 let result = this.items.map((item)=>{
                     // console.log(item)
                     if(this.onlyShow){
-                        this.onlyShow.forEach((value)=>{
-                            console.log(value)
+                        let mostrar = {}
+                            this.onlyShow.forEach((e)=>{
+                            // console.log(e)
+                                mostrar[e] = item[e]
                         })
+                        console.log(['acaaaaaaaaaaa',mostrar])
+
+                        return mostrar
                     }else{
                         // console.log('entra')
                         return {
                             'title': item.title.es || ' - ',
-                            'order': item.order,
+                            'order': item.order || 'aa',
                             'featured': item.featured || 0,
                         }
                     }
                 })
 
-                return this.items
+                return result
             },
             sortOptions() {
                 // Create an options list from our fields

@@ -74,7 +74,12 @@ Vue.mixin({
             }else{
                 return key
             }
-        }
+        },
+        logout() {
+            axios.post(route('logout').url()).then(response => {
+                window.location = route('home');
+            })
+        },
     }
 })
 Vue.mixin({ methods: { route } });

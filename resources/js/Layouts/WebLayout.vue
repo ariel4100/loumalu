@@ -20,8 +20,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div v-if="this.errors.length > 0" class="alert alert-danger">
-                            <p v-for="(item,key) in this.errors">
+                        <div v-if="errors.length > 0" class="alert alert-danger">
+                            <p v-for="(item,key) in errors">
                                 {{ item.length > 0 ? item[0] : '' }}
                             </p>
                         </div>
@@ -42,9 +42,10 @@
                                 <label for="">{{ t('Clave') }}</label>
                                 <input type="password" class="form-control" v-model="registro.password"  required>
                             </div>
-                            <div class="col-md-12">
-                                <button type="submit" v-if="loader == 1" class="btn btn-primario btn-rounded text-white">{{ t('Registrar') }}</button>
-                                <button type="button" v-if="loader == 0" class="btn btn-primario btn-rounded text-white">{{ t('Registrar') }}</button>
+                            <div class="col-md-12 text-right">
+                                <button type="submit" v-if="loader == 1" class="btn btn-primario text-white">{{ t('Registrar') }}</button>
+                                <button type="button" v-if="loader == 0" class="btn btn-primario text-white">{{ t('Verificando') }} <i class="fas fa-sync fa-spin text-white"></i></button>
+                                <button type="button" v-if="loader == 2" class="btn btn-primario text-white">{{ t('Ingresando') }} <i class="fas fa-sync fa-spin"></i></button>
                             </div>
                         </form>
                     </div>
@@ -95,16 +96,22 @@
 
         methods: {
             registrar(){
+                this.loader = false
                 if (this.registro.nombre == '' || this.registro.email == '' || this.registro.password == '' || this.registro.username == ''){
-                    this.error = 'Complete lo Campos'
+                    this.errors = [{ error : 'Complete lo Campos'}]
                 }
                 axios.post(route('auth.registro',this.registro).url()).then(response => {
                    console.log(response)
                     if (response.data.hasOwnProperty('errors'))
                     {
                         this.loader = true;
-                        this.error = response.data.message;
-                        return false
+                        this.errors = response.data.message;
+                    }else{
+                        this.loader = 0;
+                        setTimeout(()=>{
+                            this.loader = 2;
+                            location.href = route('privada.home')
+                        },3000)
                     }
                     location.href = route('privada.home')
                 }).catch(error => {

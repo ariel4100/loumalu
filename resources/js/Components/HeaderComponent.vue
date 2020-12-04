@@ -32,11 +32,16 @@
                             </li>
                         </template>
                         <template v-if="$page.auth.check == true">
-                            <li class="nav-item dropdown">
-                                <a :href="route('privada.home')" class="nav-link p-md-4 text-white bg-terciario ">
-                                    <i class="fas fa-user mr-2  text-white"></i> {{ $page.auth.user.username.toUpperCase() || 'CLIENTE'}}
+                            <div class="dropdown">
+                                <a class="nav-link text-white texx dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ $page.auth.user.username.toUpperCase() || 'CLIENTE'}}  <i class="fas fa-user mr-2  text-dark"></i>
                                 </a>
-                            </li>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" :href="route('privada.home')">Pedidos</a>
+                                    <a class="dropdown-item" @click="logout()">Salir</a>
+                                </div>
+                            </div>
+
                         </template>
 
                     </div>

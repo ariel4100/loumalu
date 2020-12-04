@@ -57,3 +57,8 @@
         }
     }
 </script>
+<style>
+    thead tr {
+        border-bottom: 3px solid #DC532F;
+    }
+</style>
