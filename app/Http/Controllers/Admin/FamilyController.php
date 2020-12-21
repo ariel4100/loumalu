@@ -19,11 +19,11 @@ class FamilyController extends Controller
 
 
         return Inertia::render('Admin/Family', [
-            'categorias' => $categorias->map(function ($item) {
+            'categorias' => $categorias->map(function ($item,$key) {
                 return [
                     'id' => $item->id,
-                    'title' => $item->getTranslations('title'),
-                    'text' => $item->getTranslations('text'),
+                    'title' => Helpers::getTranslations($item,'title'),
+                    'text' => Helpers::getTranslations($item,'text'),
                     'description' => $item->getTranslations('description'),
                     'padre_id' => $item->padre_id,
                     'video' => $item->video,
@@ -82,11 +82,8 @@ class FamilyController extends Controller
 
     public function destroy($id)
     {
-        $item = Family::with('childFamilies')->find($id);
+        $item = Family::find($id);
 
-        $item->remove_hijos($item);
-//        dd('aca');
-//        $item->childFamilies()->delete();
         $item->delete();
         session()->flash('message', 'Se elimino correctamente.');
         return Redirect::route('adm.familias.index');

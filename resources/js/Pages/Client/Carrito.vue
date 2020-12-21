@@ -1,18 +1,58 @@
 <template>
     <client-layout class="">
-        <div class="container my-5">
+        <div v-if="carrito.length == 0" class="container my-5">
+            <h5 class="text-center">El carrito esta vacio.</h5>
+        </div>
+        <div v-else class="container my-5">
             <table-custom
-                    :items="items"
+                    :items="carrito"
                     :onlyShow="mostrar"
                     :fields="fields"
                     :search="false"
-            ></table-custom>
+                    :paginate="false"
+            >
+                <template #action="{ row }">
+                    <i @click="elimItemCart(row.index)" class="far fa-times-circle fa-lg"></i>
+                </template>
+                <template #cantidad="{ item }">
+                    <input @change="updateItemCart(item)" type="number" class="form-control" v-model="item.cantidad">
+                </template>
+            </table-custom>
             <div class="row my-4">
                 <div class="col-md-12">
                     <label for="">Observaciones</label>
-                    <textarea name="" id="" cols="30" rows="4" placeholder="Escriba aquí su texto de nota de pedido correspondiente"></textarea>
+                    <textarea v-model="mensage" class="form-control" cols="30" rows="4" placeholder="Escriba aquí su texto de nota de pedido correspondiente"></textarea>
+                </div>
+                <div class="col-md-7 col-lg-5 offset-md-5 offset-lg-7 my-4 ">
+                    <div class="d-flex justify-content-between align-items-center border-bottom">
+                        <div class="">
+                            <h5 class="semibold text-color">Subtotal</h5>
+                            <h5 class="semibold text-color">IVA (21%)</h5>
+                            <h5 class="semibold mt-4">Total</h5>
+                        </div>
+                        <div class="">
+                            <h5 class="semibold text-color">$ {{ subTotal() | toCurrency }}</h5>
+                            <h5 class="semibold text-color"> $ {{ subTotalWithIVA() | toCurrency }}</h5>
+                            <h4 class="semibold mt-4">$ {{ total() | toCurrency }}</h4>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p  class="text-right mb-3">
+                            <small>Precio final, IVA incluido</small>
+                        </p>
+                        <a :href="route('privada.home')" class="btn btn-outline-success">CONTINUAR PEDIDO</a>
+                        <a v-if="spinner == 0" @click="finalizarCampra()" class="btn btn-success">FINALIZAR COMPRA</a>
+                        <a v-if="spinner == 1" class="btn btn-success">
+                            <b-spinner small ></b-spinner>
+                            PROCENSANDO COMPRA
+                        </a>
+                        <a v-if="spinner == 2" class="btn btn-danger">
+                            ERROR AL PROCESAR PEDIDO
+                        </a>
+                    </div>
                 </div>
             </div>
+
         </div>
     </client-layout>
 </template>
@@ -23,6 +63,7 @@
     import ImageFile from '../../Components/ImageComponent'
     import Modal from '../../Components/ModalComponent'
     import Table from '@/Components/TableComponent'
+    import { mapState, mapActions } from 'vuex'
 
     export default {
         props: {
@@ -33,7 +74,10 @@
         },
         data(){
             return {
-                mostrar:['rubro','codigo','marca','producto','unidad','precio','cantidad','subtotal'],
+                mensage: '',
+                spinner: 0,
+                error: 0,
+                mostrar:['id','rubro','codigo','marca','producto','unidad','precio','cantidad','subtotal'],
                 items:[
                     { rubro: ' 067 ', codigo: 'MI00517280C/1C', marca: 'FORD', producto: 'PISTONES CON PERNO TIK Y NOZUMI', unidad: '4', precio: '$ 1.500,00', cantidad: '2', subtotal: '$ 18.000,00'},
                     { rubro: ' 067 ', codigo: 'MI00517280C/1C', marca: 'FORD', producto: 'PISTONES CON PERNO TIK Y NOZUMI', unidad: '4', precio: '$ 1.500,00', cantidad: '2', subtotal: '$ 18.000,00'},
@@ -46,21 +90,18 @@
                     { key: 'rubro', label: 'RUBRO',},
                     { key: 'codigo', label: 'CÓDIGO',},
                     { key: 'marca', label: 'MARCA',},
-                    { key: 'producto', label: 'PRODUCTO',},
-                    { key: 'unidad', label: 'UNIDAD',},
-                    { key: 'precio', label: 'PRECIO',},
+                    { key: 'producto', label: 'PRODUCTO', class: 'text-secundario'},
+                    { key: 'precio', label: 'PRECIO', class: 'text-center text-nowrap'},
                     { key: 'cantidad', label: 'CANTIDAD',},
-                    { key: 'subtotal', label: 'SUBTOTAL',},
+                    { key: 'subtotal', label: 'SUBTOTAL', class: 'text-center text-nowrap'},
+                    { key: 'actions', label: '',},
                 ],
-                category: {
-                    id: '',
-                    nombre: '',
-                    autorizado: '',
-                    clientes: [],
-                    visto: 0,
-                    image: '',
-                },
             }
+        },
+        computed: {
+            ...mapState({
+                carrito: state =>  state.carrito.carrito,
+            }),
         },
         components: {
             Modal,
@@ -71,26 +112,79 @@
 
         },
         methods: {
-            add(){
-                let data = new FormData()
+            ...mapActions('carrito', [
+                'updateItemCart',
+                'elimItemCart',
+            ]),
+            finalizarCampra(){
+                let data = {}
+                data['carrito'] = this.carrito
+                data['mensage'] = this.mensage || ''
+                data['total'] = this.total().toFixed(2)
+                data['subtotal'] = this.subTotal().toFixed(2)
+                data['subtotaliva'] = this.subTotalWithIVA().toFixed(2)
+                alertify.dialog('confirm')
+                    .setHeader('Confirmar Pedido')
+                    .set({
+                    transition:'zoom',
+                    movable:false,
+                    message: '<div class="text-center"><i class="far fa-question-circle text-info fa-6x"></i></div>' +
+                        '<h4 class="text-center mt-3">¿Estas seguro de finalizar la compra?</h4>',
+                    labels: {ok:'Confirmar', cancel:'Cancelar'},
+                    onok: (closeEvent) => {
+                        this.spinner = 1
+                        axios.post(route('privada.finalizar.compra',data)).then((res) => {
+                            console.log(res)
+                            if(res.data == 1){
+                                setTimeout(()=>{
+                                    this.spinner = 0
+                                    alertify.alert()
+                                        .setHeader('Pedido Realizado')
+                                        .setContent('<div class="text-center"><i class="far fa-check-circle text-success fa-6x"></i></div>' +
+                                            '<h2 class="text-center mt-3"> Su pedido fue procesado correctamente. </h1>'
+                                        ).show();
+                                    this.$store.state.carrito.carrito = []
+                                    localStorage.removeItem('carrito_intertrade')
+                                    setTimeout(()=>{
+                                        location.href = route('privada.estado.cuenta')
+                                    },3000)
 
-                data.append('id', this.category.id)
-                data.append('title', this.category.nombre || '')
-                data.append('image', this.category.image || '')
-                // data.append('hijo', this.category.hijo || '')
-                this.$inertia.post(route('privada.descarga'), data).then(() => {
-                    this.category = {
-                        id: '',
-                        nombre: '',
-                        autorizado: '',
-                        clientes: [],
-                        visto: 0,
-                        image: '',
-                    }
-                    // data.delete('image')
-                    $('.modal').modal('hide');
-                });
+
+                                },3000)
+                            }else{
+                                this.spinner = 2
+                            }
+                        }).catch(error => {
+                            console.log(error.response)
+                            this.spinner = 2
+                        });
+
+                    },
+                }).show();
+
+
             },
+            total() {
+                return this.subTotalWithIVA() + this.subTotal()
+            },
+            subTotalWithIVA() {
+                let precio = this.subTotal()
+                precio = ((precio * parseFloat(21)) / 100)
+                return precio
+            },
+            // subTotalDiscount(amount, percent) {
+            //     return amount-((amount*percent)/100)
+            // },
+            subTotal(){
+                let subtotal = 0;
+                this.carrito.forEach((producto, key)=>{
+                    // console.log(this.subTotalDiscount((producto.producto * producto.qty),producto.discount))
+                    subtotal += producto.precio * producto.cantidad
+                })
+                // subtotal = this.formatter.format(subtotal)
+                return subtotal
+            },
+
         },
     }
 </script>

@@ -13,8 +13,60 @@ import 'jodit/build/jodit.min.css'
 import JoditVue from 'jodit-vue'
 import Slick from 'vue-slick';
 import Multiselect from 'vue-multiselect'
+import store from './Store'
+import money from 'v-money'
 
+// register directive v-money and component <money>
+Vue.use(money, {
+    decimal: ',',
+    thousands: '.',
+    prefix: '$ ',
+    precision: 2,
+    masked: false
+})
 
+Vue.filter('toCurrency', function (numero, decimales = 2) {
+    let separadorDecimal = ','
+    let separadorMiles = '.'
+    let partes, array;
+
+    if ( !isFinite(numero) || isNaN(numero = parseFloat(numero)) ) {
+        return "";
+    }
+    if (typeof separadorDecimal==="undefined") {
+        separadorDecimal = ",";
+    }
+    if (typeof separadorMiles==="undefined") {
+        separadorMiles = "";
+    }
+
+    // Redondeamos
+    if ( !isNaN(parseInt(decimales)) ) {
+        if (decimales >= 0) {
+            numero = numero.toFixed(decimales);
+        } else {
+            numero = (
+                Math.round(numero / Math.pow(10, Math.abs(decimales))) * Math.pow(10, Math.abs(decimales))
+            ).toFixed();
+        }
+    } else {
+        numero = numero.toString();
+    }
+
+    // Damos formato
+    partes = numero.split(".", 2);
+    array = partes[0].split("");
+    for (var i=array.length-3; i>0 && array[i-1]!=="-"; i-=3) {
+        array.splice(i, 0, separadorMiles);
+    }
+    numero = array.join("");
+
+    if (partes.length>1) {
+        numero += separadorDecimal + partes[1];
+    }
+
+    return numero;
+});
 Vue.mixin({
     data(){
         return {
@@ -93,6 +145,8 @@ Vue.use(JoditVue)
 
 Vue.component(JoditVue)
 Vue.component(Slick)
+Vue.component(money)
+
 Vue.component('multiselect', Multiselect)
 
 const app = document.getElementById('app');
@@ -105,4 +159,5 @@ new Vue({
                 resolveComponent: (name) => require(`./Pages/${name}`).default,
             },
         }),
+    store,
 }).$mount(app);

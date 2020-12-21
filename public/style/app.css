@@ -12586,3 +12586,11 @@ a.text-terciario:focus {
   }
 }
 
+.border-success {
+  border: 2px solid #00c851 !important;
+}
+
+.border-warning {
+  border: 2px solid #EFB96D !important;
+}
+

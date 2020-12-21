@@ -11,7 +11,7 @@
 <!--                    <div class="sidebar-brand-icon rotate-n-15">-->
 <!--                        <i class="fas fa-laugh-wink"></i>-->
 <!--                    </div>-->
-                    <div class="sidebar-brand-text mx-3">EMONA S.R.L.</div>
+                    <div class="sidebar-brand-text mx-3">{{ $page.appName || 'ADMINISTRADOR'}}</div>
                 </a>
 
                 <!-- Divider -->
@@ -60,6 +60,11 @@
                     Zona Clientes
                 </div>
                 <li class="nav-item">
+                    <inertia-link class="nav-link" :href="route('adm.pedidos.index')">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Pedidos</span>
+                    </inertia-link>
+
                     <inertia-link class="nav-link" :href="route('adm.content.index',{ section: 'reclamos'})">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Reclamos</span>
@@ -271,7 +276,7 @@
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Your Website 2020</span>
+                            <span>Copyright &copy; {{ $page.appName || 'Administrador'}} 2020</span>
                         </div>
                     </div>
                 </footer>
@@ -317,10 +322,6 @@
                             {
                                 nombre: 'Familias',
                                 ruta: route('adm.familias.index'),
-                            },
-                            {
-                                nombre: 'Subfamilias',
-                                ruta: route('adm.subfamilias.index'),
                             },
                             {
                                 nombre: 'Productos',

@@ -3,6 +3,7 @@
 namespace App\Extensions;
 
 use Illuminate\Support\Facades\Storage;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class Helpers
 {
@@ -116,7 +117,6 @@ class Helpers
         return $images;
 	}
 
-
     public static function saveMultipleImageWithData($items, $route, $model = null, $id = null)
     {
         if($items != null){
@@ -223,4 +223,16 @@ class Helpers
     	return false;
 	}
 
+	public static function getTranslations($item, $name){
+ 	    $idiomas = LaravelLocalization::getSupportedLocales();
+        $getIdiomas = collect($idiomas)->map(function ($item, $key) {
+            return '';
+        })->toArray();
+//        dd($getIdiomas);
+        $data = $item->toArray();
+        if ($data[$name] == null){
+            return $getIdiomas;
+        }
+        return $data[$name];
+    }
 }

@@ -63,7 +63,7 @@
             handleOk(bvModalEvt) {
                 this.$emit('ok')
                 // Prevent modal from closing
-                // bvModalEvt.preventDefault()
+                bvModalEvt.preventDefault()
                 // Trigger submit handler
                 // this.handleSubmit()
             },

@@ -1,16 +1,36 @@
 <template>
     <client-layout class="">
         <div class="container my-5">
-            <table-custom
-                    :items="items"
-                    :onlyShow="mostrar"
-                    :fields="fields"
-                    :search="false"
-            >
-                <template #default>
-
+            <b-table responsive  hover :items="pedidos" :fields="fields">
+                <template  #cell(actions)="row">
+                    <a class="btn btn-success"  @click="row.toggleDetails">
+                        {{ row.detailsShowing ? 'OCULTAR' : 'VER' }}  DETALLE
+                    </a>
                 </template>
-            </table-custom>
+                <template #cell(estado)="row">
+                    <span v-if="row.value == 'pendiente'" class="border-warning text-uppercase font-weight-bold text-warning px-4 py-2">
+                         {{ row.item.estado }}
+                    </span>
+                    <span v-else class="border-success text-uppercase font-weight-bold text-success px-4 py-2">
+                         {{ row.item.estado }}
+                    </span>
+                </template>
+                <template #cell(total)="row">
+                    $ {{ row.item.total | toCurrency }}
+                </template>
+                <template #cell(total_iva)="row">
+                    $ {{ row.item.total_iva | toCurrency }}
+                </template>
+                <template #row-details="row">
+                    <b-card>
+                        <b-list-group v-if="row.item.productos.length > 0">
+                            <b-list-group-item v-for="(value, key) in row.item.productos" :key="key">
+                                {{ value.cantidad }} x {{ value.producto }} <b>Cod:</b> {{ value.codigo }}
+                            </b-list-group-item>
+                        </b-list-group>
+                    </b-card>
+                </template>
+            </b-table>
         </div>
     </client-layout>
 </template>
@@ -24,7 +44,7 @@
     export default {
         props: {
             sliders: Array,
-            bloques: Array,
+            pedidos: Array,
             contenido: Object,
             descargas: Array,
         },
@@ -39,11 +59,12 @@
                     { numero: '25', fecha: '12-11-18', estado: 'pendiente', total: 'pendiente', total_iva: '$ 1.580,00'},
                 ],
                 fields: [
-                    { key: 'numero', label: 'NÚMERO',},
-                    { key: 'fecha', label: 'FECHA',},
-                    { key: 'estado', label: 'ESTADO',},
-                    { key: 'total', label: 'TOTAL',},
-                    { key: 'total_iva', label: 'TOTAL (IVA incluído) ',},
+                    { key: 'numero', label: 'NÚMERO', class: 'text-center'},
+                    { key: 'fecha', label: 'FECHA', class: 'text-center'},
+                    { key: 'estado', label: 'ESTADO', class: 'text-center'},
+                    { key: 'total', label: 'TOTAL', class: 'text-center'},
+                    { key: 'total_iva', label: 'TOTAL (IVA incluído) ', class: 'text-center'},
+                    { key: 'actions', label: '',},
                 ],
                 category: {
                     id: '',

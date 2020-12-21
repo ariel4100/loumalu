@@ -6,7 +6,9 @@
                     <button type="button" @click="addBlock(lang)" class="btn btn-info mb-4">{{ btnTitle || 'Agregar Bloque' }}</button>
                 </div>
                 <template v-if="only == undefined">
-                    <div class="row border p-3 mb-4" v-for="(item,key) in bloques">
+                    <div class="row border p-3 mb-4 position-relative" v-for="(item,key) in bloques">
+                        <span @click="del(item,key)" class="badge badge-danger text-white rounded-circle position-absolute" style="top: 0; right: 0; cursor: pointer;">X</span>
+
                         <div class="col-md-6">
                             <div class="col-md-12 form-group">
                                 <label for="">Titulo</label>
@@ -26,7 +28,9 @@
                 </template>
                 <template v-if="only == 'text'">
                     <div class="row border p-3 mb-4">
-                        <div  v-for="(item,key) in bloques" class="col-md-4 mb-4">
+                        <div  v-for="(item,key) in bloques" class=" mb-4 position-relative" :class="bloques.length == 1 ? 'col-md-12' : 'col-md-6 col-lg-6'">
+                            <span @click="del(item,key)" class="badge badge-danger text-white rounded-circle position-absolute" style="top: 0; right: 0; cursor: pointer;">X</span>
+
                             <div class="col-md-12 form-group">
                                 <label for="">Titulo</label>
                                 <input type="text" v-model="item.title[lang]" class="form-control">
@@ -41,25 +45,31 @@
                 </template>
                 <template v-if="only == 'image'">
                     <div class="row border p-3 mb-4">
-                        <div  v-for="(item,key) in bloques" class="col-md-3 mb-4">
-                            <div class="form-group">
-                                <label for="">Titulo</label>
-                                <input type="text" v-model="item.title[lang]" class="form-control">
+                        <div  v-for="(item,key) in bloques" class="col-md-4 mb-4 position-relative">
+                            <span @click="del(item,key)" class="badge badge-danger text-white rounded-circle position-absolute" style="top: -5px; right: 5px; cursor: pointer;     z-index: 5;;">X</span>
+
+
+                            <div class="form-group" v-if="$page.contenido.section == 'representadas'">
+                                <label for="">URL</label>
+                                <input type="text" v-model="item.text[lang]" class="form-control">
                             </div>
-<!--                            <div class="form-group" >-->
-<!--                                <label for="">Texto</label>-->
-<!--                                <textarea v-model="item.text[lang]" class="form-control"  cols="30" rows="2"></textarea>-->
-<!--&lt;!&ndash;                                <input type="text" v-model="item.text[lang]" class="form-control">&ndash;&gt;-->
-<!--                            </div>-->
                             <div class="">
                                 <image-custom :model.sync="item.image"></image-custom>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Texto</label>
+                                <textarea v-model="item.title[lang]" class="form-control"  cols="30" rows="2"></textarea>
+
+                                <!--                                <input type="text" v-model="item.title[lang]" class="form-control">-->
                             </div>
                         </div>
                     </div>
                 </template>
                 <template v-if="only == 'video'">
                     <div class="row border p-3 mb-4">
-                        <div  v-for="(item,key) in bloques" class="col-md-6 mb-4">
+                        <div  v-for="(item,key) in bloques" class="col-md-6 mb-4 position-relative">
+                            <span @click="del(item,key)" class="badge badge-danger text-white rounded-circle position-absolute" style="top: 0; right: 0; cursor: pointer;">X</span>
+
                             <div class="col-md-12 form-group">
                                 <label for="">Codigo de youtube - <small>https://www.youtube.com/watch?v=<b>HFOslNedk38</b></small></label>
                                 <input type="text" v-model="item.title[lang]" class="form-control mb-3">
@@ -100,8 +110,16 @@
             this.bloques = this.model || []
         },
         watch: {
-            bloques: function () {
-                this.$emit('update:model', this.bloques || [])
+            model: function(){
+                console.log('entra en model')
+                this.bloques = this.model
+            },
+            bloques: {
+                handler(val){
+                    console.log('entra')
+                    this.$emit('update:model', this.bloques || [])
+                },
+                deep: true
             },
         },
         methods: {
@@ -132,6 +150,30 @@
                     image:'',
                 })
             },
+
+            del(item,key){
+                console.log([item,key])
+                if (item.id) {
+                    Swal.fire({
+                        title: '¿Estas seguro de eliminar?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Si',
+                        cancelButtonText: 'No'
+                    }).then((result) => {
+                        if (result.value) {
+                            this.$inertia.get(route('adm.content.destroy.block',{id: item.id})).then(() => {
+
+                            })
+                        }
+                    })
+                }else{
+                    this.bloques.splice(key,1);
+                }
+
+
+            },
+
             handleSubmit() {
                 // Exit when the form isn't valid
                 if (!this.checkFormValidity()) {
@@ -147,3 +189,8 @@
         }
     }
 </script>
+<style>
+    .tabs .card-header{
+        display: none !important;
+    }
+</style>

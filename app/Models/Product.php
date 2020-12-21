@@ -16,7 +16,7 @@ class Product extends Model
     ];
 
     protected $fillable = [
-        'title', 'text','order','slug','video','image','description','file','family_id','text_video','gallery'
+        'title', 'text','order','slug','video','image','description','file','family_id','text_video','gallery','mlproducto_id'
     ];
 
     public $translatable = [
@@ -26,6 +26,12 @@ class Product extends Model
         'description',
         'slug',
     ];
+
+
+    public function product_intertrade()
+    {
+        return $this->setConnection('aguila')->belongsTo(ProductIntertrade::class,'mlproducto_id','IdMlProducto');
+    }
 
     public function family() {
         return $this->belongsTo(Family::class);

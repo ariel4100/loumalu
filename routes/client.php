@@ -28,5 +28,6 @@ Route::get('estado-cuenta', [ClientController::class, 'estado_cuenta'])->name('e
 Route::get('envios', [ClientController::class, 'envios'])->name('envios');
 Route::get('reclamos', [ClientController::class, 'reclamos'])->name('reclamos');
 Route::get('historico', [ClientController::class, 'historico'])->name('historico');
+Route::post('finalizar-compra', [ClientController::class, 'finalizar_compra'])->name('finalizar.compra');
 
 

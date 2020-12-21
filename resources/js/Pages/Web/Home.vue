@@ -13,7 +13,7 @@
                 <h5 class="m-0 font-weight-bold">Nuestros Productos Destacados</h5>
             </div>
             <div class="row">
-                <template v-for="item in destacados">
+                <template v-for="item in destacados_p">
                     <div class="col-md-3 mb-5">
                         <product-card :item="item" type="1"></product-card>
                     </div>
@@ -77,6 +77,7 @@
             sliders: Array,
             marcas: Array,
             destacados: Array,
+            destacados_p: Array,
         },
         data(){
           return {

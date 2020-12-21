@@ -62,7 +62,19 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-
+        env('aguila') => array(
+            'driver'    => 'mysql',
+            'host'      => env('AGUILA_DB_HOST', '127.0.0.1'),
+            'database'  => env('AGUILA_DB_DATABASE', 'forge'),
+            'username'  => env('AGUILA_DB_USERNAME', 'forge'),
+            'password'  => env('AGUILA_DB_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix'    => '',
+            'options'   => [
+                \PDO::ATTR_EMULATE_PREPARES => true
+            ]
+        ),
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\SubfamilyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,11 +34,11 @@ Route::post('/contenido-slider', [ContentController::class, 'slider'])->name('co
 Route::get('/destroy/slider/{id}', [ContentController::class, 'destroy_slider'])->name('content.destroy.slider');
 Route::post('/contenido-logo', [ContentController::class, 'logos'])->name('content.logo');
 
+Route::resource('pedidos', OrderController::class);
 Route::resource('categorias', CategoryController::class);
 Route::resource('noticias', NewsController::class);
 Route::resource('descargas', DescargaController::class);
 Route::resource('familias', FamilyController::class);
-Route::resource('subfamilias', SubfamilyController::class);
 Route::resource('productos', ProductController::class);
 Route::resource('usuarios', UserController::class);
 Route::resource('metas', MetaController::class);

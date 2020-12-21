@@ -28,12 +28,12 @@
                                     <label class="custom-control-label" for="customSwitch1">Mostrar en la Sección Principal?</label>
                                 </div>
                             </div>
-                            <div class="col-md-12 form-group" v-if="category.padre_id != null">
-                                <label for="">Texto</label>
-                                <jodit-vue v-model="category.text[lang]" :id="'text-'+lang"></jodit-vue>
+<!--                            <div class="col-md-12 form-group" v-if="category.padre_id != null">-->
+<!--                                <label for="">Texto</label>-->
+<!--                                <jodit-vue v-model="category.text[lang]" :id="'text-'+lang"></jodit-vue>-->
 
 <!--                                <textarea v-model="category.text[lang]" class="form-control"  cols="30" rows="3"></textarea>-->
-                            </div>
+<!--                            </div>-->
                         </div>
                     </template>
                     <template #default>
@@ -72,6 +72,7 @@
     import ImageFile from '@/Components/ImageComponent'
     import Modal from '@/Components/ModalComponent'
     import Table from '@/Components/TableComponent'
+    import { mapState, mapActions } from 'vuex'
 
 
     export default {
@@ -105,10 +106,10 @@
 
         computed:{
             familias_principales(){
-              // let selects = this.selectedValue.push({
-              //     value: this.selectedCat,
-              //     id: this.selectedCat.id,
-              // })
+                // let selects = this.selectedValue.push({
+                //     value: this.selectedCat,
+                //     id: this.selectedCat.id,
+                // })
 
                 let result = this.categorias.filter((item)=>{
                     if (item.padre_id == null){
@@ -116,11 +117,16 @@
                     }
                 })
 
-              return result
-          },
+                return result
+            },
+            ...mapState({
+                admin: state =>  state.admin,
+            }),
         },
         methods: {
-
+            ...mapActions('admin', [
+                'eliminar',
+            ]),
             reset(){
                 this.category = {
                     id: '',
@@ -155,26 +161,7 @@
                 this.$root.$emit('bv::show::modal','modal-prevent-closing')
             },
             del(id){
-                Swal.fire({
-                    title: '¿Estas seguro de eliminar?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si',
-                    cancelButtonText: 'No'
-                }).then((result) => {
-                    if (result.value) {
-                        this.$inertia.delete(route('adm.familias.destroy',{id: id})).then(() => {
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Se elimino correctamente',
-                            //     showConfirmButton: false,
-                            //     timer: 2000
-                            // })
-                            $('.modal').modal('hide');
-                        })
-                    }
-                })
-
+                this.eliminar(route('adm.familias.destroy',{id: id}))
             },
         },
     }

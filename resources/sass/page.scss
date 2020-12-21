@@ -334,7 +334,25 @@ ul li a.nav-link:hover{
 
 }
 
-
+.semibold{
+  font-weight: 700;
+}
 .hover-link:hover{
   color: $secondary-color !important;
+}
+.btn{
+  padding: 0.375rem 0.75rem !important;
+}
+
+.border{
+  &-success{
+    border: 2px solid #00c851;
+  }
+  &-warning{
+    border: 2px solid #EFB96D;
+  }
+}
+
+.ph-white::placeholder {
+  color: white;
 }

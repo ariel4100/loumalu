@@ -72,6 +72,7 @@
     import AppLayout from '../../Layouts/AppLayout'
     import ImageFile from '../../Components/ImageComponent'
     import Modal from '../../Components/ModalComponent'
+    import { mapState, mapActions } from 'vuex'
 
     export default {
         props: {
@@ -98,7 +99,9 @@
             'image-custom': ImageFile,
         },
         methods: {
-
+            ...mapActions('admin', [
+                'eliminar',
+            ]),
             reset(){
                 this.category = {
                     id: '',
@@ -130,26 +133,7 @@
                 this.$root.$emit('bv::show::modal','modal-prevent-closing')
             },
             del(id){
-                Swal.fire({
-                    title: '¿Estas seguro de eliminar?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si',
-                    cancelButtonText: 'No'
-                }).then((result) => {
-                    if (result.value) {
-                        this.$inertia.delete(route('adm.categorias.destroy',{id: id})).then(() => {
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Se elimino correctamente',
-                            //     showConfirmButton: false,
-                            //     timer: 2000
-                            // })
-                            $('.modal').modal('hide');
-                        })
-                    }
-                })
-
+                this.eliminar(route('adm.categorias.destroy',{id: id}))
             },
         },
     }

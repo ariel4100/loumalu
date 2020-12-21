@@ -1,39 +1,62 @@
 <template>
     <web-layout class="">
-        <buscador
-        ></buscador>
+        <div class=" ">
+            <div class="container">
+                <h5 class="section-title text-color">
+                    <i class="fas fa-home"></i>
+                    <a :href="route('familias')" class="text-color">
+                        {{ t('PRODUCTOS') }}
+                    </a>
+                    <a v-if="familia" :href="route('productos',{ slug: familia.slug })" class="text-color">
+                        {{ (familia ? '| '+familia.title : '') }}
+                    </a>
+                    {{ (producto ? '| '+producto.title : '') }}
+                </h5>
+            </div>
+        </div>
         <div class="container my-5">
             <div class="row">
-                <div class="col-md-6 mb-5">
-                    <carousel :images="gallery"  producto="1"></carousel>
+                <div class="col-md-3">
+                    <sidenav
+                            :familia-id="familia.id"
+                            :producto-id="producto.id"
+                            :familias="familias"
+                    ></sidenav>
                 </div>
-                <div class="col-md-6 mb-5">
-                    <h4 class="text-primario">
-                        {{ producto.title }}
-                    </h4>
-                    <hr align="left" width="50" class="mt-1 bg-primario">
-
-                    <div class="" v-html="producto.text"></div>
-                    <a v-if="producto.file" :href="producto.file" download   class="btn btn-outline-secundario  btn-rounded">DESCARGAR FICHA <i class="fas fa-download"></i></a>
-                    <a :href="route('contacto')" class="btn btn-secundario text-white btn-rounded">CONSULTAR</a>
-                </div>
-                <div class="col-md-6 bg-light mb-5 d-flex justify-content-center align-items-center" v-if="producto.video">
-                    <div class="">
-                        <p style="white-space: pre-line;">{{ producto.text_video }}</p>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-5" v-if="producto.video">
-                    <iframe width="100%" height="300" :src="'https://www.youtube.com/embed/'+producto.video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="col-md-12">
-                    <h4 class="text-primario">PRODUCTOS RELACIONADOS</h4>
-                    <hr align="left" width="50" class="mt-1 bg-primario">
+                <div class="col-md-9">
                     <div class="row">
-                        <template v-for="item in productos">
-                            <div class="col-md-3 mb-4">
-                                <product-card :item="item" type="1"></product-card>
+                        <div class="col-md-6 mb-5">
+                            <carousel :images="gallery"  producto="1" arrows="1"></carousel>
+                        </div>
+                        <div class="col-md-6 mb-5">
+                            <h4 class="text-secundario font-weight-bold">
+                                {{ producto.title }}
+                            </h4>
+
+                            <div class="" v-html="producto.text"></div>
+                            <a v-if="producto.file" :href="producto.file" download   class="btn btn-secundario">DESCARGAR FICHA  </a>
+                            <a :href="route('contacto')" class="btn btn-secundario text-white">CONSULTAR</a>
+                        </div>
+                        <div class="col-md-4 mb-5 d-flex justify-content-center align-items-center" v-if="producto.video" style="background-color:#F6F6F6;">
+                            <div class="">
+                                <p style="white-space: pre-line;">{{ producto.text_video }}</p>
                             </div>
-                        </template>
+                        </div>
+                        <div class="col-md-8 mb-5" v-if="producto.video">
+                            <iframe width="100%" height="300" :src="'https://www.youtube.com/embed/'+producto.video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="col-md-12" v-if="productos.length > 0">
+                            <h5 class="text-secundario">Productos relacionados</h5>
+                            <hr   class="mt-1 bg-secundario">
+                            <div class="row">
+                                <template v-for="item in productos">
+                                    <div class="col-md-4 col-sm-6 col-lg-4 mb-4">
+                                        <product-card :item="item" type="1"></product-card>
+
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -43,37 +66,33 @@
 </template>
 
 <script>
-    import Buscador from '@/Components/BuscadorComponent'
-    import ProductCard from '@/Components/ProductCardComponent'
     import Carousel from '@/Components/CarouselComponent'
-    import Tab from '@/Components/TabComponent'
+    import Sidenav from '@/Components/SidenavComponent'
     import WebLayout from '@/Layouts/WebLayout'
     import ImageFile from '@/Components/ImageComponent'
-    import Modal from '@/Components/ModalComponent'
+    import ProductCard from '@/Components/ProductCardComponent'
     export default {
         props: {
-            subfamilia: Array,
             gallery: Array,
             productos: Array,
+            familias: Array,
             producto: Object,
             familia: Object,
         },
         data(){
-          return {
-              text:'',
-              slider: {
-                  title: '',
-                  text: '',
-                  order: '',
-                  image: '',
-              },
-          }
+            return {
+                text:'',
+                slider: {
+                    title: '',
+                    text: '',
+                    order: '',
+                    image: '',
+                },
+            }
         },
         components: {
-            Buscador,
             ProductCard,
-            Modal,
-            Tab,
+            Sidenav,
             WebLayout,
             Carousel,
             'image-custom': ImageFile,

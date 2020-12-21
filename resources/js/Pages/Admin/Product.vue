@@ -1,76 +1,56 @@
 <template>
     <app-layout>
-
         <template #header>
             Productos
         </template>
         <div class="card">
             <div class="card-header">
                 <modal
-                        title="Nuevo Producto"
+                        title="Producto"
                         title-button="Agregar Producto"
                         @ok="add()"
                         @hidden="reset()"
                 >
                     <template #idioma="{ lang }">
                         <div class="row">
-                            <div class="col-md-10 form-group">
+                            <div class="col-md-8 form-group">
                                 <label for="">Titulo</label>
-                                <input type="text" v-model="product.title[lang]" class="form-control">
+                                <input type="text" v-model="product.title" class="form-control">
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label for="">Codigo</label>
+                                <input type="text" v-model="product.cod" class="form-control">
                             </div>
                             <div class="col-md-2 form-group">
                                 <label for="">Orden</label>
                                 <input type="text" v-model="product.order" class="form-control">
                             </div>
                             <div class="col-md-12 form-group">
-                                <label for="">Descripción Corta</label>
-                                <textarea v-model="product.description[lang]" class="form-control"  cols="30" rows="3"></textarea>
-                            </div>
-                            <div class="col-md-12 form-group">
                                 <label for="">Texto</label>
                                 <jodit-vue v-model="product.text[lang]" :id="'Texto-'+lang"></jodit-vue>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Texto de Video</label>
-                                    <textarea v-model="product.text_video[lang]" class="form-control"  cols="30" rows="3"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Codigo de youtube - <small>https://www.youtube.com/watch?v=<b>jzs03gzeC_g</b></small></label>
-                                    <input type="text" v-model="product.video" class="form-control">
-                                </div>
-                                <div class="embed-responsive embed-responsive-16by9" >
-                                    <iframe class="embed-responsive-item" :src="'https://www.youtube.com/embed/'+product.video" allowfullscreen></iframe>
-                                </div>
-                            </div>
+
                         </div>
                     </template>
                     <template #default>
                         <div class="row">
                             <div class="col-md-6 form-group">
+                                <label for="">Precio</label>
+                                <money v-model="product.price" class="form-control" v-bind="money"></money>
+
+                            </div>
+                            <div class="col-md-6 form-group">
                                 <label for="">Familias</label>
-                                <multiselect v-model="familia_selected"  @select="clear_family" :options="familias" placeholder="Familia" label="title" track-by="id"></multiselect>
+<!--                                <multiselect v-model="familia_selected" :options="familias" placeholder="Familia" label="title" track-by="id"></multiselect>-->
 
-<!--                                <select v-model="familia_selected" id="" class="form-control">-->
-<!--                                    <option value="" disabled selected>Familia</option>-->
-<!--                                    <option :value="item" v-for="item in familias">-->
-<!--                                        {{ item.title }}-->
-<!--                                    </option>-->
-<!--                                </select>-->
+                                <select v-model="product.family_id" id="" class="form-control">
+                                    <option value="" disabled selected>Familia</option>
+                                    <option :value="item.id" v-for="item in familias">
+                                        {{ item.title }}
+                                    </option>
+                                </select>
                             </div>
-                            <div class="col-md-6 form-group" v-if="familia_selected">
-                                <label for="">Subfamilia</label>
-                                <multiselect v-model="product.family_id" :options="subfamilias_filter" placeholder="Subfamilia" label="title" track-by="id"></multiselect>
 
-<!--                                <select v-model="product.family_id" id="" class="form-control">-->
-<!--                                    <option value="" disabled selected>Subfamilia</option>-->
-<!--                                    <option :value="item.id" v-for="item in familia_selected.child_families">-->
-<!--                                        {{ item.title }}-->
-<!--                                    </option>-->
-<!--                                </select>-->
-                            </div>
                         </div>
                         <div class="row">
 
@@ -81,15 +61,17 @@
                                         :model.sync="product.productos"
                                 ></select-multiple>
                             </div>
-<!--                            <div class="form-group col-md-6 d-flex align-items-end">-->
-<!--                                <div class="custom-control custom-switch">-->
-<!--                                    <input type="checkbox" class="custom-control-input" v-model="product.featured" :true-value="1" :false-value="0" id="customSwitch1">-->
-<!--                                    <label class="custom-control-label" for="customSwitch1">Mostrar en la Sección Principal?</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-                            <div class="form-group col-md-6">
-                                <label>Banner</label>
-                                <image-custom :model.sync="product.banner"></image-custom>
+                            <div class="form-group col-md-6 d-flex align-items-end">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" v-model="product.featured" :true-value="1" :false-value="0" id="customSwitch1">
+                                    <label class="custom-control-label" for="customSwitch1">Mostrar en la Sección Principal?</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 d-flex align-items-end">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" v-model="product.stock" :true-value="1" :false-value="0" id="customSwitch1">
+                                    <label class="custom-control-label" for="customSwitch1">Tiene Stock?</label>
+                                </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Archivo</label>
@@ -114,7 +96,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="(item,index) in productos">
-                        <td>{{ item.title.es || '' }}</td>
+                        <td>{{ item.title || '' }}</td>
                         <td>{{ item.order }}</td>
                         <td>
                             <button @click="edit(item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">
@@ -152,17 +134,17 @@
         },
         data(){
           return {
-              familia_selected: '',
+              familia_selected_id: '',
               product: {
                   id: '',
-                  title: {},
-                  description: {},
+                  cod: '',
+                  title: '',
+                  price: '',
+                  stock: 1,
+                  featured: 0,
                   text: {},
-                  text_video: {},
                   family_id: '',
-                  video: '',
                   productos: [],
-                  banner: '',
                   gallery: [],
                   file: '',
                   order: '',
@@ -190,9 +172,7 @@
             }
         },
         methods: {
-            clear_family(){
-                this.product.family_id = ''
-            },
+
             reset(){
                 this.product = {
                     id: '',
@@ -235,15 +215,12 @@
 
 
                 data.append('id', this.product.id)
-                data.append('title', JSON.stringify(this.product.title) || '')
+                data.append('cod', this.product.cod || '')
+                data.append('title', this.product.title || '')
                 data.append('text', JSON.stringify(this.product.text) || '')
-                data.append('text_video', JSON.stringify(this.product.text_video) || '')
-                data.append('description', JSON.stringify(this.product.description) || '')
                 data.append('productos', JSON.stringify(this.product.productos || []))
-                data.append('family_id', this.product.family_id.id|| '')
-                data.append('banner', this.product.banner || '')
+                data.append('family_id', this.product.family_id || '')
                 data.append('archivo', this.product.file || '')
-                data.append('video', this.product.video || '')
                 data.append('order', this.product.order || '')
                 data.append('featured', this.product.featured || '')
 
@@ -278,7 +255,7 @@
             },
             edit(item){
                 console.log(item)
-                this.familia_selected = item.family || {}
+                // this.familia_selected = item.family || {}
                 this.product = JSON.parse(JSON.stringify(item))
                 this.$root.$emit('bv::show::modal','modal-prevent-closing')
             },

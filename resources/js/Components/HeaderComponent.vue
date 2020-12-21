@@ -5,7 +5,7 @@
                 <div class="d-flex justify-content-md-end  text-white">
                     <div class="d-flex align-items-center py-2">
                         <div class="md-form input-group  my-0">
-                            <input type="text" class="form-control" placeholder="Buscando..." aria-describedby="material-addon2">
+                            <input type="text" class="form-control ph-white text-white" placeholder="Buscando..." aria-describedby="material-addon2">
                             <div class="input-group-append">
                                 <span class="input-group-text md-addon text-white" id="material-addon2"><i class="fas fa-search"></i></span>
                             </div>

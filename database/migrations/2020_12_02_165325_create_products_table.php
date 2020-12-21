@@ -31,6 +31,7 @@ class CreateProductsTable extends Migration
             $table->boolean('featured')->default(0);
             $table->boolean('published')->default(1);
             $table->json('slug')->nullable();
+            $table->unsignedBigInteger('mlproducto_id')->nullable();
             $table->unsignedBigInteger('family_id')->nullable();
             $table->foreign('family_id')->references('id')->on('families')->onDelete('cascade');
             $table->unsignedBigInteger('brand_id')->nullable();

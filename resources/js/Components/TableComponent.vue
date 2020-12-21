@@ -1,7 +1,7 @@
 <template>
     <b-container fluid>
         <!-- User Interface controls -->
-        <b-row class="justify-content-between" v-if="search !== false">
+        <b-row class="justify-content-between mb-4" v-if="search !== false">
             <b-col lg="6" class="my-1">
                 <b-form-group
                         label="Buscar:"
@@ -69,7 +69,7 @@
                 hover
                 :busy="isBusy"
                 responsive
-                stacked="md"
+
                 :items="items_map"
                 :fields="fields_map"
                 :current-page="currentPage"
@@ -98,7 +98,23 @@
                 </div>
             </template>
             <template #cell(title)="row">
-                {{ row.value.es || row.value }}
+                {{ row.value.es || ''  }}
+
+            </template>
+            <template #cell(precio)="row">
+                $ {{ row.item.precio | toCurrency }}
+            </template>
+            <template #cell(cantidad)="row">
+                <slot name="cantidad" :row="row" :item="row.item"></slot>
+            </template>
+            <template #cell(subtotal)="row">
+                $ {{ (row.item.cantidad * row.item.precio) | toCurrency}}
+            </template>
+            <template #cell(total)="row">
+                $ {{ row.item.total | toCurrency }}
+            </template>
+            <template #cell(total_iva)="row">
+                $ {{ row.item.total_iva | toCurrency }}
             </template>
 
             <template #cell(actions)="row">
@@ -108,18 +124,23 @@
 <!--                <b-button size="sm" @click="row.toggleDetails">-->
 <!--                    {{ row.detailsShowing ? 'Hide' : 'Show' }} Details-->
 <!--                </b-button>-->
-                <slot name="action" :item="row.item"></slot>
+                <slot name="action" :row="row" :item="row.item"></slot>
             </template>
-            <slot></slot>
+            <template #cell(estado)="row">
+                <slot name="estado" :row="row" :item="row.item"></slot>
+            </template>
+
             <template #row-details="row">
                 <b-card>
-                    <ul>
-                        <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                    </ul>
+                    <b-list-group v-if="row.item.productos.length > 0">
+                        <b-list-group-item v-for="(value, key) in row.item.productos" :key="key">
+                            {{ value.cantidad }} x {{ value.producto }} <b>Cod:</b> {{ value.codigo }}
+                        </b-list-group-item>
+                    </b-list-group>
                 </b-card>
             </template>
         </b-table>
-        <b-row class="justify-content-center">
+        <b-row class="justify-content-center" v-if="paginate !== false">
             <b-col md="6" class="my-1">
                 <b-pagination
                         v-model="currentPage"
@@ -141,14 +162,14 @@
 
 <script>
     export default {
-        props:['items','fields','onlyShow','search'],
+        props:['items','fields','onlyShow','search','paginate','filtrar'],
         data() {
             return {
                 isBusy: false,
                 totalRows: 1,
                 currentPage: 1,
-                perPage: 5,
-                pageOptions: [5, 10, 15, { value: 100, text: "Todos" }],
+                perPage: 10,
+                pageOptions: [10, 20, 50, { value: 100000, text: "Todos" }],
                 sortBy: '',
                 sortDesc: false,
                 sortDirection: 'asc',
@@ -186,16 +207,17 @@
                             // console.log(e)
                                 mostrar[e] = item[e]
                         })
-                        console.log(['acaaaaaaaaaaa',mostrar])
+                        // console.log(['acaaaaaaaaaaa',mostrar])
 
                         return mostrar
                     }else{
                         // console.log('entra')
-                        return {
-                            'title': item.title.es || ' - ',
-                            'order': item.order || 'aa',
-                            'featured': item.featured || 0,
-                        }
+                        return item
+                        // return {
+                        //     'title': item.title.es || ' - ',
+                        //     'order': item.order || 'aa',
+                        //     'featured': item.featured || 0,
+                        // }
                     }
                 })
 
@@ -210,9 +232,18 @@
                 //     })
             }
         },
+        created(){
+            if (this.paginate == false){
+                this.perPage = 10000
+            }
+            if(this.filtrar){
+                this.filterOn = this.filtrar
+            }
+        },
         mounted() {
             // Set the initial number of items
             this.totalRows = this.items.length
+
         },
         methods: {
             info(item, index, button) {

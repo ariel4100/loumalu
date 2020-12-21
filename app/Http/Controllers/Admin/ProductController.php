@@ -7,18 +7,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Family;
 use App\Models\Product;
+use App\Models\ProductIntertrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $familias = Family::with('padre')->with('childFamilies')->whereNull('padre_id')->orderBy('order')->get();
-        $subfamilias = Family::with('childFamilies')->where('padre_id','!=',null)->orderBy('order')->get();
+        $familias = Family::whereNull('padre_id')->orderBy('order')->get();
 
         $familiasMap = $familias->map(function ($item) {
             return [
@@ -27,47 +28,41 @@ class ProductController extends Controller
                 'padre_id' => $item->padre_id,
             ];
         });
-        $subfamiliasMap = $subfamilias->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'padre_id' => $item->padre_id,
-            ];
-        });
+
 
 
 //        dd($categoriasconhijos);
-        $productos = Product::orderBy('order')->get();
+//        $productos = Product::get();
+        $productos = ProductIntertrade::with('product')->get();
+//        $productos_aguila = Product::on(env('aguila'))->get();
 
+//        dd($productos);
         return Inertia::render('Admin/Product', [
             'familias' => $familiasMap,
-            'subfamilias' => $subfamiliasMap,
-
             'productos' => $productos->map(function ($item) {
+//                dd($item->product);
                 return [
-                    'id' => $item->id,
-                    'title' => $item->title ? $item->getTranslations('title') : ['es' => ''],
-                    'description' => $item->description ? $item->getTranslations('description') : ['es' => ''],
-                    'text' => $item->text ? $item->getTranslations('text') : ['es' => ''],
-                    'text_video' => $item->text_video ? $item->getTranslations('text_video') : ['es' => ''],
-                    'family' => $item->family->padre->only('id','title','padre_id'),
-                    'family_id' => $item->family->only('id','title','padre_id'),
-                    'order' => $item->order,
-                    'featured' => $item->featured,
-                    'video' => $item->video,
-                    'productos' => $item->related->map(function ($item) {
-                        return [
-                            'id' => $item->id,
-                            'title' => $item->title,
-                        ];
-                    }),
-                    'gallery' => collect($item->gallery)->map(function ($item) {
+                    'id' => $item->IdMlProducto,
+                    'cod' => $item->CodigoStProducto,
+                    'title' => $item->NombreStProducto,
+                    'text' => $item->product ? Helpers::getTranslations($item->product,'text') : ['es' => ''],
+                    'family_id' => $item->product ? $item->product->family_id : '',
+                    'price' => floatval($item->PrecioMLProducto),
+                    'stock' => $item->StockMLProducto,
+                    'featured' => $item->product ? $item->product->featured : '',
+                    'order' => $item->product ? $item->product->order : '',
+//                    'productos' => $item->related->map(function ($item) {
+//                        return [
+//                            'id' => $item->id,
+//                            'title' => $item->title,
+//                        ];
+//                    }),
+                    'gallery' => collect(@$item->product->gallery ?? [])->map(function ($item) {
                         $url_image =  Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
 //                        dd($item);
                         return $url_image;
                     }),
-                    'banner' => $item->banner ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->banner) : '',
-                    'file' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
+                    'file' => @$item->product->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->product->file) : '',
 
                 ];
             }),
@@ -82,13 +77,25 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             if ($request->id){
-                $item = Product::find($request->id);
+                $item_inter = ProductIntertrade::where('IdMlProducto',$request->id)->first();
+                $item = Product::firstOrCreate([
+                    'mlproducto_id' => $item_inter->IdMlProducto
+                ]);
             }else{
-                $item = new Product();
+                $item = new ProductIntertrade();
             }
+//            dd($item);
+            //modelo Intertrade
+            $item_inter->CodigoStProducto   = $request->cod;
+            $item_inter->NombreStProducto   = $request->title;
+//            $item->PrecioMLProducto   = $request->title;
+//            $item->StockMLProducto   = $request->title;
+//            $item->EstadoMLProducto   = $request->title;
+//            $item->idStProducto   = $request->title;
+//            $item->EsKitMLProducto   = $request->title;
+//            $item->Marca   = $request->title;
+//            $item->NombreStClasificacionSimple   = $request->title;
 
-            $file_save = Helpers::saveImage($request->file('banner'), 'productos',$item->banner);
-            $file_save ? $item->banner = $file_save : false;
             $file_save = Helpers::saveImage($request->file('archivo'), 'productos',$item->archivo);
             $file_save ? $item->file = $file_save : false;
 
@@ -98,25 +105,22 @@ class ProductController extends Controller
 
 //            dd([$images]);
 
-            $item->setTranslations('title', (array) json_decode($request->title));
-            $item->setTranslations('description', (array) json_decode($request->description));
             $item->setTranslations('text', (array) json_decode($request->text));
-            $item->setTranslations('text_video', (array) json_decode($request->text_video));
-            $item->setTranslations('slug', collect(json_decode($request->title))->slug()->toArray());
+            $item->setTranslations('slug', ['es'=> str::slug($request->title)]);
             $item->order   = $request->order;
             $item->gallery   = @$images;
             isset($request->featured) ? $item->featured = 1 : false;
-            $item->video   = $request->video;
             $item->family_id   = $request->family_id;
 
 //            $item->slug    = str::slug($request->title);
             $item->save();
-            $productos = collect(json_decode($request->productos));
+            $item_inter->save();
+//            $productos = collect(json_decode($request->productos));
 //
             //productos relacionados
-            if (count($productos) > 0){
-                $item->related()->sync($productos->pluck('id'));
-            }
+//            if (count($productos) > 0){
+//                $item->related()->sync($productos->pluck('id'));
+//            }
             DB::commit();
 
             session()->flash('message', 'Se ha guardado correctamente.');

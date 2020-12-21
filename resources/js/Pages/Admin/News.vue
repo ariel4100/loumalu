@@ -78,6 +78,7 @@
     import CustomGallery from '../../components/CustomGalleryComponent';
     import Modal from '../../Components/ModalComponent'
     import Table from '@/Components/TableComponent'
+    import { mapState, mapActions } from 'vuex'
 
     export default {
         props: {
@@ -107,7 +108,9 @@
             'custom-table': Table,
         },
         methods: {
-
+            ...mapActions('admin', [
+                'eliminar',
+            ]),
             reset(){
                 this.novedad = {
                     id: '',
@@ -170,26 +173,7 @@
                 }, 1000);
             },
             del(id){
-                Swal.fire({
-                    title: '¿Estas seguro de eliminar?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si',
-                    cancelButtonText: 'No'
-                }).then((result) => {
-                    if (result.value) {
-                        this.$inertia.delete(route('adm.noticias.destroy',{id: id})).then(() => {
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Se elimino correctamente',
-                            //     showConfirmButton: false,
-                            //     timer: 2000
-                            // })
-                            $('.modal').modal('hide');
-                        })
-                    }
-                })
-
+                this.eliminar(route('adm.noticias.destroy',{id: id}))
             },
             duplicate(id){
                 Swal.fire({
