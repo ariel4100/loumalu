@@ -41,8 +41,10 @@ Route::resource('descargas', DescargaController::class);
 Route::resource('familias', FamilyController::class);
 Route::resource('productos', ProductController::class);
 Route::resource('usuarios', UserController::class);
+Route::resource('clientes', ClientController::class);
 Route::resource('metas', MetaController::class);
 Route::get('/newsletter', [NewsletterController::class, 'index'])->name('newsletter.index');
+Route::get('/monitoreo', [ClientController::class, 'monitoreo'])->name('monitoreo.index');
 
 //Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //    return Inertia\Inertia::render('Dashboard');

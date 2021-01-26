@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Extensions\Helpers;
 use App\Models\Client;
+use App\Models\ClientIntertrade;
+use App\Models\Monitoreo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +25,10 @@ class Logincontroller extends Controller
 //
 //        return dd(Auth::guard('client')->attempt($credentials));
             if (Auth::guard('client')->attempt($credentials)) {
+                $session = new Monitoreo();
+                $session->ip = $request->ip();
+                $session->client_id = Auth::guard('client')->user()->id;
+                $session->save();
                 // Authentication passed...
                 return response()->json([
                     'success'
@@ -49,7 +55,7 @@ class Logincontroller extends Controller
 //        return dd($request->all());
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'nombre' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255','unique:clients'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:clients'],
             'password' => ['required', 'string', 'min:3'],
@@ -59,8 +65,22 @@ class Logincontroller extends Controller
             'username.unique' => trans('validation.unique', [ 'attribute' => 'Usuario']),
         ]);
 
+
+        //BDD DE AGUILA
+        $cleinte_inter = new ClientIntertrade();
+        $cleinte_inter->nombre = $request['nombre'];
+        $cleinte_inter->apellido = $request['apellido'];
+        $cleinte_inter->email = $request['email'];
+        $cleinte_inter->fecha_nacimiento = $request['fecha_nac'];
+        $cleinte_inter->domicilio = $request['domicilio'];
+        $cleinte_inter->codigo_postal = $request['cp'];
+        $cleinte_inter->ciudad = $request['ciudad'];
+        $cleinte_inter->telefono = $request['telefono'];
+        $cleinte_inter->dni = $request['dni'];
+        $cleinte_inter->save();
+
         $user = Client::create([
-            'name' => $request['name'],
+            'name' => $request['nombre'],
             'username' => $request['username'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
@@ -71,6 +91,10 @@ class Logincontroller extends Controller
 
             if (Auth::guard('client')->attempt($credentials)) {
                 // Authentication passed...
+                $session = new Monitoreo();
+                $session->ip = $request->ip();
+                $session->client_id = Auth::guard('client')->user()->id;
+                $session->save();
                 return response()->json([
                     'success'
                 ]);

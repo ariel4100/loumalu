@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Content;
+use App\Models\Family;
+use App\Models\FamilyIntertrade;
 use App\Models\Meta;
+use App\Models\ProductIntertrade;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -46,8 +49,13 @@ class AppServiceProvider extends ServiceProvider
             });
             $metas =  Meta::get();
             $contacto = Content::where('section', 'contacto')->first();
+            $marcas = ProductIntertrade::get()->pluck('marca')->unique();
+            $familias = FamilyIntertrade::select('id','nombre')->get();
+
             Inertia::share([
                 'appUrl' => config('app.url'),
+                'familias_global' => $familias,
+                'marcas_global' => $marcas,
                 'favicon' => @$contacto->image[0]['image'] ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($contacto->image[0]['image']) : '',
                 'header' => @$contacto->image[1]['image'] ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($contacto->image[1]['image']) : '',
                 'footer' => @$contacto->image[2]['image'] ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($contacto->image[2]['image']) : '',

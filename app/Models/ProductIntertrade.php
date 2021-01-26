@@ -9,16 +9,19 @@ class ProductIntertrade extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'IdMlProducto';
-    protected $table = 'mlproductosintertrade';
+    protected $primaryKey = 'id';
+    protected $table = 'productos';
     protected $connection = 'aguila';
     public $timestamps = false;
 
-    public function product()
+    public function family()
     {
-        return $this->setConnection('mysql')->hasOne(Product::class,'mlproducto_id','IdMlProducto');
+        return $this->setConnection('mysql')->belongsTo(FamilyIntertrade::class,'categoria_id');
     }
 
+    public function related() {
+        return  $this->belongsToMany(ProductIntertrade::class,'related_products','product_id','related_id');
+    }
 
 
 }

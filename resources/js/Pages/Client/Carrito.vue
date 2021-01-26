@@ -15,7 +15,7 @@
                     <i @click="elimItemCart(row.index)" class="far fa-times-circle fa-lg"></i>
                 </template>
                 <template #cantidad="{ item }">
-                    <input @change="updateItemCart(item)" type="number" class="form-control" v-model="item.cantidad">
+                    <input @change="updateItemCart(item)" type="number"  min="0" :step="item.unidad" class="form-control" v-model="item.cantidad">
                 </template>
             </table-custom>
             <div class="row my-4">
@@ -46,9 +46,13 @@
                             <b-spinner small ></b-spinner>
                             PROCENSANDO COMPRA
                         </a>
-                        <a v-if="spinner == 2" class="btn btn-danger">
-                            ERROR AL PROCESAR PEDIDO
-                        </a>
+                        <template v-if="spinner == 2">
+                            <a v-if="spinner == 2" class="btn btn-danger">
+                                ERROR AL PROCESAR PEDIDO
+                            </a>
+                            <p class="">Intente más tarde</p>
+                        </template>
+
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@
             <div class="card-header">
                 <modal
                         title="Producto"
-                        title-button="Agregar Producto"
+
                         @ok="add()"
                         @hidden="reset()"
                 >
@@ -17,17 +17,30 @@
                                 <label for="">Titulo</label>
                                 <input type="text" v-model="product.title" class="form-control">
                             </div>
-                            <div class="col-md-2 form-group">
+                            <div class="col-md-4 form-group">
                                 <label for="">Codigo</label>
                                 <input type="text" v-model="product.cod" class="form-control">
                             </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="">Marca</label>
+                                <input type="text" v-model="product.marca" class="form-control">
+                            </div>
                             <div class="col-md-2 form-group">
+                                <label for="">Stock</label>
+                                <input type="number" min="0" v-model="product.stock" class="form-control">
+                            </div>
+                            <div class="col-md-4 form-group">
                                 <label for="">Orden</label>
                                 <input type="text" v-model="product.order" class="form-control">
                             </div>
+<!--                            <div class="col-md-12 form-group">-->
+<!--                                <label for="">Descripción</label>-->
+<!--                                <jodit-vue v-model="product.text[lang]" :id="'Texto-'+lang"></jodit-vue>-->
+<!--                            </div>   -->
                             <div class="col-md-12 form-group">
-                                <label for="">Texto</label>
-                                <jodit-vue v-model="product.text[lang]" :id="'Texto-'+lang"></jodit-vue>
+                                <label for="">Descripción</label>
+                                <jodit-vue v-model="product.descripcion" :id="'Descripción-'+lang"></jodit-vue>
                             </div>
 
                         </div>
@@ -53,34 +66,37 @@
 
                         </div>
                         <div class="row">
-
-                            <div class="col-md-12 form-group">
-                                <label for="">Productos Relacionados</label>
-                                <select-multiple
-                                        :data="productos"
-                                        :model.sync="product.productos"
-                                ></select-multiple>
-                            </div>
                             <div class="form-group col-md-6 d-flex align-items-end">
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" v-model="product.featured" :true-value="1" :false-value="0" id="customSwitch1">
                                     <label class="custom-control-label" for="customSwitch1">Mostrar en la Sección Principal?</label>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6 d-flex align-items-end">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" v-model="product.stock" :true-value="1" :false-value="0" id="customSwitch1">
-                                    <label class="custom-control-label" for="customSwitch1">Tiene Stock?</label>
-                                </div>
+<!--                            <div class="col-md-10 form-group">-->
+<!--                                <label for="">Productos Relacionados</label>-->
+<!--                                <select-multiple-->
+<!--                                        :data="productos_detalle"-->
+<!--                                        :model.sync="product.productos"-->
+<!--                                ></select-multiple>-->
+<!--                            </div>-->
+                            <div class="col-md-2 form-group">
+                                <label for="">Unidad</label>
+                                <input type="number" min="0" v-model="product.unidad" class="form-control">
                             </div>
+<!--                            <div class="form-group col-md-6 d-flex align-items-end">-->
+<!--                                <div class="custom-control custom-switch">-->
+<!--                                    <input type="checkbox" class="custom-control-input" v-model="product.stock" :true-value="1" :false-value="0" id="customSwitch1">-->
+<!--                                    <label class="custom-control-label" for="customSwitch1">Tiene Stock?</label>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <div class="form-group col-md-6">
                                 <label>Archivo</label>
                                 <image-custom :model.sync="product.file"></image-custom>
                             </div>
-                            <div class="col-md-12" >
-                                <label>Agregar fotos</label>
-                                <custom-gallery   label="" :model.sync="product.gallery" :link="0" class=""></custom-gallery>
-                            </div>
+<!--                            <div class="col-md-12" >-->
+<!--                                <label>Agregar fotos</label>-->
+<!--                                <custom-gallery   label="" :model.sync="product.gallery" :link="0" class=""></custom-gallery>-->
+<!--                            </div>-->
                         </div>
                     </template>
                 </modal>
@@ -89,25 +105,31 @@
                 <table class="table">
                     <thead>
                     <tr>
+                        <th scope="col">Codigo</th>
                         <th scope="col">Titulo</th>
+                        <th scope="col">Rubro</th>
+                        <th scope="col">Marca</th>
                         <th scope="col">Orden</th>
                         <th scope="col">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="(item,index) in productos">
+                        <td>{{ item.cod || ''}}</td>
                         <td>{{ item.title || '' }}</td>
-                        <td>{{ item.order }}</td>
+                        <td>{{ item.name_family || ''}}</td>
+                        <td>{{ item.marca || ''}}</td>
+                        <td>{{ item.order || ''}}</td>
                         <td>
                             <button @click="edit(item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">
                                 <i class="far fa-edit"></i>
                             </button>
-                            <button @click="duplicate(item)" class="btn btn-info btn-circle">
-                                <i class="far fa-clone"></i>
-                            </button>
-                            <button @click="del(item)" class="btn btn-danger btn-circle">
-                                <i class="fas fa-trash"></i>
-                            </button>
+<!--                            <button @click="duplicate(item)" class="btn btn-info btn-circle">-->
+<!--                                <i class="far fa-clone"></i>-->
+<!--                            </button>-->
+<!--                            <button @click="del(item)" class="btn btn-danger btn-circle">-->
+<!--                                <i class="fas fa-trash"></i>-->
+<!--                            </button>-->
                         </td>
                     </tr>
                     </tbody>
@@ -129,6 +151,7 @@
             familias: Array,
             subfamilias: Array,
             productos: Array,
+            productos_detalle: Array,
             contenido: Object,
             section: '',
         },
@@ -139,8 +162,10 @@
                   id: '',
                   cod: '',
                   title: '',
+                  descripcion: '',
                   price: '',
                   stock: 1,
+                  unidad: 1,
                   featured: 0,
                   text: {},
                   family_id: '',
@@ -215,14 +240,21 @@
 
 
                 data.append('id', this.product.id)
+                data.append('id_inter', this.product.id_inter)
                 data.append('cod', this.product.cod || '')
                 data.append('title', this.product.title || '')
+                data.append('descripcion', this.product.descripcion || '')
                 data.append('text', JSON.stringify(this.product.text) || '')
                 data.append('productos', JSON.stringify(this.product.productos || []))
                 data.append('family_id', this.product.family_id || '')
                 data.append('archivo', this.product.file || '')
                 data.append('order', this.product.order || '')
+                data.append('price', this.product.price || '')
+                data.append('marca', this.product.marca || '')
+                data.append('unidad', this.product.unidad || '')
+                data.append('clasificacion', this.product.clasificacion || '')
                 data.append('featured', this.product.featured || '')
+                data.append('stock', this.product.stock || '')
 
                 this.$inertia.post(route('adm.productos.store'), data).then(() => {
 

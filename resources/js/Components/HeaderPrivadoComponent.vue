@@ -54,9 +54,7 @@
                         <li class="nav-item" >
                             <a class="nav-link fw-medium text-uppercase py-md-4" :class="'privada.reclamos' == $page.currentRouteName ? 'activo' : ''" :href="route('privada.reclamos')">RECLAMOS</a>
                         </li>
-                        <li class="nav-item" >
-                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="'privada.historico' == $page.currentRouteName ? 'activo' : ''" :href="route('privada.historico')">HISTORICO</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>

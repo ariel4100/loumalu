@@ -1,6 +1,9 @@
 <template>
     <div>
-        <b-button @click="show=true">{{titleButton}}</b-button>
+        <template v-if="titleButton">
+            <b-button @click="show=true">{{titleButton}}</b-button>
+
+        </template>
 <!--        <teleport to="#body" >-->
             <b-modal
                     v-model="show"
@@ -12,6 +15,7 @@
                     @show="resetModal"
                     @hidden="hiddenModal"
                     @ok="handleOk"
+                    cancel-title="Cerrar"
             >
                 <template v-if="idioma">
                     <b-tabs card>

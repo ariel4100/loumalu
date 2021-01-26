@@ -228,10 +228,10 @@
                                                         <option :value="0">Todos</option>
                                                         <option v-for="seccion in content.secciones" :value="seccion">{{seccion}}</option>
                                                     </select>
-                                                    <div class="md-form mb-3">
-                                                        <input v-model="item.title" type="text" class="form-control" placeholder="Texto">
-                                                        <small>Texto que acompaña al mail</small>
-                                                    </div>
+<!--                                                    <div class="md-form mb-3">-->
+<!--                                                        <input v-model="item.title" type="text" class="form-control" placeholder="Texto">-->
+<!--                                                        <small>Texto que acompaña al mail</small>-->
+<!--                                                    </div>-->
                                                     <div class="md-form mb-3 input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text" >

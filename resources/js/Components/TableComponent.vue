@@ -107,6 +107,9 @@
             <template #cell(cantidad)="row">
                 <slot name="cantidad" :row="row" :item="row.item"></slot>
             </template>
+            <template #cell(stock)="row">
+                <slot name="stock" :row="row" :item="row.item"></slot>
+            </template>
             <template #cell(subtotal)="row">
                 $ {{ (row.item.cantidad * row.item.precio) | toCurrency}}
             </template>
@@ -132,16 +135,41 @@
 
             <template #row-details="row">
                 <b-card>
-                    <b-list-group v-if="row.item.productos.length > 0">
-                        <b-list-group-item v-for="(value, key) in row.item.productos" :key="key">
-                            {{ value.cantidad }} x {{ value.producto }} <b>Cod:</b> {{ value.codigo }}
-                        </b-list-group-item>
-                    </b-list-group>
+<!--                    <b-list-group v-if="row.item.productos.length > 0">-->
+<!--                        <b-list-group-item v-for="(value, key) in row.item.productos" :key="key">-->
+<!--                            {{ value.cantidad }} x {{ value.producto }} <b>Cod:</b> {{ value.codigo }}-->
+<!--                        </b-list-group-item>-->
+<!--                    </b-list-group>-->
+
+                    <template v-if="row.item.mensaje">
+                        <h4 class="font-weight-bold">Observaciones:</h4>
+                        <p class="mb-3">
+                            {{ row.item.mensaje }}
+                        </p>
+                    </template>
+                    <table class="table table-bordered" v-if="row.item.productos.length > 0">
+                        <thead>
+                        <tr>
+                            <th scope="col">Codigo</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col" class="text-center">Cantidad</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr v-for="(value, key) in row.item.productos" :key="key">
+                            <td>   {{ value.producto_codigo }}</td>
+                            <td>   {{ value.producto_nombre }}</td>
+                            <td class="text-center">   {{ value.cantidad }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </b-card>
             </template>
         </b-table>
         <b-row class="justify-content-center" v-if="paginate !== false">
             <b-col md="6" class="my-1">
+
                 <b-pagination
                         v-model="currentPage"
                         :total-rows="totalRows"

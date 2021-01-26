@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderIntertrade;
+use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\ProductIntertrade;
 use App\Models\Transaction;
@@ -16,10 +18,16 @@ use App\Models\Content;
 
 class ClientController extends Controller
 {
-    public $auth;
+    private $auth;
 
-    public function __constructor(){
-        $this->auth = auth()->guard('client')->user();
+    public function __construct(){
+//        $this->auth = auth()->guard('client')->user();
+        $this->middleware('client');
+        $this->middleware(function ($request, $next) {
+            $this->auth = auth()->guard('client')->user();
+
+            return $next($request);
+        });
     }
     public function pedidos()
     {
@@ -27,20 +35,21 @@ class ClientController extends Controller
         $auth = auth()->guard('client')->user();
 
 //        $productos = Product::with('product_intertrade')->orderBy('order')->get();
-        $productos = ProductIntertrade::with('product')->get();
+        $productos = ProductIntertrade::with('family')->get();
 
 //        dd($productos->flatten());
         return Inertia::render('Client/Pedidos', [
             'productos' => $productos->map(function ($item) {
                 return [
-                    'id' => $item->IdMlProducto,
-                    'rubro' => $item->CodigoStProducto,
-                    'producto' => $item->NombreStProducto,
-                    'precio' => floatval($item->PrecioMLProducto),
-                    'codigo' => $item->CodigoStProducto,
-                    'marca' => $item->Marca,
+                    'id' => $item->id,
+                    'rubro' => $item->family ? $item->family->nombre : '',
+                    'producto' => $item->nombre,
+                    'precio' => floatval($item->precio),
+                    'codigo' => $item->codigo,
+                    'marca' => $item->marca,
                     'cantidad' => 0,
-                    'unidad' => 2,
+                    'stock' => intval($item->stock),
+                    'unidad' => intval($item->unidad) ? $item->unidad : 1,
                     'image' => $item->product ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url(@$item->product->gallery[0]) : '',
                 ];
             }),
@@ -69,16 +78,17 @@ class ClientController extends Controller
     {
 //        dd(auth()->guard('client')->user());
 
-        $pedidos = Transaction::with('order')->where('client_id',auth()->guard('client')->user()->id)->orderBy('created_at','desc')->get();
+        $pedidos = OrderIntertrade::with('order')->where('cliente_id',auth()->guard('client')->user()->id)->orderBy('created_at','desc')->get();
         return Inertia::render('Client/EstadoCuenta', [
             'pedidos' => $pedidos->map(function ($item) {
                 return [
-                    'productos' => @$item->order->first()->productos,
+                    'productos' => $item->order,
                     'numero' => $item->id,
                     'fecha' => $item->created_at->format('d/m/Y'),
                     'estado' => $item->status,
                     'total' => floatval($item->subtotal),
                     'total_iva' => floatval($item->total),
+                    'mensaje' => $item->mensaje,
                 ];
             }),
         ]);
@@ -112,23 +122,55 @@ class ClientController extends Controller
     }
 
     public function finalizar_compra(Request $request){
-//        dd($request->total);
+//        dd($this->auth);
 
         try {
             DB::beginTransaction();
+
+            //BDD SISTEMA AGUILA
+            $transaccion_inter = new OrderIntertrade();
+            $transaccion_inter->total = $request->total;
+            $transaccion_inter->subtotal = $request->subtotal;
+            $transaccion_inter->subtotal_iva = $request->subtotaliva;
+            $transaccion_inter->status = 'pendiente';
+            $transaccion_inter->mensaje = $request->mensage;
+            $transaccion_inter->fecha = now();
+            $transaccion_inter->cliente_id =  auth()->guard('client')->user()->id;
+            $transaccion_inter->save();
+
+            //BDD LOCAL RESPALDO
             $transaccion = new Transaction();
             $transaccion->total = $request->total;
             $transaccion->subtotal = $request->subtotal;
             $transaccion->subtotaliva = $request->subtotaliva;
+            $transaccion->status = 'pendiente';
             $transaccion->mensaje = $request->mensage;
             $transaccion->client_id = auth()->guard('client')->user()->id;
             $transaccion->save();
 
+            //BDD LOCAL
             $pedido = new Order();
             $pedido->productos = $request->carrito;
             $pedido->transaction_id = $transaccion->id;
             $pedido->save();
 
+            //BDD SISTEMA AGUILA
+            foreach($request->carrito ?? [] as $value){
+                OrderProduct::create([
+                    'producto_codigo' => $value['codigo'],
+                    'producto_precio' => $value['precio'],
+                    'producto_nombre' => $value['producto'],
+                    'cantidad' => $value['cantidad'] ,
+                    'orden_id' => $transaccion_inter->id,
+                 ]);
+            }
+//            $pedido_intertrade = new OrderProduct();
+//            $pedido_intertrade->nroPedidoProduteca = $transaccion->id;
+//            $pedido_intertrade->fechaAltaOrden = now();
+//            $pedido_intertrade->producto_codigo = $transaccion->subtotal;
+//             $pedido_intertrade->email = $this->auth->email;
+//
+//            $pedido_intertrade->save();
 
             DB::commit();
 
@@ -136,8 +178,10 @@ class ClientController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            session()->flash('error', 'Se encontraron algunos errores.'.$e->getMessage());
-            return Redirect::back();
+//            session()->flash('error', 'Se encontraron algunos errores.'.$e->getMessage());
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
         }
 
 

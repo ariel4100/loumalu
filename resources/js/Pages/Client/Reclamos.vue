@@ -1,6 +1,13 @@
 <template>
     <client-layout class="">
         <div class="container my-5">
+            <div v-if="$page.flash.success" class="alert alert-success">
+                {{ $page.flash.success }}
+            </div>
+            <div v-if="$page.flash.error" class="alert alert-danger">
+                {{ $page.flash.error }}
+            </div>
+
             <template v-for="(item,index) in bloques">
                 <template v-if="index == 0">
                     <div class="container wow fadeIn py-4" :data-wow-delay="'0.'+index+'s'">
@@ -54,19 +61,19 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-6 mb-4">
-                            <label for="">NÚMERO/S FACTURA/S</label>
+                            <label>NÚMERO/S FACTURA/S</label>
                             <input type="text" required v-model="reclamo.factura" class="form-control" placeholder="Factura">
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label for="">NOMBRE TRANSPORTE</label>
+                            <label>NOMBRE TRANSPORTE</label>
                             <input type="text" required v-model="reclamo.transporte" class="form-control" placeholder="Transporte">
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label for="">FECHA/S FACTURA/S</label>
-                            <input type="text" required v-model="reclamo.fecha" class="form-control" placeholder="Fecha">
+                            <label>FECHA/S FACTURA/S</label>
+                            <input type="date" required v-model="reclamo.fecha" class="form-control" placeholder="Fecha">
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label for="">NÚMERO GUÍA</label>
+                            <label>NÚMERO GUÍA</label>
                             <input type="text" required v-model="reclamo.guia" class="form-control" placeholder="Guía">
                         </div>
                     </div>
@@ -87,10 +94,13 @@
                 </div>
                 <div class="col-md-4 mb-4">
                     <label for="">ARJUNTAR FOTO DE LA GUÍA</label>
-                    <input type="file"  class="">
+                    <input type="file" @change="onFileChange($event)"  class="">
                 </div>
                 <div class="col-md-12 text-right mb-4">
-                    <button type="submit" class="btn btn-secundario px-5">enviar</button>
+
+                    <button v-if="loading == true" type="button" class="btn btn-secundario  text-white">Enviando <i class="fas fa-sync fa-spin"></i></button>
+                    <button v-if="loading == 0" type="submit" class="btn btn-secundario  text-white">{{ t('Enviar') }}</button>
+
                 </div>
             </form>
         </div>
@@ -112,6 +122,8 @@
         data(){
           return {
               items:[],
+              loading: 0,
+              foto_guia: '',
               reclamo: {
                   factura: '',
                   transporte: '',
@@ -120,6 +132,9 @@
                   autorizo: '',
                   controlo: '',
                   motivo: '',
+                  usuario: this.$page.auth.user.username,
+                  nombre: this.$page.auth.user.name,
+                  email: this.$page.auth.user.email,
 
               },
           }
@@ -131,23 +146,38 @@
             'image-custom': ImageFile,
         },
         methods: {
+            onFileChange(e){
+
+                let file = e.target.files[0];
+
+                this.foto_guia = file
+            },
             send(){
                 let data = new FormData()
-
+                this.loading = true;
                 console.log([this.reclamo,this.items]);
-                return false;
-                data.append('id', this.category.id)
-                data.append('title', this.category.nombre || '')
-                data.append('image', this.category.image || '')
+
+
+
+                data.append('datos', JSON.stringify(this.reclamo) || '')
+                data.append('items', JSON.stringify(this.items) || '')
+                data.append('foto', this.foto_guia || '')
                 // data.append('hijo', this.category.hijo || '')
-                this.$inertia.post(route('privada.descarga'), data).then(() => {
-                    this.category = {
-                        id: '',
-                        nombre: '',
-                        autorizado: '',
-                        clientes: [],
-                        visto: 0,
-                        image: '',
+                this.$inertia.post(route('privada.reclamos.mail'), data).then(() => {
+                    this.loading = false;
+                    this.items = [];
+                    this.reclamo = {
+                        factura: '',
+                        transporte: '',
+                        guia: '',
+                        fecha: '',
+                        autorizo: '',
+                        controlo: '',
+                        motivo: '',
+                        usuario: this.$page.auth.user.username,
+                        nombre: this.$page.auth.user.name,
+                        email: this.$page.auth.user.email,
+
                     }
 
                 });

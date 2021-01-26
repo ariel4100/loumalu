@@ -28,7 +28,11 @@
                         <form class="row" @submit.prevent="registrar()">
                             <div class="col-md-6 form-group">
                                 <label for="">{{ t('Nombre') }}</label>
-                                <input type="text" class="form-control" v-model="registro.name" required>
+                                <input type="text" class="form-control" v-model="registro.nombre" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">{{ t('Apellido') }}</label>
+                                <input type="text" class="form-control" v-model="registro.apellido" required>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">{{ t('Usuario') }}</label>
@@ -42,6 +46,31 @@
                                 <label for="">{{ t('Clave') }}</label>
                                 <input type="password" class="form-control" v-model="registro.password"  required>
                             </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">{{ t('Teléfono') }}</label>
+                                <input type="text" class="form-control" v-model="registro.telefono" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">{{ t('Fecha de Nacimiento') }}</label>
+                                <input type="date" class="form-control" v-model="registro.fecha_nac" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">{{ t('DNI') }}</label>
+                                <input type="text" class="form-control" v-model="registro.dni" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">{{ t('Ciudad') }}</label>
+                                <input type="text" class="form-control" v-model="registro.ciudad" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">{{ t('Domicilio') }}</label>
+                                <input type="text" class="form-control" v-model="registro.domicilio" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">{{ t('Código Postal') }}</label>
+                                <input type="text" class="form-control" v-model="registro.cp" required>
+                            </div>
+
                             <div class="col-md-12 text-right">
                                 <button type="submit" v-if="loader == 1" class="btn btn-primario text-white">{{ t('Registrar') }}</button>
                                 <button type="button" v-if="loader == 0" class="btn btn-primario text-white">{{ t('Verificando') }} <i class="fas fa-sync fa-spin text-white"></i></button>
@@ -97,9 +126,9 @@
         methods: {
             registrar(){
                 this.loader = false
-                if (this.registro.nombre == '' || this.registro.email == '' || this.registro.password == '' || this.registro.username == ''){
-                    this.errors = [{ error : 'Complete lo Campos'}]
-                }
+                // if (this.registro.nombre == '' || this.registro.email == '' || this.registro.password == '' || this.registro.username == ''){
+                //     this.errors = [{ error : 'Complete lo Campos'}]
+                // }
                 axios.post(route('auth.registro',this.registro).url()).then(response => {
                    console.log(response)
                     if (response.data.hasOwnProperty('errors'))

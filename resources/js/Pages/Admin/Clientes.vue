@@ -8,7 +8,7 @@
             <div class="card-header">
                 <modal
                         :lang="false"
-                        title="Nuevo Cliente"
+                        title="Cliente"
                         title-button="Agregar Cliente"
                         @ok="add()"
                         @hidden="reset()"
@@ -20,6 +20,10 @@
                                 <input type="text" v-model="user.name" class="form-control">
                             </div>
                             <div class="col-md-6 form-group">
+                                <label for="">Apellido</label>
+                                <input type="text" v-model="user.apellido" class="form-control">
+                            </div>
+                            <div class="col-md-6 form-group">
                                 <label for="">Usuario</label>
                                 <input type="text" v-model="user.username" class="form-control">
                             </div>
@@ -27,6 +31,7 @@
                                 <label for="">Email</label>
                                 <input type="email" v-model="user.email" class="form-control">
                             </div>
+
                             <div class="col-md-6">
                                 <password-input
                                         placeholder=""
@@ -34,6 +39,30 @@
                                         v-model="user.password"
                                 >
                                 </password-input>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">Teléfono</label>
+                                <input type="text" class="form-control" v-model="user.telefono">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">Fecha de Nacimiento</label>
+                                <input type="date" class="form-control" v-model="user.fecha_nac">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">DNI</label>
+                                <input type="text" class="form-control" v-model="user.dni">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">Ciudad</label>
+                                <input type="text" class="form-control" v-model="user.ciudad">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">Domicilio</label>
+                                <input type="text" class="form-control" v-model="user.domicilio">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">Código Postal</label>
+                                <input type="text" class="form-control" v-model="user.cp">
                             </div>
                         </div>
                     </template>
@@ -86,9 +115,16 @@
               user: {
                   id: '',
                   name:'',
+                  apellido:'',
                   username:'',
                   email: '',
                   password: '',
+                  dni: '',
+                  teelfono: '',
+                  ciudad: '',
+                  domicilio: '',
+                  cp: '',
+                  fecha_nac: '',
               },
           }
         },
@@ -104,9 +140,16 @@
                 this.user = {
                     id: '',
                     name:'',
+                    apellido:'',
                     username:'',
                     email: '',
                     password: '',
+                    dni: '',
+                    teelfono: '',
+                    ciudad: '',
+                    domicilio: '',
+                    cp: '',
+                    fecha_nac: '',
                 };
             },
             add(){
@@ -121,6 +164,7 @@
                 this.$root.$emit('bv::show::modal','modal-prevent-closing')
             },
             del(id){
+                console.log(id)
                 Swal.fire({
                     title: '¿Estas seguro de eliminar?',
                     icon: 'warning',

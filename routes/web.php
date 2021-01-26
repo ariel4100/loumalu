@@ -40,6 +40,7 @@ Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('nosotros', [FrontendController::class, 'empresa'])->name('empresa');
 Route::get('descargas', [FrontendController::class, 'descargas'])->name('descargas');
 Route::get('buscador', [FrontendController::class, 'buscador'])->name('buscador');
+Route::get('buscador-pro', [FrontendController::class, 'buscador_pro'])->name('buscador.pro');
 Route::get('contacto', [FrontendController::class, 'contacto'])->name('contacto');
 Route::post('contacto', [MailController::class, 'contacto'])->name('mail.contacto');
 Route::post('presupuesto', [MailController::class, 'presupuesto'])->name('mail.presupuesto');
@@ -49,7 +50,7 @@ Route::post('suscriptores', [MailController::class, 'suscriptor'])->name('mail.n
 Route::get('productos', [FrontendController::class, 'familias'])->name('familias');
 Route::get('categoria-producto/{slug}', [FrontendController::class, 'subfamilias'])->name('subfamilias');
 Route::get('productos/{slug}', [FrontendController::class, 'productos'])->name('productos');
-Route::get('producto/{slug}', [FrontendController::class, 'producto'])->name('producto');
+Route::get('producto/{slug?}', [FrontendController::class, 'producto'])->name('producto');
 
 //Novedades
 Route::get('blog/{slug?}', [FrontendController::class, 'novedades'])->name('novedades');

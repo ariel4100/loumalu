@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderIntertrade;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,22 +13,25 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $pedidos = Transaction::with('order')->get();
+        $pedidos = OrderIntertrade::with('order')->orderBy('created_at','desc')->get();
 
         return Inertia::render('Admin/Pedidos', [
 
             'pedidos' => $pedidos->map(function ($item) {
-                return [
-                    'productos' => @$item->order->first()->productos,
-                    'numero' => $item->id,
-                    'id' => $item->id,
-                    'fecha' => $item->created_at->format('d/m/Y'),
-                    'cliente' => $item->client->name,
-                    'estado' => $item->status,
-                    'total' => floatval($item->subtotal),
-                    'total_iva' => floatval($item->total),
-                 ];
-            }),
+                if ($item->client){
+                    return [
+                        'productos' => @$item->order,
+                        'numero' => $item->id,
+                        'id' => $item->id,
+                        'fecha' => $item->created_at->format('d/m/Y'),
+                        'cliente' => $item->client ? $item->client->name : 'Este cliente fue eliminado',
+                        'estado' => $item->status,
+                        'mensaje' => $item->mensaje,
+                        'total' => floatval($item->subtotal),
+                        'total_iva' => floatval($item->total),
+                    ];
+                }
+            })->filter()->values(),
 
         ]);
     }
@@ -38,7 +42,7 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
             if ($request->id){
-                $item = Transaction::find($request->id);
+                $item = OrderIntertrade::find($request->id);
             }
 
             $item->status = $request->estado;

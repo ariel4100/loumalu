@@ -60,6 +60,14 @@
                     Zona Clientes
                 </div>
                 <li class="nav-item">
+                    <inertia-link class="nav-link" :href="route('adm.clientes.index')">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Clientes</span>
+                    </inertia-link>
+                    <inertia-link class="nav-link" :href="route('adm.monitoreo.index')">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Monitoreo</span>
+                    </inertia-link>
                     <inertia-link class="nav-link" :href="route('adm.pedidos.index')">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Pedidos</span>
@@ -310,7 +318,7 @@
                         ruta: route('adm.content.index',{ section: 'inicio'}),
                     },
                     {
-                        nombre: 'Nosotroa',
+                        nombre: 'Nosotros',
                         icon: '<i class="fas fa-building"></i>',
                         submenu: [],
                         ruta: route('adm.content.index',{ section: 'empresa'}),
@@ -320,7 +328,7 @@
                         icon: '<i class="fas fa-cart-plus"></i>',
                         submenu: [
                             {
-                                nombre: 'Familias',
+                                nombre: 'Rubros',
                                 ruta: route('adm.familias.index'),
                             },
                             {

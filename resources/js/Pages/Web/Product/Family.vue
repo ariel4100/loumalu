@@ -1,6 +1,8 @@
 <template>
     <web-layout class="">
-        <div class=" ">
+        <buscador
+        ></buscador>
+        <div class=" " v-if="sidenav == 1">
             <div class="container">
                 <h5 class="section-title ">
                     <i class="fas fa-home text-color"></i>
@@ -8,14 +10,14 @@
                         {{ t('PRODUCTOS') }}
                     </a>
                     <a v-if="familia" :href="route('productos',{ slug: familia.slug })" class="text-color">
-                        {{ (familia ? '| '+familia.title : '') }}
+                        {{ (familia ? '| '+familia.nombre : '') }}
                     </a>
 
                 </h5>
             </div>
         </div>
 
-        <div v-if="sidenav == 1" class="container my-5">
+        <div v-if="sidenav == 1" class="container mb-5">
             <div class="row">
                 <div class="col-lg-3 col-md-4">
                     <sidenav
@@ -37,8 +39,8 @@
         <div v-else class="container my-5">
             <div class="row">
                 <template v-for="item in familias">
-                    <div class="col-sm-6 col-md-4 col-lg-4 mb-5">
-                        <product-card :item="item" type="1"></product-card>
+                    <div class="col-sm-6 col-md-3 col-lg-3 mb-5">
+                        <product-card :item="item"  ></product-card>
                     </div>
                 </template>
             </div>
@@ -51,6 +53,7 @@
     import Sidenav from '@/Components/SidenavComponent'
     import WebLayout from '@/Layouts/WebLayout'
     import ProductCard from '@/Components/ProductCardComponent'
+    import Buscador from '@/Components/BuscadorComponent'
 
     export default {
         props: {
@@ -69,6 +72,7 @@
             ProductCard,
             WebLayout,
             Carousel,
+            Buscador,
         },
         methods: {
             buscar(){

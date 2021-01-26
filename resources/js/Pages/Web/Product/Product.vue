@@ -8,15 +8,15 @@
                         {{ t('PRODUCTOS') }}
                     </a>
                     <a v-if="familia" :href="route('productos',{ slug: familia.slug })" class="text-color">
-                        {{ (familia ? '| '+familia.title : '') }}
+                        {{ (familia ? '| '+familia.nombre : '') }}
                     </a>
                     {{ (producto ? '| '+producto.title : '') }}
                 </h5>
             </div>
         </div>
-        <div class="container my-5">
+        <div class="container mb-5">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 ">
                     <sidenav
                             :familia-id="familia.id"
                             :producto-id="producto.id"
@@ -25,14 +25,17 @@
                 </div>
                 <div class="col-md-9">
                     <div class="row">
-                        <div class="col-md-6 mb-5">
-                            <carousel :images="gallery"  producto="1" arrows="1"></carousel>
+                        <div class="col-md-6 mb-5 border">
+                            <img :src="'uploads/imagenes/'+producto.code+'.jpg'" alt="" class="img-fluid">
+
+<!--                            <carousel :images="gallery"  producto="1" arrows="1"></carousel>-->
                         </div>
                         <div class="col-md-6 mb-5">
                             <h4 class="text-secundario font-weight-bold">
                                 {{ producto.title }}
                             </h4>
-
+                            <p> {{ producto.code }}</p>
+                            <h6 class="text-uppercase"><b>MARCA:</b> {{ producto.marca }}</h6>
                             <div class="" v-html="producto.text"></div>
                             <a v-if="producto.file" :href="producto.file" download   class="btn btn-secundario">DESCARGAR FICHA  </a>
                             <a :href="route('contacto')" class="btn btn-secundario text-white">CONSULTAR</a>
@@ -45,18 +48,18 @@
                         <div class="col-md-8 mb-5" v-if="producto.video">
                             <iframe width="100%" height="300" :src="'https://www.youtube.com/embed/'+producto.video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
-                        <div class="col-md-12" v-if="productos.length > 0">
-                            <h5 class="text-secundario">Productos relacionados</h5>
-                            <hr   class="mt-1 bg-secundario">
-                            <div class="row">
-                                <template v-for="item in productos">
-                                    <div class="col-md-4 col-sm-6 col-lg-4 mb-4">
-                                        <product-card :item="item" type="1"></product-card>
+<!--                        <div class="col-md-12" v-if="productos.length > 0">-->
+<!--                            <h5 class="text-secundario">Productos relacionados</h5>-->
+<!--                            <hr   class="mt-1 bg-secundario">-->
+<!--                            <div class="row">-->
+<!--                                <template v-for="item in productos">-->
+<!--                                    <div class="col-md-4 col-sm-6 col-lg-4 mb-4">-->
+<!--                                        <product-card :item="item" type="1"></product-card>-->
 
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
+<!--                                    </div>-->
+<!--                                </template>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </div>

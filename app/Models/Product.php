@@ -16,7 +16,7 @@ class Product extends Model
     ];
 
     protected $fillable = [
-        'title', 'text','order','slug','video','image','description','file','family_id','text_video','gallery','mlproducto_id'
+        'title', 'text','order','slug','video','image','description','file','family_id','text_video','gallery','mlproducto_id','id'
     ];
 
     public $translatable = [
@@ -30,7 +30,7 @@ class Product extends Model
 
     public function product_intertrade()
     {
-        return $this->setConnection('aguila')->belongsTo(ProductIntertrade::class,'mlproducto_id','IdMlProducto');
+        return $this->setConnection('aguila')->belongsTo(ProductIntertrade::class,'mlproducto_id','id');
     }
 
     public function family() {
@@ -42,6 +42,7 @@ class Product extends Model
     public function related() {
         return $this->belongsToMany(Product::class,'related_products','product_id','related_id');
     }
+
     public function industrias()
     {
         return $this->belongsToMany(Block::class, 'product_blocks','product_id','block_id');

@@ -6,6 +6,7 @@ use App\Extensions\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Family;
+use App\Models\FamilyIntertrade;
 use App\Models\Product;
 use App\Models\ProductIntertrade;
 use Illuminate\Http\Request;
@@ -19,51 +20,63 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $familias = Family::whereNull('padre_id')->orderBy('order')->get();
+        $familias = FamilyIntertrade::orderBy('orden')->get();
 
         $familiasMap = $familias->map(function ($item) {
             return [
                 'id' => $item->id,
-                'title' => $item->title,
-                'padre_id' => $item->padre_id,
+                'title' => $item->nombre,
+
             ];
         });
 
 
 
 //        dd($categoriasconhijos);
-//        $productos = Product::get();
-        $productos = ProductIntertrade::with('product')->get();
+        $productos_con_detalle = ProductIntertrade::orderBy('orden')->get();
+        $productos = ProductIntertrade::get();
 //        $productos_aguila = Product::on(env('aguila'))->get();
+//        dd($productos );
+        $productos_ordered = $productos->map(function ($item) {
+//                dd($item->product);
+            return [
+                'id_inter' => $item->id,
+                'id' => $item->product ? $item->product->id : '',
+                'cod' => $item->codigo,
+                'title' => $item->nombre,
+                'marca' => $item->marca,
+                'clasificacion' => $item->marca,
+                'descripcion' => $item->descripcion,
+                'family_id' => $item->categoria_id,
+                'name_family' => $item->family ? @$item->family->nombre : '',
+                'price' => floatval($item->precio),
+                'stock' => $item->stock,
+                'unidad' => $item->unidad,
+                'featured' => $item->destacado,
+                'order' => $item->orden,
+                'productos' => $item->product ? $item->product->related->map(function ($value) {
+                    return [
+                        'id' => $value->id,
+                        'title' => $value->product_intertrade->nombre,
+                    ];
+                }) : [],
+//                'gallery' => collect(@$item->product->gallery ?? [])->map(function ($item) {
+//                    $url_image =  Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
+////                        dd($item);
+//                    return $url_image;
+//                }),
+                'file' => @$item->archivo ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->archivo) : '',
 
-//        dd($productos);
+            ];
+        });
+//        dd($productos_con_detalle);
         return Inertia::render('Admin/Product', [
             'familias' => $familiasMap,
-            'productos' => $productos->map(function ($item) {
-//                dd($item->product);
+            'productos' => $productos_ordered->sortBy('order')->values()->all(),
+            'productos_detalle' => $productos_con_detalle->map(function ($value) {
                 return [
-                    'id' => $item->IdMlProducto,
-                    'cod' => $item->CodigoStProducto,
-                    'title' => $item->NombreStProducto,
-                    'text' => $item->product ? Helpers::getTranslations($item->product,'text') : ['es' => ''],
-                    'family_id' => $item->product ? $item->product->family_id : '',
-                    'price' => floatval($item->PrecioMLProducto),
-                    'stock' => $item->StockMLProducto,
-                    'featured' => $item->product ? $item->product->featured : '',
-                    'order' => $item->product ? $item->product->order : '',
-//                    'productos' => $item->related->map(function ($item) {
-//                        return [
-//                            'id' => $item->id,
-//                            'title' => $item->title,
-//                        ];
-//                    }),
-                    'gallery' => collect(@$item->product->gallery ?? [])->map(function ($item) {
-                        $url_image =  Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
-//                        dd($item);
-                        return $url_image;
-                    }),
-                    'file' => @$item->product->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->product->file) : '',
-
+                    'id' => $value->id,
+                    'title' => $value->nombre ?? 'otro',
                 ];
             }),
 
@@ -76,28 +89,31 @@ class ProductController extends Controller
 //        dd($request->all());
         try {
             DB::beginTransaction();
-            if ($request->id){
-                $item_inter = ProductIntertrade::where('IdMlProducto',$request->id)->first();
-                $item = Product::firstOrCreate([
-                    'mlproducto_id' => $item_inter->IdMlProducto
-                ]);
+            if ($request->id_inter){
+                $item_inter = ProductIntertrade::find($request->id_inter) ;
+//                $item = Product::firstOrCreate([
+//                    'mlproducto_id' => $item_inter->id
+//                ]);
             }else{
-                $item = new ProductIntertrade();
+                $item_inter = new ProductIntertrade();
             }
-//            dd($item);
+//            dd([$item,$item_inter]);
             //modelo Intertrade
-            $item_inter->CodigoStProducto   = $request->cod;
-            $item_inter->NombreStProducto   = $request->title;
-//            $item->PrecioMLProducto   = $request->title;
-//            $item->StockMLProducto   = $request->title;
+            $item_inter->codigo   = $request->cod;
+            $item_inter->nombre   = $request->title;
+            $item_inter->precio   = floatval($request->price);
+            $item_inter->descripcion   = $request->descripcion;
+            isset($request->stock) ? $item_inter->stock = 1 : $item_inter->stock = 0;
 //            $item->EstadoMLProducto   = $request->title;
 //            $item->idStProducto   = $request->title;
 //            $item->EsKitMLProducto   = $request->title;
-//            $item->Marca   = $request->title;
-//            $item->NombreStClasificacionSimple   = $request->title;
+            $item_inter->marca   = $request->marca;
+            $item_inter->unidad   = $request->unidad;
+//            $item_inter->NombreStClasificacionSimple   = $request->clasificacion;
 
-            $file_save = Helpers::saveImage($request->file('archivo'), 'productos',$item->archivo);
-            $file_save ? $item->file = $file_save : false;
+//            dd('aca');
+            $file_save = Helpers::saveImage($request->file('archivo'), 'productos',$item_inter->archivo);
+            $file_save ? $item_inter->archivo = $file_save : false;
 
             if (isset($request->gallery)){
                 $images = Helpers::saveMultipleImage($request->gallery, 'productos');
@@ -105,22 +121,25 @@ class ProductController extends Controller
 
 //            dd([$images]);
 
-            $item->setTranslations('text', (array) json_decode($request->text));
-            $item->setTranslations('slug', ['es'=> str::slug($request->title)]);
-            $item->order   = $request->order;
-            $item->gallery   = @$images;
-            isset($request->featured) ? $item->featured = 1 : false;
-            $item->family_id   = $request->family_id;
+//            $item->setTranslations('text', (array) json_decode($request->text));
+//            $item->setTranslations('slug', ['es'=> str::slug($request->title)]);
+            $item_inter->orden   = $request->order;
+            $item_inter->slug   = str::slug($request->title);
+//            $item->gallery   = @$images;
+            isset($request->featured) ? $item_inter->destacado = 1 : $item_inter->destacado = 0;
+            $item_inter->categoria_id   = $request->family_id;
 
 //            $item->slug    = str::slug($request->title);
-            $item->save();
+//            $item->save();
             $item_inter->save();
-//            $productos = collect(json_decode($request->productos));
+            $productos = collect(json_decode($request->productos));
+
 //
-            //productos relacionados
-//            if (count($productos) > 0){
-//                $item->related()->sync($productos->pluck('id'));
-//            }
+//            productos relacionados
+            if (count($productos) > 0){
+                $item_inter->related()->sync($productos->pluck('id'));
+            }
+
             DB::commit();
 
             session()->flash('message', 'Se ha guardado correctamente.');

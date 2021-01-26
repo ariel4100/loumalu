@@ -20,8 +20,8 @@
                 </template>
             </div>
         </div>
-        <div class="py-5" style="background-color:rgba(190, 202, 214,0.4);">
-            <div class="container">
+        <div class="py-5 " style="background-color:rgba(190, 202, 214,0.4);">
+            <div class="container ">
                 <div class="d-md-flex d-none pb-4 justify-content-center align-items-center">
                     <hr class="bg-dark m-0 w-100">
                     <h5 class="m-0 text-nowrap px-3 font-weight-bold">Principales Categorías de Productos</h5>

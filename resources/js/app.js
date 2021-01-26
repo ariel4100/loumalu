@@ -86,13 +86,13 @@ Vue.mixin({
                 {
                     nombre: 'Productos',
                     route: 'familias',
-                    url: 'familias',
+                    url: 'familias,subfamilias,productos,producto',
                     mostrar: 1,
                 },
                 {
                     nombre: 'NOVEDADES Y OFERTAS',
                     route: 'novedades',
-                    url: 'blog',
+                    url: 'blog,novedades,novedad',
                     mostrar: 1,
                 },
                 {

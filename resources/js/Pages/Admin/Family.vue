@@ -2,13 +2,13 @@
     <app-layout>
 
         <template #header>
-            Familias
+            Rubros
         </template>
         <div class="card">
             <div class="card-header">
                 <modal
-                        title="Familia"
-                        title-button="Agregar Familia"
+                        title="Rubro"
+                        title-button=""
                         @ok="add()"
                         @hidden="reset()"
                 >
@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-10 form-group">
                                 <label for="">Titulo</label>
-                                <input type="text" v-model="category.title[lang]" class="form-control">
+                                <input type="text" v-model="category.title" class="form-control">
                             </div>
                             <div class="col-md-2 form-group">
                                 <label for="">Orden</label>
@@ -47,19 +47,32 @@
                 </modal>
             </div>
             <div class="card-body">
-                <custom-table
-                        :items="categorias"
-                >
-                    <template #action="{ item }">
-                        <button @click="edit(item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">
+                <b-table striped hover :items="categorias" :fields="fields">
+                    <template #cell(actions)="row">
+                        <button @click="edit(row.item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">
                             <i class="far fa-edit"></i>
                         </button>
 
-                        <button @click="del(item)" class="btn btn-danger btn-circle">
-                            <i class="fas fa-trash"></i>
-                        </button>
+<!--                        <button @click="del(row.item)" class="btn btn-danger btn-circle">-->
+<!--                            <i class="fas fa-trash"></i>-->
+<!--                        </button>-->
+
                     </template>
-                </custom-table>
+                </b-table>
+
+<!--                <custom-table-->
+<!--                        :items="categorias"-->
+<!--                >-->
+<!--                    <template #action="{ item }">-->
+<!--                        <button @click="edit(item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">-->
+<!--                            <i class="far fa-edit"></i>-->
+<!--                        </button>-->
+
+<!--                        <button @click="del(item)" class="btn btn-danger btn-circle">-->
+<!--                            <i class="fas fa-trash"></i>-->
+<!--                        </button>-->
+<!--                    </template>-->
+<!--                </custom-table>-->
 
             </div>
         </div>
@@ -84,10 +97,20 @@
         data(){
           return {
               selectedCat: '',
+              fields: [
+                  {
+                      key: 'title',
+                      label: 'Titulo',
+                  },
+                  {
+                      key: 'actions',
+                      label: 'Acciones',
+                  },
+              ],
               // selectedValue: [],
               category: {
                   id: '',
-                  title: {},
+                  title: '',
                   text: {},
                   padre_id: '',
                   featured: 0,
@@ -130,7 +153,7 @@
             reset(){
                 this.category = {
                     id: '',
-                    title: {},
+                    title: '',
                     text: {},
                     padre_id: '',
                     featured: 0,
@@ -143,7 +166,7 @@
                 let data = new FormData()
 
                 data.append('id', this.category.id)
-                data.append('title', JSON.stringify(this.category.title) || '')
+                data.append('title', this.category.title)
                 data.append('text', JSON.stringify(this.category.text) || '')
                 data.append('image', this.category.image || '')
                 data.append('featured', this.category.featured || '')

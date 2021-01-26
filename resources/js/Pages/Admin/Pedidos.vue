@@ -1,7 +1,7 @@
 <template>
     <app-layout>
         <template #header>
-            Familias
+            Pedidos
         </template>
         <div class="card">
             <div class="card-body">
@@ -19,15 +19,16 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" @click="cambiarEstado('Pendiente',row.item.id)">Pendiente</a>
-                                <a class="dropdown-item" @click="cambiarEstado('Procesado',row.item.id)">Procesado</a>
+                                <a class="dropdown-item" @click="cambiarEstado('Enviado',row.item.id)">Enviado</a>
                             </div>
                         </div>
                     </template>
                     <template #action="{ row }">
-                        <button type="button" class="btn btn-success text-white"  @click="row.toggleDetails">
+                        <button type="button" class="btn btn-info text-white"  @click="row.toggleDetails">
                             {{ row.detailsShowing ? 'OCULTAR' : 'VER' }}  DETALLE
                         </button>
                     </template>
+
                 </custom-table>
 
             </div>

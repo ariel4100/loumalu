@@ -8,11 +8,11 @@
                     </a>
                 </template>
                 <template #cell(estado)="row">
-                    <span v-if="row.value == 'pendiente'" class="border-warning text-uppercase font-weight-bold text-warning px-4 py-2">
-                         {{ row.item.estado }}
+                    <span v-if="row.value.toLowerCase() == 'enviado'" class="border-warning d-block text-uppercase font-weight-bold text-warning px-4 py-2">
+                         PENDIENTE
                     </span>
-                    <span v-else class="border-success text-uppercase font-weight-bold text-success px-4 py-2">
-                         {{ row.item.estado }}
+                    <span v-else class="border-success d-block text-uppercase font-weight-bold text-success px-4 py-2">
+                        ENVIADO
                     </span>
                 </template>
                 <template #cell(total)="row">
@@ -23,11 +23,34 @@
                 </template>
                 <template #row-details="row">
                     <b-card>
-                        <b-list-group v-if="row.item.productos.length > 0">
-                            <b-list-group-item v-for="(value, key) in row.item.productos" :key="key">
-                                {{ value.cantidad }} x {{ value.producto }} <b>Cod:</b> {{ value.codigo }}
-                            </b-list-group-item>
-                        </b-list-group>
+<!--                        <b-list-group v-if="row.item.productos.length > 0">-->
+<!--                            <b-list-group-item v-for="(value, key) in row.item.productos" :key="key">-->
+<!--                                {{ value.cantidad }} x {{ value.producto }} <b>Cod:</b> {{ value.codigo }}-->
+<!--                            </b-list-group-item>-->
+<!--                        </b-list-group>-->
+                        <template v-if="row.item.mensaje">
+                            <h4 class="">Observaciones:</h4>
+                            <p class="">
+                                {{ row.item.mensaje }}
+                            </p>
+                        </template>
+                        <table class="table table-bordered" v-if="row.item.productos.length > 0">
+                            <thead>
+                            <tr>
+                                <th scope="col">Codigo</th>
+                                <th scope="col">Producto</th>
+                                <th scope="col" class="text-center">Cantidad</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr v-for="(value, key) in row.item.productos" :key="key">
+                                <td>   {{ value.producto_codigo }}</td>
+                                <td>   {{ value.producto_nombre }}</td>
+                                <td class="text-center">   {{ value.cantidad }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </b-card>
                 </template>
             </b-table>

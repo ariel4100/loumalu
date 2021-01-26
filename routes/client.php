@@ -27,6 +27,7 @@ Route::get('carrito', [ClientController::class, 'carrito'])->name('carrito');
 Route::get('estado-cuenta', [ClientController::class, 'estado_cuenta'])->name('estado.cuenta');
 Route::get('envios', [ClientController::class, 'envios'])->name('envios');
 Route::get('reclamos', [ClientController::class, 'reclamos'])->name('reclamos');
+Route::post('reclamos-data', [MailController::class, 'reclamos'])->name('reclamos.mail');
 Route::get('historico', [ClientController::class, 'historico'])->name('historico');
 Route::post('finalizar-compra', [ClientController::class, 'finalizar_compra'])->name('finalizar.compra');
 
