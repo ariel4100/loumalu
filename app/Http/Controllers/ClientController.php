@@ -7,6 +7,7 @@ use App\Models\OrderIntertrade;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\ProductIntertrade;
+use App\Models\Pruebas;
 use App\Models\Transaction;
 use http\Client;
 use Illuminate\Http\Request;
@@ -35,22 +36,22 @@ class ClientController extends Controller
         $auth = auth()->guard('client')->user();
 
 //        $productos = Product::with('product_intertrade')->orderBy('order')->get();
-        $productos = ProductIntertrade::with('family')->get();
+        $productos = Product::with('family')->get();
 
 //        dd($productos->flatten());
         return Inertia::render('Client/Pedidos', [
             'productos' => $productos->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'rubro' => $item->family ? $item->family->nombre : '',
-                    'producto' => $item->nombre,
-                    'precio' => floatval($item->precio),
-                    'codigo' => $item->codigo,
+                    'rubro' => $item->family ? $item->family->title : '',
+                    'producto' => $item->title,
+                    'precio' => floatval($item->price),
+                    'codigo' => $item->code,
                     'marca' => $item->marca,
                     'cantidad' => 0,
                     'stock' => intval($item->stock),
-                    'unidad' => intval($item->unidad) ? $item->unidad : 1,
-                    'image' => $item->product ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url(@$item->product->gallery[0]) : '',
+                    'unidad' => intval($item->unit) ? $item->unit : 1,
+                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url(@$item->image) : '',
                 ];
             }),
 //            'sliders' => $sliders->map(function ($item) {
@@ -68,9 +69,18 @@ class ClientController extends Controller
     {
 //        dd(auth()->guard('client')->user());
         $auth = auth()->guard('client')->user();
+        $content = Content::where("section",'carrito')->first();
+        $descuento_general = $content->data['descuento_general'] ?? 0;
+        $descuento_cliente = $auth->descuento;
+        //OTRA COSA XD
+//        $articulo_rubro  = Pruebas::get();
+//        dd($articulo_rubro);
 
+
+//        dd($descuento_cliente);
         return Inertia::render('Client/Carrito', [
-
+            'descuento_general' => $descuento_general ?? 0,
+            'descuento_cliente' => $descuento_cliente ?? 0,
         ]);
     }
 

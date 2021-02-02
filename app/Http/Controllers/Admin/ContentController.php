@@ -28,6 +28,7 @@ class ContentController extends Controller
         if ($section == 'contacto'){
             return Inertia::render('Admin/Config', [
                 'contenido' => $contenido,
+
                 'imagenes' => collect($contenido->image)->map(function ($item) {
                     return [
                         'title' => $item['title'] ?? '',
@@ -179,6 +180,25 @@ class ContentController extends Controller
                 ]
             ]);
         }
+    }
+
+    public function carrito(Request $request)
+    {
+        $data = $request->all();
+//        dd($request->all());
+        $content = Content::where('section',$request->section)->first();
+        $content->data = $data;
+        $content->save();
+        if($content)
+        {
+            session()->flash('message', 'Se guardo correctamente.');
+            return Redirect::route('adm.content.index',$request->section);
+
+        }else{
+            session()->flash('message', 'Algo salio mal.');
+            return Redirect::route('adm.content.index',$request->section);
+        }
+
     }
 
 }

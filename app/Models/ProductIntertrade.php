@@ -14,6 +14,10 @@ class ProductIntertrade extends Model
     protected $connection = 'aguila';
     public $timestamps = false;
 
+    protected $fillable = [
+        'marca','categoria_id'
+    ];
+
     public function family()
     {
         return $this->setConnection('mysql')->belongsTo(FamilyIntertrade::class,'categoria_id');

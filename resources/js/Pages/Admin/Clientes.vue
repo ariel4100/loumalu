@@ -64,6 +64,15 @@
                                 <label for="">Código Postal</label>
                                 <input type="text" class="form-control" v-model="user.cp">
                             </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">Descuento Cliente</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" v-model="user.descuento" class="form-control" aria-describedby="basic-addon2">
+                                    <span class="input-group-text" id="basic-addon2">%</span>
+                                </div>
+<!--                                <label for="">Descuento Cliente</label>-->
+<!--                                <input type="number" class="form-control" v-model="user.descuento">-->
+                            </div>
                         </div>
                     </template>
                 </modal>
@@ -125,6 +134,7 @@
                   domicilio: '',
                   cp: '',
                   fecha_nac: '',
+                  descuento: '',
               },
           }
         },
@@ -150,6 +160,7 @@
                     domicilio: '',
                     cp: '',
                     fecha_nac: '',
+                    descuento: '',
                 };
             },
             add(){

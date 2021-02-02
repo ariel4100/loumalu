@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\Logincontroller;
 use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,7 @@ Route::get('productos', [FrontendController::class, 'familias'])->name('familias
 Route::get('categoria-producto/{slug}', [FrontendController::class, 'subfamilias'])->name('subfamilias');
 Route::get('productos/{slug}', [FrontendController::class, 'productos'])->name('productos');
 Route::get('producto/{slug?}', [FrontendController::class, 'producto'])->name('producto');
+Route::get('excel', [ImportController::class, 'import'])->name('import');
 
 //Novedades
 Route::get('blog/{slug?}', [FrontendController::class, 'novedades'])->name('novedades');

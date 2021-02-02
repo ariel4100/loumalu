@@ -27,11 +27,15 @@
                     <div class="d-flex justify-content-between align-items-center border-bottom">
                         <div class="">
                             <h5 class="semibold text-color">Subtotal</h5>
+                            <h5 class="semibold text-color" v-if="parseInt(subTotalWithDiscountWeb())">Descuento Web ({{ descuento_general}}%)</h5>
+                            <h5 class="semibold text-color" v-if="parseInt(subTotalWithDiscountClient())">Descuento Cliente ({{ descuento_cliente}}%)</h5>
                             <h5 class="semibold text-color">IVA (21%)</h5>
                             <h5 class="semibold mt-4">Total</h5>
                         </div>
                         <div class="">
                             <h5 class="semibold text-color">$ {{ subTotal() | toCurrency }}</h5>
+                            <h5 class="semibold text-color" v-if="parseInt(subTotalWithDiscountWeb())">- $ {{ subTotalWithDiscountWeb() | toCurrency }}</h5>
+                            <h5 class="semibold text-color" v-if="parseInt(subTotalWithDiscountClient())">- $ {{ subTotalWithDiscountClient() | toCurrency }}</h5>
                             <h5 class="semibold text-color"> $ {{ subTotalWithIVA() | toCurrency }}</h5>
                             <h4 class="semibold mt-4">$ {{ total() | toCurrency }}</h4>
                         </div>
@@ -75,6 +79,8 @@
             bloques: Array,
             contenido: Object,
             descargas: Array,
+            descuento_general: Number,
+            descuento_cliente: Number,
         },
         data(){
             return {
@@ -169,13 +175,24 @@
 
             },
             total() {
-                return this.subTotalWithIVA() + this.subTotal()
+                return this.subTotalWithIVA() + this.subTotal() - this.subTotalWithDiscountWeb() - this.subTotalWithDiscountClient()
             },
             subTotalWithIVA() {
                 let precio = this.subTotal()
                 precio = ((precio * parseFloat(21)) / 100)
                 return precio
             },
+            subTotalWithDiscountWeb() {
+                let precio = this.subTotal()
+                precio = ((precio * parseFloat(this.descuento_general)) / 100)
+                return precio
+            },
+            subTotalWithDiscountClient() {
+                let precio = this.subTotal()
+                precio = ((precio * parseFloat(this.descuento_cliente)) / 100)
+                return precio
+            },
+
             // subTotalDiscount(amount, percent) {
             //     return amount-((amount*percent)/100)
             // },

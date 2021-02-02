@@ -8,7 +8,7 @@
                 <custom-table
                         :items="items"
                         :fields="fields"
-                        :filtrar="['fecha','cliente','ip']"
+                        :filtrar="['fecha','cliente','ip','entradas','pedidos']"
                 >
 
 
@@ -38,6 +38,8 @@
                   { key: 'fecha', label: 'FECHA', class: 'text-center'},
                   { key: 'cliente', label: 'CLIENTE', class: 'text-center'},
                   { key: 'ip', label: 'IP', class: 'text-center'},
+                  { key: 'entradas', label: 'Entradas', class: 'text-center'},
+                  { key: 'pedidos', label: 'Pedidos', class: 'text-center'},
               ],
 
           }

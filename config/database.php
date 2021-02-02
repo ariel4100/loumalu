@@ -75,6 +75,19 @@ return [
                 \PDO::ATTR_EMULATE_PREPARES => true
             ]
         ),
+        env('inter_old') => array(
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('INTER_OLD_DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '1433'),
+            'database' => env('INTER_OLD_DB_DATABASE', 'forge'),
+            'username' => env('INTER_OLD_DB_USERNAME', 'forge'),
+            'password' => env('INTER_OLD_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+
+        ),
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

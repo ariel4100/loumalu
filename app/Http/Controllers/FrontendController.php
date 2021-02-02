@@ -26,8 +26,8 @@ class FrontendController extends Controller
 {
     public function home()
     {
-        $destacados = FamilyIntertrade::where('destacado',1)->orderBy('orden')->get();
-        $destacados_productos = ProductIntertrade::where('destacado',1)->orderBy('orden')->get();
+        $destacados = Family::where('featured',1)->orderBy('order')->get();
+        $destacados_productos = Product::where('featured',1)->orderBy('order')->get();
         $marcas = Content::where('section','inicio')->first()->Block;
         $sliders = Slider::where('section','inicio')->get();
 //        dd($destacados_productos);
@@ -45,8 +45,8 @@ class FrontendController extends Controller
             'destacados' => $destacados->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'title' => $item->nombre,
-                    'order' => $item->orden,
+                    'title' => $item->title,
+                    'order' => $item->order,
                     'ruta' => route('productos',$item->slug),
                     'image' => $item->ruta ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->ruta) : '',
                 ];
@@ -54,9 +54,9 @@ class FrontendController extends Controller
             'destacados_p' => $destacados_productos->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'code' => $item->codigo,
+                    'code' => $item->code,
                     'marca' => $item->marca,
-                    'title' => $item->nombre,
+                    'title' => $item->title,
                     'slug' => $item->slug,
                     'ruta' => route('producto',@$item->slug),
                     'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
@@ -143,17 +143,17 @@ class FrontendController extends Controller
     public function familias($slug = '')
     {
         $lang = app()->getLocale();
-        $familias = FamilyIntertrade::orderBy('orden')->get();
+        $familias = Family::orderBy('order')->get();
 
 
         return Inertia::render('Web/Product/Family', [
                 'familias' => $familias->map(function ($item) {
                     return [
                         'id' => $item->id,
-                        'title' => $item->nombre,
-                        'order' => $item->orden,
+                        'title' => $item->title,
+                        'order' => $item->order,
                         'ruta' => route('productos',$item->slug),
-                        'image' => $item->ruta ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->ruta) : '',
+                        'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
                     ];
                 }),
             ]);
@@ -165,11 +165,11 @@ class FrontendController extends Controller
     public function productos($slug = '')
     {
         $lang = app()->getLocale();
-        $familia = FamilyIntertrade::where("slug",$slug)->first();
-        $familias = FamilyIntertrade::orderBy('orden')->get();
+        $familia = Family::where("slug",$slug)->first();
+        $familias = Family::orderBy('order')->get();
 
 //        $productos = $familia->productos;
-        $productos =  ProductIntertrade::where("categoria_id",$familia->id)->get();;
+        $productos =  Product::where("family_id",$familia->id)->get();;
 
 
 //        dd($productos);
@@ -179,12 +179,12 @@ class FrontendController extends Controller
             'familias' => $familias->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'title' => $item->nombre,
+                    'title' => $item->title,
                     'ruta' => route('producto',$item->slug),
                     'productos' => $item->productos->map(function ($item) {
                         return [
                             'id' => $item->id,
-                            'title' => $item->nombre,
+                            'title' => $item->title,
                             'ruta' => route('producto',$item->slug),
                         ];
                     }),                ];
@@ -192,13 +192,13 @@ class FrontendController extends Controller
             'productos' => $productos->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'code' => $item->codigo,
-                    'title' => $item->nombre,
+                    'code' => $item->code,
+                    'title' => $item->title,
                     'marca' => $item->marca,
                     'text' => $item->text,
-                    'order' => $item->orden,
+                    'order' => $item->order,
                     'ruta' => route('producto',$item->slug),
-                    'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
+                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
                 ];
             }),
         ])->withViewData(['title' => $familia->title]);
@@ -208,10 +208,10 @@ class FrontendController extends Controller
     {
 
         $lang = app()->getLocale();
-        $producto = ProductIntertrade::with('family')->where("slug",$slug)->first();
+        $producto = Product::with('family')->where("slug",$slug)->first();
 //        dd($producto);
         $familia = $producto->family;
-        $familias = FamilyIntertrade::with('productos')->orderBy('orden')->get();
+        $familias = Family::with('productos')->orderBy('order')->get();
 
         $galeria = collect($producto->gallery)->map(function ($item) {
             return Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
@@ -220,13 +220,13 @@ class FrontendController extends Controller
 
         $producto_intertrade = collect([
             'id' => $producto->id,
-            'title' => $producto->nombre,
+            'title' => $producto->title,
             'marca' => $producto->marca,
-            'code' => $producto->codigo,
-            'price' => $producto->precio,
-            'text' => $producto->descripcion,
-            'order' => $producto->orden,
-            'file' => $producto->archivo ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($producto->archivo) : '',
+            'code' => $producto->code,
+            'price' => $producto->price,
+            'text' => $producto->description,
+            'order' => $producto->order,
+            'file' => $producto->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($producto->file) : '',
             'ruta' => route('producto',$producto->slug),
         ]);
 
@@ -237,12 +237,12 @@ class FrontendController extends Controller
             'familias' => $familias->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'title' => $item->nombre,
+                    'title' => $item->title,
                     'ruta' => route('producto',$item->slug),
                     'productos' => $item->productos->map(function ($item) {
                         return [
                             'id' => $item->id,
-                            'title' => $item->nombre,
+                            'title' => $item->title,
                             'ruta' => route('producto',$item->slug),
                         ];
                     }),
@@ -389,27 +389,27 @@ class FrontendController extends Controller
         $productos = [];
         //filtra por marca y rubro
         if ($request->marca && $request->familia && $request->nombre == null){
-            $productos = ProductIntertrade::where('marca',$request->marca)->where('categoria_id',$request->familia)->get();
+            $productos = Product::where('marca',$request->marca)->where('family_id',$request->familia)->get();
         }
         //filtra por los 3
         if ($request->marca && $request->familia && $request->nombre){
-            $productos = ProductIntertrade::where('marca',$request->marca)
-                ->where('categoria_id',$request->familia)
+            $productos = Product::where('marca',$request->marca)
+                ->where('family_id',$request->familia)
 
                 ->get();
         }
         //filtra por rubro
         if ($request->familia  && $request->marca == null && $request->nombre  == null){
-            $productos = ProductIntertrade::where('categoria_id',$request->familia)->get();
+            $productos = Product::where('family_id',$request->familia)->get();
         }
         //filtra por marca
         if ($request->marca && $request->familia == null && $request->nombre  == null){
-            $productos = ProductIntertrade::where('marca',$request->marca)->get();
+            $productos = Product::where('marca',$request->marca)->get();
         }
         //filtra por nombre
         if ($request->nombre && $request->familia == null && $request->marca   == null){
             $productName = $request->nombre;
-            $productos = ProductIntertrade::all()->filter(function ($item) use ($productName) {
+            $productos = Product::all()->filter(function ($item) use ($productName) {
                 // replace stristr with your choice of matching function
 
                 if (false !== stristr($item->nombre, $productName)){
@@ -424,14 +424,14 @@ class FrontendController extends Controller
 
                 return [
                     'id' => $item->id,
-                    'title' => $item->nombre,
-                    'price' => $item->precio,
-                    'code' => $item->codigo,
+                    'title' => $item->title,
+                    'price' => $item->price,
+                    'code' => $item->code,
                     'marca' => $item->marca,
-                    'text' => $item->desccripcion,
-                    'order' => $item->orden,
+                    'text' => $item->description,
+                    'order' => $item->order,
                     'ruta' => route('producto',$item->slug),
-                    'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
+                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
                 ];
             }),
         ]);

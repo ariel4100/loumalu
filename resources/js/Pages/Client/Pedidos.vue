@@ -14,8 +14,8 @@
                     <div class="col-md-2 mb-md-0 mb-4">
                         <select v-model="familia" id="" class="form-control">
                             <option value="" selected>Rubro</option>
-                            <option :value="item.nombre" v-for="item in $page.familias_global">
-                                {{ item.nombre || ''}}
+                            <option :value="item.title" v-for="item in $page.familias_global">
+                                {{ item.title || ''}}
                             </option>
                         </select>
                     </div>
@@ -147,17 +147,21 @@
                 'addToCart',
             ]),
             verificarStock(data){
-                console.log(data)
+                // console.log(data)
                 let alertifyObject = alertify.notify('Comprobando stock', 'warning');
                 alertifyObject.setContent('Comprobando stock <i class="fas fa-spinner fa-lg fa-spin"></i>');
                 setTimeout(function(){
-                    if(data.stock > 0){
+                    if(data.stock == 0 || data.stock == undefined){
+                        alertify.error('Stock no disponible');
+                        $('#'+data.id).addClass('bg-danger');
+                    }
+                    if(data.stock == 1 || data.stock == 2){
+                        alertify.success('Stock inferior o igual a cantidad crítica');
+                        $('#'+data.id).addClass('bg-warning');
+                    }
+                    if(data.stock > 2){
                         alertify.success('Stock disponible');
                         $('#'+data.id).addClass('bg-success');
-                    }
-                    if(data.stock == 0 || data.stock == undefined){
-                        alertify.success('Stock disponible');
-                        $('#'+data.id).addClass('bg-danger');
                     }
                 },4700)
             },

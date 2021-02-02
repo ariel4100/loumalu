@@ -3,10 +3,39 @@
         <template #header>
             {{ $page.contenido.section }}
         </template>
-        <div class="card" >
+        <template v-if="$page.contenido.section == 'carrito'">
+            <form @submit.prevent="save()" class="row">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg1 py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-white">Configuración de parametros de Compra</h6>
+                        </div>
+                        <div class="card-body">
+<!--                            <div class="form-group">-->
+<!--                                <label for="iva">IVA</label>-->
+<!--                                <input id="iva" v-model="texto.iva" type="text" class="form-control" required>-->
+<!--                            </div>-->
+                            <div class="form-group">
+                                <label for="min_reparto">Descuento Web</label>
+                                <input id="min_reparto" v-model="texto.descuento_general" type="number" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 d-sm-flex align-items-center justify-content-end">
+                    <button type="submit"  class=" btn btn-primary shadow-sm">
+                        <!--<i class="fas fa-save fa-sm text-white-50"></i>-->
+                        Guardar
+                    </button>
+                </div>
+
+            </form>
+        </template>
+        <div v-else class="card" >
             <div class="card-header">
                 <modal
-                        title="Nuevo Slider"
+                        title="Slider"
                         title-button="Agregar Slider"
                         @ok="addSlider()"
                         @hidden="reset()"
@@ -117,6 +146,10 @@
                   order: '',
                   image: '',
               },
+              texto: {
+                  descuento_general: '',
+                  section: '',
+              },
           }
         },
         components: {
@@ -132,8 +165,26 @@
           setTimeout(() => {
               this.loader = 1
           },3000)
+            if(this.contenido.data){
+                this.texto = this.contenido.data
+            }
         },
         methods: {
+            save() {
+                // this.formData.append('data', JSON.stringify(this.texto));
+                // this.formData.append('title', JSON.stringify(this.title));
+                // this.formData.append('text', JSON.stringify(this.text));
+                this.texto.section = this.$page.contenido.section;
+                this.$inertia.post(route('adm.carrito',this.texto))
+
+                //         axios.post(route('adm.carrito',this.texto)).then(res => {
+                //     // this.loader = false
+                //     console.log(res)
+                //     alertify.notify('Registro guardado correctamente', 'success', 1, function(){
+                //         // location.reload()
+                //     });
+                // });
+            },
             saveContent(){
                 let formData = new FormData()
                 let self = this

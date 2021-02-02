@@ -3,7 +3,7 @@
         <carousel :images="sliders" height="400px"></carousel>
         <buscador
         ></buscador>
-        <div class="container my-5">
+        <div class="container my-5" v-if="destacados_p.length > 0">
             <div class="d-md-flex d-none pb-4 justify-content-center align-items-center">
                 <hr class="bg-dark m-0 w-100">
                 <h5 class="m-0 text-nowrap px-3 font-weight-bold">Nuestros Productos Destacados</h5>
@@ -20,7 +20,7 @@
                 </template>
             </div>
         </div>
-        <div class="py-5 " style="background-color:rgba(190, 202, 214,0.4);">
+        <div class="py-5 " style="background-color:rgba(190, 202, 214,0.4);" v-if="destacados.length > 0">
             <div class="container ">
                 <div class="d-md-flex d-none pb-4 justify-content-center align-items-center">
                     <hr class="bg-dark m-0 w-100">

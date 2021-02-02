@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\ClientIntertrade;
 use App\Models\Monitoreo;
+use App\Models\OrderIntertrade;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -31,6 +33,7 @@ class ClientController extends Controller
                     'fecha_nac' => $inter->fecha_nacimiento,
                     'domicilio' => $inter->domicilio,
                     'dni' => $inter->dni,
+                    'descuento' => $inter->descuento,
                     'codigo_postal' => $inter->codigo_postal,
                     'ciudad' => $inter->ciudad,
                     'telefono' => $inter->telefono,
@@ -45,13 +48,20 @@ class ClientController extends Controller
     {
         $items = Monitoreo::all();
 
+//        $grouped = $items->groupBy('client_id');
+//        $items->duplicates('client_id');
+
+//        dd($items->unique('client_id'));
+
         return Inertia::render('Admin/Monitoreo', [
-            'items' => $items ? $items->map(function ($item) {
+            'items' => $items ? $items->unique('client_id')->map(function ($item) {
                 if ($item->client){
                     return [
                         'fecha' => $item->created_at->format('d/m/y'),
                         'cliente' => $item->client->username,
                         'ip' => $item->ip,
+                        'entradas' => Monitoreo::where('client_id',$item->client_id)->get()->count(),
+                        'pedidos' => OrderIntertrade::where('cliente_id',$item->client_id)->get()->count(),
                     ];
                 }
             })->filter()->values() : [],
@@ -65,9 +75,8 @@ class ClientController extends Controller
 //        dd($request->all());
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255','unique:clients'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:clients'],
-            'password' => ['required', 'string', 'min:4',],
+            'username' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
         ]);
         try {
             DB::beginTransaction();
@@ -83,6 +92,8 @@ class ClientController extends Controller
             $cleinte_inter->nombre = $request['name'];
             $cleinte_inter->apellido = $request['apellido'];
             $cleinte_inter->email = $request['email'];
+            $cleinte_inter->usuario = $request['username'];
+            $cleinte_inter->descuento = $request['descuento'];
             $cleinte_inter->fecha_nacimiento = $request['fecha_nac'];
             $cleinte_inter->domicilio = $request['domicilio'];
             $cleinte_inter->codigo_postal = $request['cp'];
@@ -95,6 +106,7 @@ class ClientController extends Controller
             $item->name   = $request->name;
             $item->username   = $request->username;
             $item->email   = $request->email;
+            $item->descuento   = $request->descuento;
 
             if ($request->password)
             {

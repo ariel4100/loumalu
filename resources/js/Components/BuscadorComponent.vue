@@ -14,7 +14,7 @@
                     <select v-model="familia" id="" class="form-control">
                         <option value="" selected>Rubro</option>
                         <option :value="item.id" v-for="item in $page.familias_global">
-                            {{ item.nombre || ''}}
+                            {{ item.title || ''}}
                         </option>
                     </select>
                 </div>

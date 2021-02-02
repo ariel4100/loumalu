@@ -20,7 +20,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $familias = FamilyIntertrade::orderBy('orden')->get();
+        $familias = Family::orderBy('order')->get();
 
         $familiasMap = $familias->map(function ($item) {
             return [
@@ -33,27 +33,27 @@ class ProductController extends Controller
 
 
 //        dd($categoriasconhijos);
-        $productos_con_detalle = ProductIntertrade::orderBy('orden')->get();
-        $productos = ProductIntertrade::get();
+        $productos_con_detalle = Product::orderBy('order')->get();
+        $productos = Product::get();
 //        $productos_aguila = Product::on(env('aguila'))->get();
 //        dd($productos );
         $productos_ordered = $productos->map(function ($item) {
 //                dd($item->product);
             return [
                 'id_inter' => $item->id,
-                'id' => $item->product ? $item->product->id : '',
-                'cod' => $item->codigo,
-                'title' => $item->nombre,
+                'id' => $item->id,
+                'cod' => $item->code,
+                'title' => $item->title,
                 'marca' => $item->marca,
                 'clasificacion' => $item->marca,
-                'descripcion' => $item->descripcion,
-                'family_id' => $item->categoria_id,
-                'name_family' => $item->family ? @$item->family->nombre : '',
-                'price' => floatval($item->precio),
+                'descripcion' => $item->description,
+                'family_id' => $item->family_id,
+                'name_family' => $item->family ? @$item->family->title : '',
+                'price' => floatval($item->price),
                 'stock' => $item->stock,
-                'unidad' => $item->unidad,
-                'featured' => $item->destacado,
-                'order' => $item->orden,
+                'unidad' => $item->unit,
+                'featured' => $item->featured,
+                'order' => $item->order,
                 'productos' => $item->product ? $item->product->related->map(function ($value) {
                     return [
                         'id' => $value->id,
@@ -65,7 +65,7 @@ class ProductController extends Controller
 ////                        dd($item);
 //                    return $url_image;
 //                }),
-                'file' => @$item->archivo ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->archivo) : '',
+                'file' => @$item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
 
             ];
         });
@@ -90,12 +90,12 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             if ($request->id_inter){
-                $item_inter = ProductIntertrade::find($request->id_inter) ;
+                $item_inter = Product::find($request->id_inter) ;
 //                $item = Product::firstOrCreate([
 //                    'mlproducto_id' => $item_inter->id
 //                ]);
             }else{
-                $item_inter = new ProductIntertrade();
+                $item_inter = new Product();
             }
 //            dd([$item,$item_inter]);
             //modelo Intertrade

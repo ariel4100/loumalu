@@ -6,6 +6,7 @@ use App\Models\Content;
 use App\Models\Family;
 use App\Models\FamilyIntertrade;
 use App\Models\Meta;
+use App\Models\Product;
 use App\Models\ProductIntertrade;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Session;
@@ -49,8 +50,8 @@ class AppServiceProvider extends ServiceProvider
             });
             $metas =  Meta::get();
             $contacto = Content::where('section', 'contacto')->first();
-            $marcas = ProductIntertrade::get()->pluck('marca')->unique();
-            $familias = FamilyIntertrade::select('id','nombre')->get();
+            $marcas = Product::get()->pluck('marca')->unique();
+            $familias = Family::select('id','title')->get();
 
             Inertia::share([
                 'appUrl' => config('app.url'),

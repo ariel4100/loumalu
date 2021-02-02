@@ -60,6 +60,10 @@
                     Zona Clientes
                 </div>
                 <li class="nav-item">
+                    <inertia-link class="nav-link" :href="route('adm.content.index',{ section: 'carrito'})">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Carrito</span>
+                    </inertia-link>
                     <inertia-link class="nav-link" :href="route('adm.clientes.index')">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Clientes</span>

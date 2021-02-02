@@ -18,24 +18,24 @@ class FamilyController extends Controller
     public function index()
     {
 //        $categorias = Family::orderBy('order')->get();
-        $categorias = FamilyIntertrade::get();
+        $categorias = Family::get();
 
 
         return Inertia::render('Admin/Family', [
             'categorias' => $categorias->map(function ($item,$key) {
                 return [
                     'id' => $item->id,
-                    'title' => $item->nombre,
+                    'title' => $item->title,
 
 //                    'title' => Helpers::getTranslations($item,'title'),
 //                    'text' => Helpers::getTranslations($item,'text'),
 //                    'description' => $item->getTranslations('description'),
 //                    'padre_id' => $item->padre_id,
 //                    'video' => $item->video,
-                    'featured' => $item->destacado,
-                    'order' => $item->orden,
+                    'featured' => $item->featured,
+                    'order' => $item->order,
 //                    'child_families' => $item->childFamilies,
-                    'image' => $item->ruta ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->ruta) : '',
+                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
                 ];
             }),
 
@@ -49,9 +49,9 @@ class FamilyController extends Controller
         try {
             DB::beginTransaction();
             if ($request->id){
-                $item = FamilyIntertrade::find($request->id);
+                $item = Family::find($request->id);
             }else{
-                $item = new FamilyIntertrade();
+                $item = new Family();
             }
 
 
@@ -67,10 +67,10 @@ class FamilyController extends Controller
 //            }
 //            $item->setTranslations('slug', collect(json_decode($request->title))->slug()->toArray());
 
-            $item->nombre = $request->title;
+            $item->title = $request->title;
             $item->slug   = str::slug($request->title);
-            $item->orden   = $request->order;
-            $request->featured ? $item->destacado = 1 : $item->destacado = 0;
+            $item->order   = $request->order;
+            $request->featured ? $item->featured = 1 : $item->featured = 0;
 
             $item->save();
 

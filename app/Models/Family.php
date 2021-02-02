@@ -4,23 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
 
 class Family extends Model
 {
     use HasFactory;
-    use HasTranslations;
 
     protected $fillable = [
-        'title', 'text','order','slug','description','image','video','file','padre_id','family_id'
+        'title', 'text','order','slug','description','image','video','file','padre_id','family_id','id'
     ];
 
-    public $translatable = [
-        'title',
-        'text',
-        'description',
-        'slug',
-    ];
 
     public function productos() {
         return $this->hasMany(Product::class);

@@ -13,10 +13,10 @@ class FamilyIntertrade extends Model
     protected $connection = 'aguila';
     public $timestamps = false;
 
-    public function productos()
-    {
-        return $this->setConnection('mysql')->hasMany(ProductIntertrade::class,'categoria_id');
-//        return $this->setConnection('mysql')->hasMany(Product::class,'mlproducto_id');
-    }
+//    public function productos()
+//    {
+//        return $this->setConnection('mysql')->hasMany(ProductIntertrade::class,'categoria_id');
+////        return $this->setConnection('mysql')->hasMany(Product::class,'mlproducto_id');
+//    }
 
 }

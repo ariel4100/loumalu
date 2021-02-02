@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
+
 
 class Product extends Model
 {
     use HasFactory;
-    use HasTranslations;
+
 
     protected $casts = [
         'gallery' => 'array'
@@ -19,13 +19,6 @@ class Product extends Model
         'title', 'text','order','slug','video','image','description','file','family_id','text_video','gallery','mlproducto_id','id'
     ];
 
-    public $translatable = [
-        'title',
-        'text',
-        'text_video',
-        'description',
-        'slug',
-    ];
 
 
     public function product_intertrade()
