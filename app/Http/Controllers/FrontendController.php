@@ -48,7 +48,7 @@ class FrontendController extends Controller
                     'title' => $item->title,
                     'order' => $item->order,
                     'ruta' => route('productos',$item->slug),
-                    'image' => $item->ruta ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->ruta) : '',
+                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
                 ];
             }),
             'destacados_p' => $destacados_productos->map(function ($item) {
@@ -142,6 +142,7 @@ class FrontendController extends Controller
 
     public function familias($slug = '')
     {
+        ini_set('memory_limit','-1');
         $lang = app()->getLocale();
         $familias = Family::orderBy('order')->get();
 
@@ -164,32 +165,57 @@ class FrontendController extends Controller
 
     public function productos($slug = '')
     {
+        ini_set('memory_limit','-1');
         $lang = app()->getLocale();
         $familia = Family::where("slug",$slug)->first();
-        $familias = Family::orderBy('order')->get();
+   
 
-//        $productos = $familia->productos;
-        $productos =  Product::where("family_id",$familia->id)->get();;
+    //    $productos = $familia->productos;
+        $productos =  Product::where("family_id",$familia->id)->get();
 
 
-//        dd($productos);
+        
+        $imagen_familia = $familia->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($familia->image) : null;
+
+        $productos->append('magic_code');
+        $productos->append('check_subprod');
+        /*
+        $filtered = $prods->reject(function ($item) {
+            return $item->check_subprod == true;
+        });
+        
+        dd($filtered->pluck('title'));
+        */
+        $removes = [];
+        foreach($productos as $p){
+            //dd($p->check_subprod);
+            
+            
+            if(!in_array($p->id, $removes)){
+
+            $medidas[] = $p;
+
+            // echo "<h5>".$p->code." - ".$p->title."</h5>";
+            foreach($p->magic_code as $m){
+
+                $removes[] = $m->id;
+                // echo "<br>----".$m->code." - ".$m->title;
+                
+                
+            }
+            //   echo "<hr>";
+            }
+          
+            
+        }
+
+        $productos = collect($medidas);
+        //    dd($productos);
         return Inertia::render('Web/Product/Family', [
-            'familia' => $familia->only('nombre','id','slug'),
+            'familia' => $familia->only('title','id','slug'),
             'sidenav' => 1,
-            'familias' => $familias->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'ruta' => route('producto',$item->slug),
-                    'productos' => $item->productos->map(function ($item) {
-                        return [
-                            'id' => $item->id,
-                            'title' => $item->title,
-                            'ruta' => route('producto',$item->slug),
-                        ];
-                    }),                ];
-            }),
-            'productos' => $productos->map(function ($item) {
+            'familias' => [],
+            'productos' => $productos->map(function ($item) use($imagen_familia){
                 return [
                     'id' => $item->id,
                     'code' => $item->code,
@@ -198,7 +224,7 @@ class FrontendController extends Controller
                     'text' => $item->text,
                     'order' => $item->order,
                     'ruta' => route('producto',$item->slug),
-                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
+                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : $imagen_familia,
                 ];
             }),
         ])->withViewData(['title' => $familia->title]);
@@ -206,17 +232,20 @@ class FrontendController extends Controller
 
     public function producto($slug = '')
     {
-
+        ini_set('memory_limit','-1');
         $lang = app()->getLocale();
         $producto = Product::with('family')->where("slug",$slug)->first();
-//        dd($producto);
+    //    dd($producto);
         $familia = $producto->family;
-        $familias = Family::with('productos')->orderBy('order')->get();
+        // $familias = Family::with('productos')->orderBy('code','DESC')->get();
 
         $galeria = collect($producto->gallery)->map(function ($item) {
             return Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
         });
 //        $productos = @$producto->related ?? collect([]);
+
+
+        $imagen_familia = $producto->family->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($producto->family->image) : null;
 
         $producto_intertrade = collect([
             'id' => $producto->id,
@@ -226,28 +255,58 @@ class FrontendController extends Controller
             'price' => $producto->price,
             'text' => $producto->description,
             'order' => $producto->order,
-            'file' => $producto->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($producto->file) : '',
+            'file' => $producto->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($producto->file) : $imagen_familia,
             'ruta' => route('producto',$producto->slug),
         ]);
 
+
+               
+        // $prods->append('magic_code');
+        // $prods->append('check_subprod');
+        /*
+        $filtered = $prods->reject(function ($item) {
+            return $item->check_subprod == true;
+        });
+        
+        dd($filtered->pluck('title'));
+        */
+        $removes = [];
+
+        $productos[] = $producto;
+
+        // echo "<h5>".$producto->code." - ".$producto->title."</h5>";
+        // foreach($producto->magic_code as $m){
+
+        //     $removes[] = $m->id;
+        //     echo "<br>----".$m->code." - ".$m->title;
+            
+            
+        // }
+        //   echo "<hr>";
+ 
+
+        $medidas = collect($producto->magic_code);
+
+
         return Inertia::render('Web/Product/Product', [
-            'familia' => $familia->only('nombre','id','slug'),
+            'familia' => $familia->only('title','id','slug'),
             'gallery' => $galeria,
             'producto' => $producto_intertrade,
-            'familias' => $familias->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'ruta' => route('producto',$item->slug),
-                    'productos' => $item->productos->map(function ($item) {
-                        return [
-                            'id' => $item->id,
-                            'title' => $item->title,
-                            'ruta' => route('producto',$item->slug),
-                        ];
-                    }),
-                ];
-            }),
+            'medidas' => $medidas,
+            // 'familias' => $familias->map(function ($item) {
+            //     return [
+            //         'id' => $item->id,
+            //         'title' => $item->title,
+            //         'ruta' => route('producto',$item->slug),
+            //         'productos' => $item->productos->map(function ($item) {
+            //             return [
+            //                 'id' => $item->id,
+            //                 'title' => $item->title,
+            //                 'ruta' => route('producto',$item->slug),
+            //             ];
+            //         }),
+            //     ];
+            // }),
 //            'productos' => $productos->map(function ($item) {
 //
 //                return [
@@ -374,7 +433,39 @@ class FrontendController extends Controller
         }else{
             $productos = [];
         }
+        $productos->append('magic_code');
+        $productos->append('check_subprod');
+        /*
+        $filtered = $prods->reject(function ($item) {
+            return $item->check_subprod == true;
+        });
+        
+        dd($filtered->pluck('title'));
+        */
+        $removes = [];
+        foreach($productos as $p){
+            //dd($p->check_subprod);
+            
+            
+            if(!in_array($p->id, $removes)){
 
+            $medidas[] = $p;
+
+            // echo "<h5>".$p->code." - ".$p->title."</h5>";
+            foreach($p->magic_code as $m){
+
+                $removes[] = $m->id;
+                // echo "<br>----".$m->code." - ".$m->title;
+                
+                
+            }
+            //   echo "<hr>";
+            }
+          
+            
+        }
+
+        $productos = collect($medidas);
 
         return Inertia::render('Web/Buscador', [
             'productos' => $productos
@@ -383,7 +474,7 @@ class FrontendController extends Controller
 
     public function buscador_pro(Request $request)
     {
-//        dd($request->all());
+    //    dd($request->all());
 //        $productos_con_familia = ProductIntertrade::get();
 
         $productos = [];
@@ -409,18 +500,64 @@ class FrontendController extends Controller
         //filtra por nombre
         if ($request->nombre && $request->familia == null && $request->marca   == null){
             $productName = $request->nombre;
-            $productos = Product::all()->filter(function ($item) use ($productName) {
-                // replace stristr with your choice of matching function
+            $productos =  Product::where('title', 'like', '%'.$productName.'%')
+            ->orwhere('code', 'like', '%'.$productName.'%')
+            ->orwhere('marca', 'like', '%'.$productName.'%')
+            ->get();
+            // dd($productos);
+            // $productos = Product::all()->filter(function ($item) use ($productName) {
+            //     // replace stristr with your choice of matching function
 
-                if (false !== stristr($item->nombre, $productName)){
-                    return $item;
-                }
-            });
+            //     if (false !== stristr($item->title, $productName)){
+            //         return $item;
+            //     }
+            //     if (false !== stristr($item->codigo, $productName)){
+            //         return $item;
+            //     }
+                
+            // });
+        }
+        // dd($productos);
+        $productos->append('magic_code');
+        $productos->append('check_subprod');
+        /*
+        $filtered = $prods->reject(function ($item) {
+            return $item->check_subprod == true;
+        });
+        
+        dd($filtered->pluck('title'));
+        */
+        $removes = [];
+        foreach($productos as $p){
+            //dd($p->check_subprod);
+            
+            
+            if(!in_array($p->id, $removes)){
+
+            $medidas[] = $p;
+
+            // echo "<h5>".$p->code." - ".$p->title."</h5>";
+            foreach($p->magic_code as $m){
+
+                $removes[] = $m->id;
+                // echo "<br>----".$m->code." - ".$m->title;
+                
+                
+            }
+            //   echo "<hr>";
+            }
+          
+            
         }
 
-//        dd($productos);
+        $productos = collect($medidas);
+        
+
+      
         return Inertia::render('Web/BuscadorPro', [
             'productos' => $productos->map(function ($item) {
+                
+                $imagen_familia = @$item->family->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->family->image) : null;
 
                 return [
                     'id' => $item->id,
@@ -431,7 +568,174 @@ class FrontendController extends Controller
                     'text' => $item->description,
                     'order' => $item->order,
                     'ruta' => route('producto',$item->slug),
-                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
+                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) :  $imagen_familia,
+                ];
+            }),
+        ]);
+    }
+    public function tests(Request $request){
+    
+        $productName = $request->get('code');
+
+        
+        $prods = Product::where('code', 'LIKE', $productName.'%')
+            ->orWhere('title', 'like', '%'.$productName.'%')
+            ->orWhere('code', 'like', '%'.$productName.'%') // faltan filtro ed marca y rubro
+            ->get();
+            
+            
+            
+        $prods->append('magic_code');
+        $prods->append('check_subprod');
+        /*
+        $filtered = $prods->reject(function ($item) {
+            return $item->check_subprod == true;
+        });
+        
+        dd($filtered->pluck('title'));
+        */
+        $removes = [];
+        foreach($prods as $p){
+            //dd($p->check_subprod);
+            
+            
+            if(!in_array($p->id, $removes)){
+
+            $productos[] = $p;
+
+            echo "<h5>".$p->code." - ".$p->title."</h5>";
+            foreach($p->magic_code as $m){
+
+                $removes[] = $m->id;
+                echo "<br>----".$m->code." - ".$m->title;
+                
+                
+            }
+              echo "<hr>";
+            }
+          
+            
+        }
+
+        $productos = collect($productos);
+        
+        return Inertia::render('Web/BuscadorPro', [
+            'productos' => $productos->map(function ($item) {
+
+                return [
+                    'id' => $item->id,
+                    
+                    'title' => $item->title,
+                    'price' => $item->price,
+                    'code' => $item->code,
+                    'marca' => $item->marca,
+                    'text' => $item->description,
+                    'order' => $item->order,
+                    'ruta' => route('producto',$item->slug),
+                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
+                ];
+            }),
+        ]);
+    }
+
+    public function buscador_pro2(Request $request)
+    {
+    //    dd($request->all());
+//        $productos_con_familia = ProductIntertrade::get();
+        $productName = $request->nombre;
+        $productos = [];
+        //filtra por marca y rubro
+        if ($request->marca && $request->familia && $request->nombre == null){
+            $productos = Product::where('marca',$request->marca)->where('family_id',$request->familia)->get();
+        }
+        //filtra por los 3
+        if ($request->marca && $request->familia && $request->nombre){
+            $productos = Product::where('marca', 'like', '%'.$request->marca.'%')
+                ->orwhere('family_id', 'like', '%'.$request->familia.'%')
+                ->orwhere('code', 'like', '%'.$productName.'%')
+                ->orwhere('title', 'like', '%'.$productName.'%')
+                ->get();
+ 
+        }
+        //filtra por rubro
+        if ($request->familia  && $request->marca == null && $request->nombre  == null){
+            $productos = Product::where('family_id',$request->familia)->get();
+        }
+        //filtra por marca
+        if ($request->marca && $request->familia == null && $request->nombre  == null){
+            $productos = Product::where('marca',$request->marca)->get();
+        }
+        //filtra por nombre
+        if ($request->nombre && $request->familia == null && $request->marca   == null){
+            $productName = $request->nombre;
+            $productos =  Product::where('title', 'like', '%'.$productName.'%')
+            ->orwhere('code', 'like', '%'.$productName.'%')
+            ->get();
+            // dd($productos);
+            // $productos = Product::all()->filter(function ($item) use ($productName) {
+            //     // replace stristr with your choice of matching function
+
+            //     if (false !== stristr($item->title, $productName)){
+            //         return $item;
+            //     }
+            //     if (false !== stristr($item->codigo, $productName)){
+            //         return $item;
+            //     }
+                
+            // });
+        }
+        // dd($productos);
+        // $productos->append('magic_code');
+        // $productos->append('check_subprod');
+        // /*
+        // $filtered = $prods->reject(function ($item) {
+        //     return $item->check_subprod == true;
+        // });
+        
+        // dd($filtered->pluck('title'));
+        // */
+        // $removes = [];
+        // foreach($productos as $p){
+        //     //dd($p->check_subprod);
+            
+            
+        //     if(!in_array($p->id, $removes)){
+
+        //     $medidas[] = $p;
+
+        //     // echo "<h5>".$p->code." - ".$p->title."</h5>";
+        //     foreach($p->magic_code as $m){
+
+        //         $removes[] = $m->id;
+        //         // echo "<br>----".$m->code." - ".$m->title;
+                
+                
+        //     }
+        //     //   echo "<hr>";
+        //     }
+          
+            
+        // }
+
+        // $productos = collect($medidas);
+        
+
+      
+        return response()->json([
+            'productos' => $productos->map(function ($item) {
+
+                return [
+                    'id' => $item->id,
+                    'rubro' => $item->family ? $item->family->title : '',
+                    'producto' => $item->title,
+                    'precio' => floatval($item->price),
+                    'codigo' => $item->code,
+                    'marca' => $item->marca,
+                    'cantidad' => 0,
+                    'stock' => intval($item->stock),
+                    'unidad' => intval($item->unit) ? $item->unit : 1,
+                    'ruta' => route('producto',$item->slug),
+                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
                 ];
             }),
         ]);

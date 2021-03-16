@@ -4,6 +4,9 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\Logincontroller;
 use App\Http\Controllers\MailController;
+use App\Models\Product;
+use App\Models\Family;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,6 +45,7 @@ Route::get('nosotros', [FrontendController::class, 'empresa'])->name('empresa');
 Route::get('descargas', [FrontendController::class, 'descargas'])->name('descargas');
 Route::get('buscador', [FrontendController::class, 'buscador'])->name('buscador');
 Route::get('buscador-pro', [FrontendController::class, 'buscador_pro'])->name('buscador.pro');
+Route::get('buscador-pro2', [FrontendController::class, 'buscador_pro2'])->name('buscador.pro2');
 Route::get('contacto', [FrontendController::class, 'contacto'])->name('contacto');
 Route::post('contacto', [MailController::class, 'contacto'])->name('mail.contacto');
 Route::post('presupuesto', [MailController::class, 'presupuesto'])->name('mail.presupuesto');
@@ -62,3 +66,15 @@ Route::get('blog/noti/{slug}', [FrontendController::class, 'novedad'])->name('no
 Route::post('ingresar', [Logincontroller::class, 'login'])->name('auth.login');
 Route::post('registro', [Logincontroller::class, 'register'])->name('auth.registro');
 
+
+Route::get('buscador-global', function () {
+    $marcas = Product::get()->pluck('marca')->unique();
+    $familias = Family::select('id','title')->get();
+
+    return response()->json([
+        'familias_global' => $familias,
+        'marcas_global' => $marcas,
+    ]);
+})->name('buscador.global');
+
+Route::get('tests', [FrontendController::class, 'tests'])->name('test');

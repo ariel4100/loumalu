@@ -34,12 +34,14 @@ class ClientController extends Controller
     {
 //        dd(auth()->guard('client')->user());
         $auth = auth()->guard('client')->user();
+        $modal = Content::where('section','pop-up')->first()->data;
 
 //        $productos = Product::with('product_intertrade')->orderBy('order')->get();
         $productos = Product::with('family')->get();
 
 //        dd($productos->flatten());
         return Inertia::render('Client/Pedidos', [
+            'modal' => $modal,
             'productos' => $productos->map(function ($item) {
                 return [
                     'id' => $item->id,
@@ -71,6 +73,7 @@ class ClientController extends Controller
         $auth = auth()->guard('client')->user();
         $content = Content::where("section",'carrito')->first();
         $descuento_general = $content->data['descuento_general'] ?? 0;
+        $texto = $content->data['texto'] ?? 0;
         $descuento_cliente = $auth->descuento;
         //OTRA COSA XD
 //        $articulo_rubro  = Pruebas::get();
@@ -81,6 +84,7 @@ class ClientController extends Controller
         return Inertia::render('Client/Carrito', [
             'descuento_general' => $descuento_general ?? 0,
             'descuento_cliente' => $descuento_cliente ?? 0,
+            'texto' => $texto ?? 0,
         ]);
     }
 

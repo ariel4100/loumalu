@@ -44,44 +44,49 @@ class MigrateData extends Command
      */
     public function handle()
     {
+
+        DB::table('families')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        DB::table('products')->truncate();
+
         $starttime = microtime(true);
         Artisan::call('down');
-//        $this->info('- Consultando Family');
-//        $families =  FamilyIntertrade::all();
-//        $counter = 0;
-//        foreach ($families as $family) {
-//            $item = Family::firstOrNew([
-//                'id' => $family->id
-//            ]);
-//            $item->title = $family->nombre;
-//            $item->order = $family->orden;
-//            $item->image = $family->ruta;
-//            $item->featured = $family->destacado;
-//            $item->slug = $family->slug;
-//            $item->save();
-//            $counter++;
-//        }
-//        $this->info('-- Family Guardados: '.$counter);
+       $this->info('- Consultando Family');
+       $families =  FamilyIntertrade::all();
+       $counter = 0;
+       foreach ($families as $family) {
+           $item = Family::firstOrNew([
+               'id' => $family->id
+           ]);
+           $item->title = str_replace("Productos-","",$family->nombre);
+           $item->order = $family->orden;
+           $item->image = $family->ruta;
+           $item->featured = $family->destacado;
+           $item->slug = Str::slug($family->nombre);
+           $item->save();
+           $counter++;
+       }
+       $this->info('-- Family Guardados: '.$counter);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         $this->info('- Consultando Productos');
-        $families =  ProductIntertrade::all();
+        $productos =  ProductIntertrade::all();
         $counter = 0;
-        foreach ($families as $family) {
+        foreach ($productos as $pro) {
             $item = Product::firstOrNew([
-                'id' => $family->id
+                'id' => $pro->id
             ]);
-            $item->code = $family->codigo;
-            $item->title = $family->nombre;
-            $item->short_description = $family->descripcion;
-            $item->description = $family->descripcion;
-            $item->text = $family->descripcion;
-            $item->price = floatval($family->precio);
-            // $item->family_id = $family->categoria_id;
-            $item->marca = $family->marca;
-            $item->stock = $family->stock;
-            $item->unit = $family->unidad;
-            $item->slug = Str::slug($family->nombre);
+            $item->code = $pro->codigo;
+            $item->title = $pro->nombre;
+            $item->short_description = $pro->descripcion;
+            $item->description = $pro->descripcion;
+            $item->text = $pro->descripcion;
+            $item->price = floatval($pro->precio);
+            $item->family_id = $pro->categoria_id;
+            $item->marca = $pro->marca;
+            $item->stock = $pro->stock;
+            $item->unit = $pro->unidad;
+            $item->slug = Str::slug($pro->nombre);
             $item->save();
             $counter++;
         }

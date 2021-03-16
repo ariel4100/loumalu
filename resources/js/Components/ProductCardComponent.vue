@@ -9,7 +9,14 @@
                         <!--                        <a :href="item.ruta" class="btn btn-white  btn-rounded text-secundario">VER MÁS</a>-->
                     </div>
                 </div>
-                <img :src="'uploads/imagenes/'+item.code+'.jpg'" alt="" class="img-fluid">
+                <template v-if="item.image">
+                    <img @error="replaceByDefault($event,null)" :src="item.image" :alt="item.title" class="img-fluid dsadadas">
+
+                </template>
+                <template v-else>
+                  
+                    <img @error="replaceByDefault($event,item)" :src="$page.appUrl+'/uploads/imagenes/'+item.code+'-001.jpg'" alt="" class="img-fluid">
+                </template>
             </div>
             <div class="">
                 <h6 class="mt-2 mb-0 text-secundario">{{ item.code || 'CODIGO' }}</h6>
@@ -26,8 +33,10 @@
                         <!--                        <a :href="item.ruta" class="btn btn-white  btn-rounded text-secundario">VER MÁS</a>-->
                     </div>
                 </div>
-                <img :src="item.image" :alt="item.title" class="img-fluid">
-            </div>
+               
+                    <img @error="replaceByDefault($event,null)" :src="item.image" :alt="item.title" class="img-fluid">
+  
+                </div>
             <div class="p-3">
                 <h6 class="mt-2 mb-0 text-uppercase text-secundario">{{ item.categoria  || 'OTROS' }}</h6>
                 <h5 class="mt-1 text-primario font-weight-bold">{{ item.title|| 'Titulo' }}</h5>
@@ -44,7 +53,14 @@
 <!--                        <a :href="item.ruta" class="btn btn-white  btn-rounded text-secundario">VER MÁS</a>-->
                     </div>
                 </div>
-                <img :src="item.image" alt="" class="img-fluid">
+                <template v-if="item.image">
+                    <img @error="replaceByDefault($event,null)" :src="item.image" :alt="item.title" class="img-fluid">
+
+                </template>
+                <template v-else>
+                    <img @error="replaceByDefault($event,item)" :src="$page.appUrl+'/uploads/imagenes/'+item.code+'-001.jpg'" alt="" class="img-fluid">
+
+                </template>    
             </div>
             <div class="border p-3">
                 <h5 class="mt-2 font-weight-bold text-primario text-center">{{ item.title || 'TITULO' }}</h5>
@@ -75,6 +91,29 @@
             },
         },
         methods: {
+              replaceByDefault(e,item) {
+                 let imageUrl = this.$page.appUrl+'/uploads/imagenes/'+item.code+'-001.JPG';
+                  if(item == null){
+                    e.target.src = 'http://osolelaravel.com/intertrade/storage/uploads/logo/Grupo%20429.png'
+                  }else{
+                    this.imageExists(imageUrl, (exists) => {
+                        // console.log(['ssssssssssssssssssss',exists])
+                        if(exists){
+                            e.target.src = this.$page.appUrl+'/uploads/imagenes/'+item.code+'-001.JPG'
+                        }else{
+                            e.target.src = 'http://osolelaravel.com/intertrade/storage/uploads/logo/Grupo%20429.png'
+                        }
+                        // console.log('RESULT: url=' + imageUrl + ', exists=' + exists);
+                    });
+                      
+                  }
+            },
+            imageExists(url, callback) {
+                var img = new Image();
+                img.onload = function() { callback(true); };
+                img.onerror = function() { callback(false); };
+                img.src = url;
+            },
             checkFormValidity() {
                 const valid = this.$refs.form.checkValidity()
                 this.nameState = valid

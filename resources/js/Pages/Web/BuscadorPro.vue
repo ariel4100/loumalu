@@ -10,8 +10,8 @@
                 <h4 class="my-5">No hay Resultados</h4>
             </template>
             <div class="row mt-5">
-                <template v-for="item in productos">
-                    <div class="col-md-3 col-sm-6 col-lg-3 mb-4">
+                <template v-for="(item,index) in productos" >
+                    <div class="col-md-3 col-sm-6 col-lg-3 mb-4" :key="index">
                         <product-card :item="item" type="1"></product-card>
                     </div>
                 </template>

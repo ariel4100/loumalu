@@ -1,6 +1,8 @@
 <template>
     <web-layout class="">
-        <div class=" ">
+            <buscador
+        ></buscador>
+        <!-- <div class=" ">
             <div class="container">
                 <h5 class="section-title text-color">
                     <i class="fas fa-home"></i>
@@ -8,26 +10,32 @@
                         {{ t('PRODUCTOS') }}
                     </a>
                     <a v-if="familia" :href="route('productos',{ slug: familia.slug })" class="text-color">
-                        {{ (familia ? '| '+familia.nombre : '') }}
+                        {{ (familia ? '| '+familia.title : '') }}
                     </a>
                     {{ (producto ? '| '+producto.title : '') }}
                 </h5>
             </div>
-        </div>
-        <div class="container mb-5">
+        </div> -->
+        <div class="container my-5">
             <div class="row">
-                <div class="col-md-3 ">
+                <!-- <div class="col-md-3 ">
                     <sidenav
                             :familia-id="familia.id"
                             :producto-id="producto.id"
                             :familias="familias"
                     ></sidenav>
-                </div>
-                <div class="col-md-9">
+                </div> -->
+                <div class="col-md-12 ">
                     <div class="row">
-                        <div class="col-md-6 mb-5 border">
-                            <img :src="'uploads/imagenes/'+producto.code+'.jpg'" alt="" class="img-fluid">
+                        <div class="col-md-6 mb-5 border justify-content-center align-items-center d-flex">
+                            <!-- <img :src="'uploads/imagenes/'+producto.code+'.jpg'" alt="" class="img-fluid"> -->
+                            <template v-if="producto.file">
+                                <img @error="replaceByDefault($event, null)" :src="producto.file"   class="img-fluid">
 
+                            </template>
+                            <template v-else>
+                                <img @error="replaceByDefault($event,producto)" :src="$page.appUrl+'/uploads/imagenes/'+producto.code+'-001.jpg'"   class="img-fluid 2">
+                            </template>
 <!--                            <carousel :images="gallery"  producto="1" arrows="1"></carousel>-->
                         </div>
                         <div class="col-md-6 mb-5">
@@ -38,7 +46,28 @@
                             <h6 class="text-uppercase"><b>MARCA:</b> {{ producto.marca }}</h6>
                             <div class="" v-html="producto.text"></div>
                             <a v-if="producto.file" :href="producto.file" download   class="btn btn-secundario">DESCARGAR FICHA  </a>
-                            <a :href="route('contacto')" class="btn btn-secundario text-white">CONSULTAR</a>
+                            <a :href="route('contacto')" class="btn btn-secundario mx-0 text-white">CONSULTAR</a>
+                        </div>
+                        <div class="col-md-12" v-if="medidas.length > 0">
+                             <h4 class="text-secundario font-weight-bold">
+                                Medidas
+                            </h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="font-weight-bold">Codigo</th>
+                                         <th class="font-weight-bold">Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item,index) in medidas" :key="index">
+                                        <td>{{ item.code }}</td>
+                                     
+                                        <td>{{ item.title }}</td>
+                                    </tr>
+ 
+                                </tbody>
+                            </table>
                         </div>
                         <div class="col-md-4 mb-5 d-flex justify-content-center align-items-center" v-if="producto.video" style="background-color:#F6F6F6;">
                             <div class="">
@@ -74,10 +103,12 @@
     import WebLayout from '@/Layouts/WebLayout'
     import ImageFile from '@/Components/ImageComponent'
     import ProductCard from '@/Components/ProductCardComponent'
+    import Buscador from '@/Components/BuscadorComponent'
+
     export default {
         props: {
             gallery: Array,
-            productos: Array,
+            medidas: Array,
             familias: Array,
             producto: Object,
             familia: Object,
@@ -98,9 +129,33 @@
             Sidenav,
             WebLayout,
             Carousel,
+            Buscador,
             'image-custom': ImageFile,
         },
         methods: {
+              replaceByDefault(e,item) {
+                 let imageUrl = this.$page.appUrl+'/uploads/imagenes/'+item.code+'-001.JPG';
+                  if(item == null){
+                    e.target.src = 'http://osolelaravel.com/intertrade/storage/uploads/logo/Grupo%20429.png'
+                  }else{
+                    this.imageExists(imageUrl, (exists) => {
+                        // console.log(['ssssssssssssssssssss',exists])
+                        if(exists){
+                            e.target.src = this.$page.appUrl+'/uploads/imagenes/'+item.code+'-001.JPG'
+                        }else{
+                            e.target.src = 'http://osolelaravel.com/intertrade/storage/uploads/logo/Grupo%20429.png'
+                        }
+                        // console.log('RESULT: url=' + imageUrl + ', exists=' + exists);
+                    });
+                      
+                  }
+            },
+            imageExists(url, callback) {
+                var img = new Image();
+                img.onload = function() { callback(true); };
+                img.onerror = function() { callback(false); };
+                img.src = url;
+            },            
             saveContent(){
                 let data = {
                     id: this.contenido.id,

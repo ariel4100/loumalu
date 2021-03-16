@@ -168,7 +168,7 @@
             </template>
         </b-table>
         <b-row class="justify-content-center" v-if="paginate !== false">
-            <b-col md="6" class="my-1">
+            <b-col md="6" class="my-1" v-if="items_map.length > 50">
 
                 <b-pagination
                         v-model="currentPage"
@@ -196,7 +196,7 @@
                 isBusy: false,
                 totalRows: 1,
                 currentPage: 1,
-                perPage: 10,
+                perPage: 250,
                 pageOptions: [10, 20, 50, { value: 100000, text: "Todos" }],
                 sortBy: '',
                 sortDesc: false,

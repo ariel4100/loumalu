@@ -56,7 +56,7 @@ class FamilyController extends Controller
 
 
             $file_save = Helpers::saveImage($request->file('image'), 'familias',$item->image);
-            $file_save ? $item->ruta = $file_save : false;
+            $file_save ? $item->image = $file_save : false;
 
 //            $item->setTranslations('title', (array) json_decode($request->title));
 //            if ($request->text){
@@ -69,7 +69,7 @@ class FamilyController extends Controller
 
             $item->title = $request->title;
             $item->slug   = str::slug($request->title);
-            $item->order   = $request->order;
+            $request->order ? $item->order  = $request->order : false;
             $request->featured ? $item->featured = 1 : $item->featured = 0;
 
             $item->save();

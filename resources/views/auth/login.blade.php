@@ -22,7 +22,7 @@
             {{--            </div>--}}
 
             <div>
-                <x-jet-label for="username" value="{{ __('Username') }}" />
+                <x-jet-label for="username" value="{{ __('Usuario') }}" />
                 <x-jet-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus />
             </div>
 

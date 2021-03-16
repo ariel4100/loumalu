@@ -50,13 +50,13 @@ class AppServiceProvider extends ServiceProvider
             });
             $metas =  Meta::get();
             $contacto = Content::where('section', 'contacto')->first();
-            $marcas = Product::get()->pluck('marca')->unique();
-            $familias = Family::select('id','title')->get();
+            // $marcas = Product::get()->pluck('marca')->unique();
+            // $familias = Family::select('id','title')->get();
 
             Inertia::share([
                 'appUrl' => config('app.url'),
-                'familias_global' => $familias,
-                'marcas_global' => $marcas,
+                // 'familias_global' => $familias,
+                // 'marcas_global' => $marcas,
                 'favicon' => @$contacto->image[0]['image'] ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($contacto->image[0]['image']) : '',
                 'header' => @$contacto->image[1]['image'] ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($contacto->image[1]['image']) : '',
                 'footer' => @$contacto->image[2]['image'] ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($contacto->image[2]['image']) : '',

@@ -20,6 +20,8 @@ class ProductController extends Controller
 {
     public function index()
     {
+        ini_set('memory_limit', '-1');
+
         $familias = Family::orderBy('order')->get();
 
         $familiasMap = $familias->map(function ($item) {
@@ -33,8 +35,8 @@ class ProductController extends Controller
 
 
 //        dd($categoriasconhijos);
-        $productos_con_detalle = Product::orderBy('order')->get();
-        $productos = Product::get();
+//        $productos_con_detalle = Product::orderBy('order')->get();
+        $productos = Product::with('family')->get();
 //        $productos_aguila = Product::on(env('aguila'))->get();
 //        dd($productos );
         $productos_ordered = $productos->map(function ($item) {
@@ -54,12 +56,12 @@ class ProductController extends Controller
                 'unidad' => $item->unit,
                 'featured' => $item->featured,
                 'order' => $item->order,
-                'productos' => $item->product ? $item->product->related->map(function ($value) {
-                    return [
-                        'id' => $value->id,
-                        'title' => $value->product_intertrade->nombre,
-                    ];
-                }) : [],
+//                'productos' => $item->product ? $item->product->related->map(function ($value) {
+//                    return [
+//                        'id' => $value->id,
+//                        'title' => $value->product_intertrade->nombre,
+//                    ];
+//                }) : [],
 //                'gallery' => collect(@$item->product->gallery ?? [])->map(function ($item) {
 //                    $url_image =  Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
 ////                        dd($item);
@@ -73,12 +75,12 @@ class ProductController extends Controller
         return Inertia::render('Admin/Product', [
             'familias' => $familiasMap,
             'productos' => $productos_ordered->sortBy('order')->values()->all(),
-            'productos_detalle' => $productos_con_detalle->map(function ($value) {
-                return [
-                    'id' => $value->id,
-                    'title' => $value->nombre ?? 'otro',
-                ];
-            }),
+//            'productos_detalle' => $productos_con_detalle->map(function ($value) {
+//                return [
+//                    'id' => $value->id,
+//                    'title' => $value->nombre ?? 'otro',
+//                ];
+//            }),
 
         ]);
 

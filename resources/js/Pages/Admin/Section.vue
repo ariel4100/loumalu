@@ -8,7 +8,7 @@
                 <div class="col-xl-12 col-lg-12">
                     <div class="card shadow mb-4">
                         <div class="card-header bg1 py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-white">Configuración de parametros de Compra</h6>
+                            <h6 class="m-0 font-weight-bold  ">Configuración de parametros de Compra</h6>
                         </div>
                         <div class="card-body">
 <!--                            <div class="form-group">-->
@@ -18,6 +18,45 @@
                             <div class="form-group">
                                 <label for="min_reparto">Descuento Web</label>
                                 <input id="min_reparto" v-model="texto.descuento_general" type="number" class="form-control">
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="Texto2">Texto</label>
+                                <!-- <textarea class="form-control" id="Texto" v-model="texto.texto" cols="30" rows="10"></textarea> -->
+                                <jodit-vue v-model="texto.texto"  id="Texto2"></jodit-vue>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 d-sm-flex align-items-center justify-content-end">
+                    <button type="submit"  class=" btn btn-primary shadow-sm">
+                        <!--<i class="fas fa-save fa-sm text-white-50"></i>-->
+                        Guardar
+                    </button>
+                </div>
+
+            </form>
+        </template>
+        <template v-else-if="$page.contenido.section == 'pop-up'">
+            <form @submit.prevent="savePopup()" class="row">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg1 py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold  ">Configuración de Pop-Up</h6>
+                        </div>
+                        <div class="card-body">
+<!--                            <div class="form-group">-->
+<!--                                <label for="iva">IVA</label>-->
+<!--                                <input id="iva" v-model="texto.iva" type="text" class="form-control" required>-->
+<!--                            </div>-->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" v-model="popup.estado" :false-value="0" :true-value="1" type="checkbox" id="flexSwitchCheckDefault">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar?</label>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="Texto">Texto</label>
+                                <!-- <textarea class="form-control" id="Texto" v-model="popup.texto" cols="30" rows="10"></textarea> -->
+                                 <jodit-vue v-model="popup.texto"  id="Texto"></jodit-vue>
                             </div>
                         </div>
                     </div>
@@ -148,6 +187,13 @@
               },
               texto: {
                   descuento_general: '',
+                  texto: '',
+                  section: '',
+              },
+              popup: {
+                  estado: '',
+                  texto: '',
+                  popup: '',
                   section: '',
               },
           }
@@ -167,14 +213,38 @@
           },3000)
             if(this.contenido.data){
                 this.texto = this.contenido.data
+                this.popup = this.contenido.data
             }
         },
         methods: {
+            savePopup() {
+                 let formData = new FormData()
+                let self = this
+ 
+ 
+                formData.append('id', this.contenido.id)
+                formData.append('section', this.contenido.section || '')
+                formData.append('contenido', JSON.stringify(this.popup))
+                // data.append('content', this.content || '')
+                // data.append('id', this.contenido.id || '')
+                // this.$inertia.post(route('adm.content.store'), formData).then(() => {
+
+                // });
+                 
+              
+                this.$inertia.post(route('adm.content.popup'),formData)
+
+                //         axios.post(route('adm.carrito',this.texto)).then(res => {
+                //     // this.loader = false
+                //     console.log(res)
+                //     alertify.notify('Registro guardado correctamente', 'success', 1, function(){
+                //         // location.reload()
+                //     });
+                // });
+            },
             save() {
-                // this.formData.append('data', JSON.stringify(this.texto));
-                // this.formData.append('title', JSON.stringify(this.title));
-                // this.formData.append('text', JSON.stringify(this.text));
                 this.texto.section = this.$page.contenido.section;
+
                 this.$inertia.post(route('adm.carrito',this.texto))
 
                 //         axios.post(route('adm.carrito',this.texto)).then(res => {

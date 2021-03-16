@@ -40,5 +40,36 @@ class Product extends Model
     {
         return $this->belongsToMany(Block::class, 'product_blocks','product_id','block_id');
     }
+    public function getMagicCodeAttribute() {
+        if(str_contains($this->title, 'STD')){
+            
+            $parsed = substr($this->slug, 0, strpos($this->slug, 'std'));
+            
+            return Product::select('id', 'code', 'title','marca')->where('slug', 'LIKE', $parsed.'%')->where('slug', '!=', $this->slug)->get();
+        }else{
+            return [];
+        }
+        
+    }
+    
+    public function getCheckSubprodAttribute() {
+        if(!str_contains($this->title, 'STD')){
+            
+            $parsed = substr($this->slug, 0, -4);
 
+            $check = Product::where('slug', 'LIKE', $parsed.'%')->where('slug', 'LIKE', '%-std%')->orWhere('slug', 'LIKE', '%-std-lle%')->first();
+            
+            if($check){
+            return true;    
+            }else{
+            return false;
+            }
+            
+            
+            
+        }else{
+            return false;
+        }
+        
+    }
 }

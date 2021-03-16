@@ -60,6 +60,10 @@
                     Zona Clientes
                 </div>
                 <li class="nav-item">
+                    <inertia-link class="nav-link" :href="route('adm.content.index',{ section: 'pop-up'})">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Pop-Up</span>
+                    </inertia-link>
                     <inertia-link class="nav-link" :href="route('adm.content.index',{ section: 'carrito'})">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Carrito</span>
@@ -75,6 +79,10 @@
                     <inertia-link class="nav-link" :href="route('adm.pedidos.index')">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Pedidos</span>
+                    </inertia-link>
+                    <inertia-link class="nav-link" :href="route('adm.envios.index')">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Envios</span>
                     </inertia-link>
 
                     <inertia-link class="nav-link" :href="route('adm.content.index',{ section: 'reclamos'})">

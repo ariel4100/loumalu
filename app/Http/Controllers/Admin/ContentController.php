@@ -113,7 +113,31 @@ class ContentController extends Controller
 
         }
     }
+    public function popup(Request $request)
+    {
+    //    dd($request->all());
+        
 
+//        $item->block()->delete();
+        try {
+            $item = Content::find($request->id);
+//            dd($contacto);
+            DB::beginTransaction();
+  
+            $item->data = json_decode($request->contenido);
+   
+            $item->save();
+
+            DB::commit();
+            session()->flash('message', 'Se guardo correctamente.');
+            return Redirect::route('adm.content.index',$item->section);
+        } catch (\Exception $e) {
+            DB::rollback();
+            session()->flash('error', 'Se encontraron algunos errores.'.$e->getMessage());
+            return Redirect::route('adm.content.index',$item->section);
+
+        }
+    }
 
     public function slider(Request $request)
     {

@@ -102,7 +102,95 @@
                 </modal>
             </div>
             <div class="card-body">
-                <table class="table">
+<!--                <b-row>-->
+
+
+
+<!--                    <b-col lg="6" class="my-1">-->
+<!--                        <b-form-group-->
+<!--                                label="Buscador"-->
+<!--                                label-for="filter-input"-->
+<!--                                label-cols-sm="3"-->
+<!--                                label-align-sm="right"-->
+<!--                                label-size="sm"-->
+<!--                                class="mb-0"-->
+<!--                        >-->
+<!--                            <b-input-group size="sm">-->
+<!--                                <b-form-input-->
+<!--                                        id="filter-input"-->
+<!--                                        v-model="filter"-->
+<!--                                        type="search"-->
+<!--                                        placeholder="Buscar..."-->
+<!--                                ></b-form-input>-->
+
+<!--                                <b-input-group-append>-->
+<!--                                    <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>-->
+<!--                                </b-input-group-append>-->
+<!--                            </b-input-group>-->
+<!--                        </b-form-group>-->
+<!--                    </b-col>-->
+
+
+
+<!--                    <b-col sm="5" md="6" class="my-1">-->
+<!--                        <b-form-group-->
+<!--                                label="Paginar"-->
+<!--                                label-for="per-page-select"-->
+<!--                                label-cols-sm="6"-->
+<!--                                label-cols-md="4"-->
+<!--                                label-cols-lg="3"-->
+<!--                                label-align-sm="right"-->
+<!--                                label-size="sm"-->
+<!--                                class="mb-0"-->
+<!--                        >-->
+<!--                            <b-form-select-->
+<!--                                    id="per-page-select"-->
+<!--                                    v-model="perPage"-->
+<!--                                    :options="pageOptions"-->
+<!--                                    size="sm"-->
+<!--                            ></b-form-select>-->
+<!--                        </b-form-group>-->
+<!--                    </b-col>-->
+
+<!--                </b-row>-->
+<!--                &lt;!&ndash; Main table element &ndash;&gt;-->
+<!--                <b-table-->
+<!--                        :items="productos"-->
+<!--                        :fields="fields"-->
+<!--                        :current-page="currentPage"-->
+<!--                        :per-page="perPage"-->
+<!--                        :filter="filter"-->
+<!--                        :filter-included-fields="filterOn"-->
+<!--                        :sort-by.sync="sortBy"-->
+<!--                        :sort-desc.sync="sortDesc"-->
+<!--                        :sort-direction="sortDirection"-->
+<!--                        stacked="md"-->
+<!--                        show-empty-->
+<!--                        small-->
+<!--                        @filtered="onFiltered"-->
+<!--                >-->
+
+
+<!--                    <template #cell(actions)="row">-->
+<!--                        <button @click="edit(item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">-->
+<!--                            <i class="far fa-edit"></i>-->
+<!--                        </button>-->
+<!--                    </template>-->
+
+<!--                </b-table>-->
+<!--                <b-row>-->
+<!--                    <b-col   md="12" class="my-1">-->
+<!--                        <b-pagination-->
+<!--                                v-model="currentPage"-->
+<!--                                :total-rows="totalRows"-->
+<!--                                :per-page="perPage"-->
+<!--                                align="fill"-->
+<!--                                size="sm"-->
+<!--                                class="my-0"-->
+<!--                        ></b-pagination>-->
+<!--                    </b-col>-->
+<!--                </b-row>-->
+                <table class="table" v-if="0">
                     <thead>
                     <tr>
                         <th scope="col">Codigo</th>
@@ -134,6 +222,32 @@
                     </tr>
                     </tbody>
                 </table>
+
+                <div class="overflow-auto">
+
+
+                    <b-table
+                            id="my-table"
+                            :items="productos"
+                            :fields="fields"
+                            :per-page="perPage"
+                            :current-page="currentPage"
+                            small
+                    >
+                        <template #cell(actions)="row">
+
+                            <button @click="edit(row.item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </template>
+                    </b-table>
+                    <b-pagination
+                            v-model="currentPage"
+                            :total-rows="rows"
+                            :per-page="perPage"
+                            aria-controls="my-table"
+                    ></b-pagination>
+                </div>
             </div>
         </div>
     </app-layout>
@@ -157,6 +271,24 @@
         },
         data(){
           return {
+              fields: [
+                  { key: 'title', label: 'Titulo', sortable: false, sortDirection: 'desc' },
+                  { key: 'cod', label: 'Codigo', sortable: false, class: 'text-center' },
+                  { key: 'name_family', label: 'Rubro', sortable: false, class: 'text-center' },
+                  { key: 'marca', label: 'Marca', sortable: false, class: 'text-center' },
+
+                  { key: 'actions', label: 'Acciones' }
+              ],
+              perPage: 500,
+              currentPage: 1,
+              totalRows: 1,
+
+              pageOptions: [10, 50, 100, { value: 1000000, text: "Mostrar todo" }],
+              sortBy: '',
+              sortDesc: false,
+              sortDirection: 'asc',
+              filter: null,
+              filterOn: [],
               familia_selected_id: '',
               product: {
                   id: '',
@@ -194,6 +326,9 @@
                     return item.padre_id ==  this.familia_selected.id
                 })
                 return result;
+            },
+            rows() {
+                return this.productos.length
             }
         },
         methods: {

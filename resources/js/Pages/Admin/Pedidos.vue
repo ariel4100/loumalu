@@ -52,6 +52,7 @@
         data(){
           return {
               fields: [
+                  { key: 'id', label: 'Nro Pedido', class: 'text-center'},
                   { key: 'fecha', label: 'FECHA', class: 'text-center'},
                   { key: 'cliente', label: 'CLIENTE', class: 'text-center'},
                   { key: 'total', label: 'TOTAL', class: 'text-center'},

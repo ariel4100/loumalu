@@ -23,7 +23,10 @@
                     <label for="">Observaciones</label>
                     <textarea v-model="mensage" class="form-control" cols="30" rows="4" placeholder="Escriba aquí su texto de nota de pedido correspondiente"></textarea>
                 </div>
-                <div class="col-md-7 col-lg-5 offset-md-5 offset-lg-7 my-4 ">
+                <div class="col-lg-7">
+                    <div class="mt-4" v-html="texto"></div>
+                </div>
+                <div class="col-md-7 col-lg-5   my-4 ">
                     <div class="d-flex justify-content-between align-items-center border-bottom">
                         <div class="">
                             <h5 class="semibold text-color">Subtotal</h5>
@@ -79,6 +82,7 @@
             bloques: Array,
             contenido: Object,
             descargas: Array,
+            texto: String,
             descuento_general: Number,
             descuento_cliente: Number,
         },

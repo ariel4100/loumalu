@@ -802,7 +802,7 @@ ul li a.nav-link:hover {
 }
 
 .product-card {
-  min-height: 277px;
+  min-height: 290px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -810,7 +810,7 @@ ul li a.nav-link:hover {
 
 .product-card .img-fluid {
   display: block;
-  max-height: 250px;
+  max-height: 300px;
   margin: auto;
 }
 

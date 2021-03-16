@@ -5,8 +5,8 @@
                 <div class="row justify-content-center">
                     <div class="col-md-2 mb-md-0 mb-4">
                         <select v-model="marca"  class="form-control">
-                            <option value="" selected disabled>Marca</option>
-                            <option :value="item" v-for="item in $page.marcas_global">
+                            <option value="" selected >Marca</option>
+                            <option :value="item" v-for="(item,index) in marcas" :key="index">
                                 {{item}}
                             </option>
                         </select>
@@ -14,7 +14,7 @@
                     <div class="col-md-2 mb-md-0 mb-4">
                         <select v-model="familia" id="" class="form-control">
                             <option value="" selected>Rubro</option>
-                            <option :value="item.title" v-for="item in $page.familias_global">
+                            <option :value="item.id" v-for="(item,index) in familias" :key="index">
                                 {{ item.title || ''}}
                             </option>
                         </select>
@@ -28,7 +28,7 @@
                         <input type="text" v-model="nombre" class="form-control" placeholder="Ingrese una descripción">
                     </div>
                     <div class="col-md-2 mb-md-0 mb-4 text-center text-md-left">
-                        <a   class="btn btn-secundario m-0">
+                        <a @click="Buscar()"  class="btn btn-secundario m-0">
                             <i class="fas fa-search mr-2"></i>
                             buscar
                         </a>
@@ -61,6 +61,38 @@
             </table-custom>
 
         </div>
+
+        <!-- Modal -->
+<div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      <div class="modal-body">
+        <div class=" " v-html="modal.texto">
+            
+        </div>
+        <!-- <ul class="list-unstyled">
+
+            <li>Pasos:
+                <ul>
+                <li>Iniciar sessión en la web.</li>
+                <li>Inscribirse en los cursos.</li>
+                <li>Espera la notificación ó mail que vamos a enviarte.</li>
+                <li>Listo, la solicitud estara en proceso.</li>
+                <li>NOTA: en caso de cambiar el curso, puede modificar el curso hasta el 27 de Febrero.</li>
+                </ul>
+            </li>
+
+        </ul> -->
+      </div>
+
+    </div>
+  </div>
+</div>
     </client-layout>
 </template>
 
@@ -76,11 +108,14 @@
         props: {
             sliders: Array,
             productos: Array,
+            modal: Object,
             contenido: Object,
             descargas: Array,
         },
         data(){
           return {
+              marcas: [],
+              familias: [],
               marca: '',
               familia: '',
               nombre: '',
@@ -118,6 +153,14 @@
         },
         created(){
           this.filteredItems = this.productos
+          this.getData()
+        },
+       mounted(){
+            setTimeout(()=>{
+                if(this.modal.estado == 1){
+                    $('#exampleModal').modal('show'); 
+                }
+            },2000)
         },
         components: {
             Modal,
@@ -129,23 +172,41 @@
         },
         // trigger filter on either input
         watch: {
-            marca: function () {
+            // marca: function () {
 
-                this.filteredItems = this.filterItems()
-            },
-            nombre: function () {
+            //     this.filteredItems = this.filterItems()
+            // },
+            // nombre: function () {
 
-                this.filteredItems = this.filterItems()
-            },
-            familia: function () {
+            //     this.filteredItems = this.filterItems()
+            // },
+            // familia: function () {
 
-                this.filteredItems = this.filterItems()
-            }
+            //     this.filteredItems = this.filterItems()
+            // }
         },
         methods: {
             ...mapActions('carrito', [
                 'addToCart',
             ]),
+             getData(){
+                axios.get(route('buscador.global')).then((res)=>{
+                    console.log(res)
+                    this.marcas = res.data.marcas_global
+                    this.familias = res.data.familias_global
+                })
+            },
+            Buscar(){
+                let data = {}
+                data['marca'] = this.marca
+                data['familia'] = this.familia
+                data['nombre'] = this.nombre
+                console.log(['acaaaa',data,route('buscador.pro2',data)])
+                axios.get(route('buscador.pro2',data)).then((res) => {
+                    console.log(res)
+                    this.filteredItems = res.data.productos
+                });
+            },
             verificarStock(data){
                 // console.log(data)
                 let alertifyObject = alertify.notify('Comprobando stock', 'warning');

@@ -24,16 +24,16 @@
             <template v-for="(item,index) in items">
                 <div class="row py-3 border-bottom">
                     <div class="col-md-4 mb-4">
-                        <label for="">Código del producto</label>
-                        <input type="text" v-model="item.codigo" class="form-control">
+                        <label for="">Código del producto <span class="text-danger">*</span></label>
+                        <input type="text" v-model="item.codigo" class="form-control" required>
                     </div>
                     <div class="col-md-4 mb-4">
                         <label for="">Descripción</label>
                         <input type="text" v-model="item.descripcion" class="form-control">
                     </div>
                     <div class="col-md-3 col-10 mb-4">
-                        <label for="">Cantidad</label>
-                        <input type="number" v-model="item.cantidad" min="1" class="form-control">
+                        <label for="">Cantidad <span class="text-danger">*</span></label>
+                        <input type="number" v-model="item.cantidad" min="1" class="form-control" required>
                     </div>
                     <div class="col-md-1 col-2 mb-3 d-flex align-items-center justify-content-end">
                         <a @click="elimItem(index)" class="">
@@ -44,7 +44,7 @@
             </template>
             <div class="row  pt-4" style="background-color: rgba(110,111,113,5%);">
                 <div class="col-md-4 d-flex align-items-center mb-4">
-                    <div class="p-2 w-100 text-muted border">Código del producto</div>
+                    <div class="p-2 w-100 text-muted border">Código del producto </div>
                 </div>
                 <div class="col-md-4 d-flex align-items-center mb-4">
                     <div class="p-2 w-100 text-muted border">Descripción</div>
@@ -62,26 +62,26 @@
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <label>NÚMERO/S FACTURA/S</label>
-                            <input type="text" required v-model="reclamo.factura" class="form-control" placeholder="Factura">
+                            <input type="text"   v-model="reclamo.factura" class="form-control" placeholder="Factura">
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label>NOMBRE TRANSPORTE</label>
+                            <label>NOMBRE TRANSPORTE <span class="text-danger">*</span></label>
                             <input type="text" required v-model="reclamo.transporte" class="form-control" placeholder="Transporte">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label>FECHA/S FACTURA/S</label>
-                            <input type="date" required v-model="reclamo.fecha" class="form-control" placeholder="Fecha">
+                            <input type="date"   v-model="reclamo.fecha" class="form-control" placeholder="Fecha">
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label>NÚMERO GUÍA</label>
+                            <label>NÚMERO GUÍA <span class="text-danger">*</span></label>
                             <input type="text" required v-model="reclamo.guia" class="form-control" placeholder="Guía">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 mb-4">
                     <div class="form-group">
-                        <label for="">MOTIVO DE LA DEVOLUCIÓN</label>
-                        <textarea v-model="reclamo.motivo"  cols="30" rows="5" class="form-control" placeholder="Escriba su mensaje..."></textarea>
+                        <label for="">MOTIVO DE LA DEVOLUCIÓN <span class="text-danger">*</span></label>
+                        <textarea v-model="reclamo.motivo"  required cols="30" rows="5" class="form-control" placeholder="Escriba su mensaje..."></textarea>
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -89,8 +89,12 @@
                     <input type="text" required v-model="reclamo.autorizo" class="form-control" placeholder="Empresa representada">
                 </div>
                 <div class="col-md-3 mb-4">
-                    <label for="">CONTROLÓ</label>
-                    <input type="text" required v-model="reclamo.controlo" class="form-control" placeholder="Empresa representada">
+                    <label for="">TIPO DE ENVIO</label>
+                    <select v-model="reclamo.controlo" class="form-control">
+                        <option  value="A Domicilio">A domicilio</option>
+                        <option value="Retiro Terminal">Retiro terminal</option>
+                    </select>
+                    <!-- <input type="text" required v-model="reclamo.controlo" class="form-control" placeholder="Empresa representada"> -->
                 </div>
                 <div class="col-md-4 mb-4">
                     <label for="">ARJUNTAR FOTO DE LA GUÍA</label>

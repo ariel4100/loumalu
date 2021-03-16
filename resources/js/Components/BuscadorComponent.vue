@@ -5,15 +5,15 @@
                 <div class="col-md-2 mb-md-0 mb-4">
                     <select v-model="marca"  class="form-control">
                         <option value="" selected disabled>Marca</option>
-                        <option :value="item" v-for="item in $page.marcas_global">
+                        <option :value="item" v-for="item in marcas">
                             {{item}}
                         </option>
                     </select>
                 </div>
                 <div class="col-md-2 mb-md-0 mb-4">
                     <select v-model="familia" id="" class="form-control">
-                        <option value="" selected>Rubro</option>
-                        <option :value="item.id" v-for="item in $page.familias_global">
+                        <option value="" selected disabled>Rubro</option>
+                        <option :value="item.id" v-for="item in familias">
                             {{ item.title || ''}}
                         </option>
                     </select>
@@ -45,7 +45,12 @@
                 marca: '',
                 familia: '',
                 nombre: '',
+                familias: [],
+                marcas: [],
             }
+        },
+        mounted(){
+            this.getData()
         },
         methods: {
             buscar(){
@@ -55,6 +60,13 @@
                 data['nombre'] = this.nombre
                 console.log(data)
                 this.$inertia.get(route('buscador.pro',data));
+            },
+            getData(){
+                axios.get(route('buscador.global')).then((res)=>{
+                    console.log(res)
+                    this.marcas = res.data.marcas_global
+                    this.familias = res.data.familias_global
+                })
             }
         }
     }
