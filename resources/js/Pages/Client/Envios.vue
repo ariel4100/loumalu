@@ -2,7 +2,7 @@
     <client-layout class="">
         <div class="container my-5">
             <table-custom
-                  :items="items"
+                  :items="envios"
                   :onlyShow="mostrar"
                   :fields="fields"
                   :search="false"
@@ -19,24 +19,17 @@
     import Modal from '../../Components/ModalComponent'
     export default {
         props: {
-            sliders: Array,
+            envios: Array,
             bloques: Array,
             contenido: Object,
             descargas: Array,
         },
         data(){
           return {
-              mostrar:['pedido','fecha','transporte','guia'],
-              items:[
-                  { pedido: '1001-2569', fecha: '12-11-18', transporte: 'La Sevillanita', guia: '10458'},
-                  { pedido: '1001-2569', fecha: '12-11-18', transporte: 'La Sevillanita', guia: '10458'},
-                  { pedido: '1001-2569', fecha: '12-11-18', transporte: 'La Sevillanita', guia: '10458'},
-                  { pedido: '1001-2569', fecha: '12-11-18', transporte: 'La Sevillanita', guia: '10458'},
-                  { pedido: '1001-2569', fecha: '12-11-18', transporte: 'La Sevillanita', guia: '10458'},
-
-              ],
+              mostrar:['nro_pedido','fecha','transporte','guia'],
+ 
               fields: [
-                  { key: 'pedido', label: ' PEDIDO WEB',},
+                  { key: 'nro_pedido', label: ' PEDIDO WEB',},
                   { key: 'fecha', label: 'FECHA',},
                   { key: 'transporte', label: 'TRANSPORTE',},
                   { key: 'guia', label: 'GUÍA DE TRANPOSTE',},

@@ -40,6 +40,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto text-center text-start">
                         <li class="nav-item" >
+                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="'familias' == $page.currentRouteName ? 'activo' : ''" :href="route('familias')">PRODUCTOS</a>
+                        </li>
+                        <li class="nav-item" >
                             <a class="nav-link fw-medium text-uppercase py-md-4" :class="'privada.home' == $page.currentRouteName ? 'activo' : ''" :href="route('privada.home')">PEDIDOS</a>
                         </li>
                         <li class="nav-item" >

@@ -184,15 +184,7 @@
                     cancelButtonText: 'No'
                 }).then((result) => {
                     if (result.value) {
-                        this.$inertia.delete(route('adm.clientes.destroy',{id: id})).then(() => {
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Se elimino correctamente',
-                            //     showConfirmButton: false,
-                            //     timer: 2000
-                            // })
-                            $('.modal').modal('hide');
-                        })
+                        this.$inertia.delete(route('adm.clientes.destroy',id)) 
                     }
                 })
 

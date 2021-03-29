@@ -16,10 +16,10 @@
                     </span>
                 </template>
                 <template #cell(total)="row">
-                    $ {{ row.item.total | toCurrency }}
+                    $ {{ row.item.total_iva | toCurrency }}
                 </template>
                 <template #cell(total_iva)="row">
-                    $ {{ row.item.total_iva | toCurrency }}
+                    $ {{ row.item.total | toCurrency }}
                 </template>
                 <template #row-details="row">
                     <b-card>

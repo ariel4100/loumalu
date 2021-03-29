@@ -9,14 +9,21 @@
                         <!--                        <a :href="item.ruta" class="btn btn-white  btn-rounded text-secundario">VER MÁS</a>-->
                     </div>
                 </div>
-                <template v-if="item.image">
-                    <img @error="replaceByDefault($event,null)" :src="item.image" :alt="item.title" class="img-fluid dsadadas">
+                <template v-if="item.imagef">
+                    <img @error="replaceByDefault($event,null)" :src="item.imagef" :alt="item.title" class="d-block w-100 dsadadas">
 
                 </template>
-                <template v-else>
-                  
-                    <img @error="replaceByDefault($event,item)" :src="$page.appUrl+'/uploads/imagenes/'+item.code+'-001.jpg'" alt="" class="img-fluid">
+                 <template v-else>
+                    <template v-if="item.image">
+                        <img @error="replaceByDefault($event,null)" :src="item.image" :alt="item.title" class="d-block w-100 dsadadas">
+
+                    </template>
+                    <template v-else>
+                    
+                        <img @error="replaceByDefault($event,item)" :src="$page.appUrl+'/uploads/imagenes/'+item.code+'-001.jpg'" alt="" class="d-block w-100">
+                    </template>
                 </template>
+                
             </div>
             <div class="">
                 <h6 class="mt-2 mb-0 text-secundario">{{ item.code || 'CODIGO' }}</h6>

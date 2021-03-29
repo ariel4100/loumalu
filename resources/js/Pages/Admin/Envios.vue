@@ -43,43 +43,24 @@
 <!--                            </div>-->
                         </div>
                     </template>
-                    <!-- <template #default>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label>Imagen</label>
-                                <image-custom :model.sync="category.image"></image-custom>
-                            </div>
-                        </div>
-                    </template> -->
+ 
                 </modal>
             </div>
             <div class="card-body">
-                <b-table striped hover :items="categorias" :fields="fields">
+                <b-table striped hover :items="envios" :fields="fields" >
                     <template #cell(actions)="row">
                         <button @click="edit(row.item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">
                             <i class="far fa-edit"></i>
                         </button>
 
-<!--                        <button @click="del(row.item)" class="btn btn-danger btn-circle">-->
-<!--                            <i class="fas fa-trash"></i>-->
-<!--                        </button>-->
+                       <!-- <button @click="del(row.item)" class="btn btn-danger btn-circle">
+                           <i class="fas fa-trash"></i>
+                       </button> -->
 
                     </template>
                 </b-table>
 
-<!--                <custom-table-->
-<!--                        :items="categorias"-->
-<!--                >-->
-<!--                    <template #action="{ item }">-->
-<!--                        <button @click="edit(item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">-->
-<!--                            <i class="far fa-edit"></i>-->
-<!--                        </button>-->
-
-<!--                        <button @click="del(item)" class="btn btn-danger btn-circle">-->
-<!--                            <i class="fas fa-trash"></i>-->
-<!--                        </button>-->
-<!--                    </template>-->
-<!--                </custom-table>-->
+  
 
             </div>
         </div>
@@ -92,12 +73,12 @@
     import ImageFile from '@/Components/ImageComponent'
     import Modal from '@/Components/ModalComponent'
     import Table from '@/Components/TableComponent'
-    import { mapState, mapActions } from 'vuex'
+     import { mapState, mapActions } from 'vuex'
 
 
     export default {
         props: {
-            categorias: Array,
+            envios: Array,
             contenido: Object,
             section: '',
         },
@@ -106,8 +87,25 @@
               selectedCat: '',
               fields: [
                   {
-                      key: 'title',
-                      label: 'Titulo',
+                      key: 'id',
+                      label: 'Nro',
+                  },
+                  {
+                      key: 'nro_pedido',
+                      label: 'Nro Pedido',
+                      class: 'text-center'
+                  },
+                  {
+                      key: 'fecha',
+                      label: 'Fecha',
+                  },
+                  {
+                      key: 'transporte',
+                      label: 'Transporte',
+                  },
+                  {
+                      key: 'guia',
+                      label: 'Guia',
                   },
                   {
                       key: 'actions',
@@ -132,7 +130,9 @@
             'image-custom': ImageFile,
             'custom-table': Table,
         },
-
+        mounted(){
+            console.log(this.categorias)
+        },
         computed:{
             familias_principales(){
                 // let selects = this.selectedValue.push({
@@ -148,12 +148,10 @@
 
                 return result
             },
-            ...mapState({
-                admin: state =>  state.admin,
-            }),
+ 
         },
         methods: {
-            ...mapActions('admin', [
+  ...mapActions('admin', [
                 'eliminar',
             ]),
             reset(){
@@ -172,18 +170,24 @@
                 data.append('id', this.category.id)
                 data.append('pedido', this.category.pedido)
                 data.append('fecha', this.category.fecha || '')
-                data.append('fecha', this.category.transporte || '')
+                data.append('transporte', this.category.transporte || '')
                 data.append('guia', this.category.guia || '')
-                this.$inertia.post(route('adm.envios.store'), data)
+                this.$inertia.post(route('adm.envios.store'), data).then(() => {
+
+                });
             },
 
             edit(item){
                 // console.log(item)
-                this.category = JSON.parse(JSON.stringify(item))
+                this.category.id =   item.id
+                this.category.pedido =   item.nro_pedido
+                this.category.fecha =   item.fecha
+                this.category.transporte =   item.transporte
+                this.category.guia =   item.guia
                 this.$root.$emit('bv::show::modal','modal-prevent-closing')
             },
             del(id){
-                this.eliminar(route('adm.familias.destroy',{id: id}))
+                this.eliminar(route('adm.envios.destroy', {id: id} ))
             },
         },
     }

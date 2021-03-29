@@ -20,10 +20,7 @@ class CreateEnviosTable extends Migration
             $table->string('transporte')->nullable();
             $table->string('guia')->nullable();
             $table->unsignedBigInteger('client_id')->nullable();
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-
             $table->unsignedBigInteger('transaction_id')->nullable();
-            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
             $table->timestamps();
         });
     }

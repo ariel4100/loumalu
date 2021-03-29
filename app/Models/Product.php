@@ -30,8 +30,14 @@ class Product extends Model
         return $this->belongsTo(Family::class);
     }
 
-
-
+    public function scopeFamilia($query, $type)
+    {
+        return $query->where('family_id',$type);
+    }
+    public function scopeMarca($query, $type)
+    {
+        return $query->where('marca',$type);
+    }
     public function related() {
         return $this->belongsToMany(Product::class,'related_products','product_id','related_id');
     }

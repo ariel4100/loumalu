@@ -43,11 +43,11 @@
                     :fields="fields"
                     :search="false"
             >
-                <template #action="{ item }">
-                    <button @click="addToCart(item)" class="btn btn-success text-white" >
-                        AGREGAR
-                    </button>
-                </template>
+                    <template #action="{ item }">
+                        <button @click="addToCart(item)" class="btn btn-success text-white" >
+                            AGREGAR
+                        </button>
+                    </template>
                 <template #stock="{ item }">
                     <div class="p-4" :id="item.id">
                         <button class="btn btn-dark" @click="verificarStock(item)" type="button">
@@ -59,40 +59,39 @@
                     <input type="number" class="form-control"  min="0" :step="item.unidad" v-model="item.cantidad">
                 </template>
             </table-custom>
-
         </div>
 
         <!-- Modal -->
-<div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+        <div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <div class="modal-body">
+                <div class=" " v-html="modal.texto">
+                    
+                </div>
+                <!-- <ul class="list-unstyled">
+
+                    <li>Pasos:
+                        <ul>
+                        <li>Iniciar sessión en la web.</li>
+                        <li>Inscribirse en los cursos.</li>
+                        <li>Espera la notificación ó mail que vamos a enviarte.</li>
+                        <li>Listo, la solicitud estara en proceso.</li>
+                        <li>NOTA: en caso de cambiar el curso, puede modificar el curso hasta el 27 de Febrero.</li>
+                        </ul>
+                    </li>
+
+                </ul> -->
+            </div>
+
+            </div>
         </div>
-      <div class="modal-body">
-        <div class=" " v-html="modal.texto">
-            
         </div>
-        <!-- <ul class="list-unstyled">
-
-            <li>Pasos:
-                <ul>
-                <li>Iniciar sessión en la web.</li>
-                <li>Inscribirse en los cursos.</li>
-                <li>Espera la notificación ó mail que vamos a enviarte.</li>
-                <li>Listo, la solicitud estara en proceso.</li>
-                <li>NOTA: en caso de cambiar el curso, puede modificar el curso hasta el 27 de Febrero.</li>
-                </ul>
-            </li>
-
-        </ul> -->
-      </div>
-
-    </div>
-  </div>
-</div>
     </client-layout>
 </template>
 
@@ -129,13 +128,13 @@
 
               ],
               fields: [
-                  { key: 'rubro', label: 'RUBRO',},
+                  { key: 'rubro', label: 'RUBRO', class: 'px-0'},
                   { key: 'codigo', label: 'CÓDIGO',},
-                  { key: 'marca', label: 'MARCA',},
-                  { key: 'producto', label: 'PRODUCTO', class: 'text-secundario'},
-                  { key: 'unidad', label: 'UNIDAD', class: 'text-center'},
-                  { key: 'stock', label: 'STOCK', class: 'text-center'},
-                  { key: 'precio', label: 'PRECIO', class: 'text-center text-nowrap'},
+                  { key: 'marca', label: 'MARCA', class: 'px-0'},
+                  { key: 'producto', label: 'PRODUCTO', class: 'text-secundario ' },
+                  { key: 'unidad', label: 'UNIDAD', class: 'text-center px-0'},
+                  { key: 'stock', label: 'STOCK', class: 'text-center '},
+                  { key: 'precio', label: 'PRECIO', class: 'text-center text-nowrap px-0'},
                   { key: 'cantidad', label: 'CANTIDAD',},
                   { key: 'subtotal', label: 'SUBTOTAL', class: 'text-center text-nowrap'},
                   { key: 'actions', label: '',},
@@ -260,3 +259,11 @@
         },
     }
 </script>
+<style scoped>
+ 
+.table th, .table td {
+    padding: 0.15rem;
+    vertical-align: center;
+    border-top: 1px solid #dee2e6;
+}
+</style>

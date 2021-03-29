@@ -68,12 +68,13 @@ Route::post('registro', [Logincontroller::class, 'register'])->name('auth.regist
 
 
 Route::get('buscador-global', function () {
-    $marcas = Product::get()->pluck('marca')->unique();
+    $marcas = Product::get()->pluck('marca')->unique()->filter();
     $familias = Family::select('id','title')->get();
-
+    $sorted = $marcas->sort();
+    // dd($marcas);
     return response()->json([
         'familias_global' => $familias,
-        'marcas_global' => $marcas,
+        'marcas_global' => $sorted->values()->all(),
     ]);
 })->name('buscador.global');
 

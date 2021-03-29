@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Envio;
 use App\Models\OrderIntertrade;
 use App\Models\OrderProduct;
 use App\Models\Product;
@@ -37,9 +38,9 @@ class ClientController extends Controller
         $modal = Content::where('section','pop-up')->first()->data;
 
 //        $productos = Product::with('product_intertrade')->orderBy('order')->get();
-        $productos = Product::with('family')->get();
+        $productos = Product::with('family')->limit(500)->get() ;
 
-//        dd($productos->flatten());
+    //    dd($productos );
         return Inertia::render('Client/Pedidos', [
             'modal' => $modal,
             'productos' => $productos->map(function ($item) {
@@ -112,9 +113,9 @@ class ClientController extends Controller
     {
 //        dd(auth()->guard('client')->user());
         $auth = auth()->guard('client')->user();
-
+        $envios = Envio::where('client_id',$auth->id)->orderBy('id','desc')->get();
         return Inertia::render('Client/Envios', [
-
+            'envios' => $envios
         ]);
     }
 

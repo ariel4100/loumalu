@@ -30,11 +30,11 @@
                         <div class="col-md-6 mb-5 border justify-content-center align-items-center d-flex">
                             <!-- <img :src="'uploads/imagenes/'+producto.code+'.jpg'" alt="" class="img-fluid"> -->
                             <template v-if="producto.file">
-                                <img @error="replaceByDefault($event, null)" :src="producto.file"   class="img-fluid">
+                                <img @error="replaceByDefault($event, null)" :src="producto.file"   class="w-100 d-block">
 
                             </template>
                             <template v-else>
-                                <img @error="replaceByDefault($event,producto)" :src="$page.appUrl+'/uploads/imagenes/'+producto.code+'-001.jpg'"   class="img-fluid 2">
+                                <img @error="replaceByDefault($event,producto)" :src="$page.appUrl+'/uploads/imagenes/'+producto.code+'-001.jpg'"   class="w-100 d-block 2">
                             </template>
 <!--                            <carousel :images="gallery"  producto="1" arrows="1"></carousel>-->
                         </div>

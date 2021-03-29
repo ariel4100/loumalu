@@ -224,7 +224,8 @@ class FrontendController extends Controller
                     'text' => $item->text,
                     'order' => $item->order,
                     'ruta' => route('producto',$item->slug),
-                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : $imagen_familia,
+                    'imagef' => $imagen_familia,
+                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : null,
                 ];
             }),
         ])->withViewData(['title' => $familia->title]);
@@ -255,7 +256,9 @@ class FrontendController extends Controller
             'price' => $producto->price,
             'text' => $producto->description,
             'order' => $producto->order,
-            'file' => $producto->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($producto->file) : $imagen_familia,
+            'imagef' => $imagen_familia,
+
+            'file' => $producto->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($producto->file) : null,
             'ruta' => route('producto',$producto->slug),
         ]);
 
@@ -476,7 +479,7 @@ class FrontendController extends Controller
     {
     //    dd($request->all());
 //        $productos_con_familia = ProductIntertrade::get();
-
+        $productName = $request->nombre;
         $productos = [];
         //filtra por marca y rubro
         if ($request->marca && $request->familia && $request->nombre == null){
@@ -484,10 +487,16 @@ class FrontendController extends Controller
         }
         //filtra por los 3
         if ($request->marca && $request->familia && $request->nombre){
-            $productos = Product::where('marca',$request->marca)
-                ->where('family_id',$request->familia)
-
-                ->get();
+            // $productos = Product::where('marca',$request->marca)
+            //     ->where('family_id',$request->familia)
+            //     ->where('title', 'like', '%'.$productName.'%')
+            //     ->orwhere('code', 'like', '%'.$productName.'%')
+            //     ->get();
+            $productos = Product::familia($request->familia)->marca($request->marca)->where(function($query) use ($productName){
+                    $query->where('title', 'LIKE', '%'.$productName.'%')
+                          ->orWhere('code', 'LIKE', '%'.$productName.'%');
+                })->get();
+                // dd([$productos,$request->all()]);
         }
         //filtra por rubro
         if ($request->familia  && $request->marca == null && $request->nombre  == null){
@@ -567,8 +576,10 @@ class FrontendController extends Controller
                     'marca' => $item->marca,
                     'text' => $item->description,
                     'order' => $item->order,
+                    'imagef' => $imagen_familia,
+
                     'ruta' => route('producto',$item->slug),
-                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) :  $imagen_familia,
+                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) :  null,
                 ];
             }),
         ]);
@@ -650,12 +661,17 @@ class FrontendController extends Controller
         }
         //filtra por los 3
         if ($request->marca && $request->familia && $request->nombre){
-            $productos = Product::where('marca', 'like', '%'.$request->marca.'%')
-                ->orwhere('family_id', 'like', '%'.$request->familia.'%')
-                ->orwhere('code', 'like', '%'.$productName.'%')
-                ->orwhere('title', 'like', '%'.$productName.'%')
-                ->get();
- 
+            // $productos = Product::where('marca', $request->marca)
+            // ->where('family_id',$request->familia)
+            // ->where('title', 'like', '%'.$productName.'%')
+            // ->where('code', 'like', '%'.$productName.'%')
+            // ->get();
+
+            $productos = Product::familia($request->familia)->marca($request->marca)->where(function($query) use ($productName){
+                $query->where('title', 'LIKE', '%'.$productName.'%')
+                      ->orWhere('code', 'LIKE', '%'.$productName.'%');
+            })->get();
+            
         }
         //filtra por rubro
         if ($request->familia  && $request->marca == null && $request->nombre  == null){
@@ -670,6 +686,7 @@ class FrontendController extends Controller
             $productName = $request->nombre;
             $productos =  Product::where('title', 'like', '%'.$productName.'%')
             ->orwhere('code', 'like', '%'.$productName.'%')
+            ->orwhere('marca', 'like', '%'.$productName.'%')
             ->get();
             // dd($productos);
             // $productos = Product::all()->filter(function ($item) use ($productName) {
