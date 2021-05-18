@@ -36,11 +36,12 @@ Route::post('/contenido-slider', [ContentController::class, 'slider'])->name('co
 Route::get('/destroy/slider/{id}', [ContentController::class, 'destroy_slider'])->name('content.destroy.slider');
 Route::post('/contenido-logo', [ContentController::class, 'logos'])->name('content.logo');
 
+Route::resource('familias', FamilyController::class);
+Route::get('/destroy/familia/{id}', [FamilyController::class, 'elim'])->name('familias.elim');
 Route::resource('pedidos', OrderController::class);
 Route::resource('categorias', CategoryController::class);
 Route::resource('noticias', NewsController::class);
 Route::resource('descargas', DescargaController::class);
-Route::resource('familias', FamilyController::class);
 Route::resource('productos', ProductController::class);
 Route::resource('usuarios', UserController::class);
 Route::resource('envios', EnviosController::class);

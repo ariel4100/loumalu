@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+ 
 
 class FamilyController extends Controller
 {
@@ -88,10 +89,20 @@ class FamilyController extends Controller
 
     public function destroy($id)
     {
-        $item = Family::find($id);
+        $item = Family::find(trim($id));
+        // dd($item);
 
         $item->delete();
         session()->flash('message', 'Se elimino correctamente.');
-        return Redirect::route('adm.familias.index');
+        return Redirect::back();
+    }
+    public function elim($id)
+    {
+        $item = Family::find(trim($id));
+        // dd($item);
+
+        $item->delete();
+        session()->flash('message', 'Se elimino correctamente.');
+        return Redirect::back();
     }
 }

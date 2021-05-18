@@ -20,12 +20,7 @@ class Product extends Model
     ];
 
 
-
-    public function product_intertrade()
-    {
-        return $this->setConnection('aguila')->belongsTo(ProductIntertrade::class,'mlproducto_id','id');
-    }
-
+ 
     public function family() {
         return $this->belongsTo(Family::class);
     }

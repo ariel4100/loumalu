@@ -1,24 +1,35 @@
  <template>
     <web-layout class="">
-        <carousel :images="sliders" height="400px"></carousel>
-        <template v-for="(item,index) in bloques">
-            <template v-if="index == 0">
-                <div class="container wow fadeIn py-4" :data-wow-delay="'0.'+index+'s'">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h3 class="mb-3 text-secundario">{{ item.title }}</h3>
+        <carousel :images="sliders" ></carousel>
+        <section class="bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 text-center py-5" v-for="(item,index) in imagenes" :key="index">
+                        <img :src="item.image" :alt="item.title" class="img-fluid m-auto" style="min-height: 45px;">
+                        <h5 class="text-white mt-3">{{ item.title }}</h5>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <template v-for="(item,index) in bloques.slice(0,2)">
+            <template >
+                <div class="  wow fadeIn " :data-wow-delay="'0.'+index+'s'">
+                    <div class="row" v-if="index % 2 == 0">
+                        <div class="col-md-6 p-0">
+                            <img :src="item.image" alt="" class="img-fluid mx-auto h-100 w-100">  
+                        </div>
+                        <div class="col-md-6 p-0 p-4">
+                            <h3 class="mb-3 text-center  ">{{ item.title }}</h3>
                             <p class="" v-html="item.text"></p>
                         </div>
-                        <div class="col-md-5">
-                            <div class="row mb-4" v-for="(item,index) in bloques.slice(1)">
-                                <div class="col-md-2">
-                                    <img :src="item.image" alt="" class="img-fluid mx-auto">
-                                </div>
-                                <div class="col-md-9 pl-md-0 mt-4 mt-md-0 text-center text-md-left">
-                                    <h6 class="mb-2 font-weight-bold text-primario">{{ item.title }}</h6>
-                                    <p class="" v-html="item.text"></p>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="row" v-else>
+                        <div class="col-md-6 p-0 p-4">
+                            <h3 class="mb-3 text-center  ">{{ item.title }}</h3>
+                            <p class="" v-html="item.text"></p>
+                        </div>
+                        <div class="col-md-6 p-0">
+                            <img :src="item.image" alt="" class="img-fluid mx-auto h-100 w-100">  
                         </div>
                     </div>
                 </div>

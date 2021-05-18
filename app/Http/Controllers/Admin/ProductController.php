@@ -27,7 +27,7 @@ class ProductController extends Controller
         $familiasMap = $familias->map(function ($item) {
             return [
                 'id' => $item->id,
-                'title' => $item->nombre,
+                'title' => $item->title,
 
             ];
         });
@@ -62,11 +62,11 @@ class ProductController extends Controller
 //                        'title' => $value->product_intertrade->nombre,
 //                    ];
 //                }) : [],
-//                'gallery' => collect(@$item->product->gallery ?? [])->map(function ($item) {
-//                    $url_image =  Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
-////                        dd($item);
-//                    return $url_image;
-//                }),
+               'gallery' => collect(@$item->product->gallery ?? [])->map(function ($item) {
+                   $url_image =  Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
+//                        dd($item);
+                   return $url_image;
+               }),
                 'file' => @$item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
 
             ];
@@ -88,34 +88,27 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-//        dd($request->all());
+    //    dd($request->all());
         try {
             DB::beginTransaction();
-            if ($request->id_inter){
-                $item_inter = Product::find($request->id_inter) ;
+            if ($request->id){
+                $item = Product::find($request->id) ;
 //                $item = Product::firstOrCreate([
 //                    'mlproducto_id' => $item_inter->id
 //                ]);
             }else{
-                $item_inter = new Product();
+                $item = new Product();
             }
 //            dd([$item,$item_inter]);
             //modelo Intertrade
-            $item_inter->codigo   = $request->cod;
-            $item_inter->nombre   = $request->title;
-            $item_inter->precio   = floatval($request->price);
-            $item_inter->descripcion   = $request->descripcion;
-            isset($request->stock) ? $item_inter->stock = 1 : $item_inter->stock = 0;
-//            $item->EstadoMLProducto   = $request->title;
-//            $item->idStProducto   = $request->title;
-//            $item->EsKitMLProducto   = $request->title;
-            $item_inter->marca   = $request->marca;
-            $item_inter->unidad   = $request->unidad;
-//            $item_inter->NombreStClasificacionSimple   = $request->clasificacion;
+            $item->title   = $request->title;
+            $item->text   = $request->descripcion;
+            $item->description   = $request->descripcion;
+            isset($request->stock) ? $item->stock = 1 : $item->stock = 0;
 
 //            dd('aca');
-            $file_save = Helpers::saveImage($request->file('archivo'), 'productos',$item_inter->archivo);
-            $file_save ? $item_inter->archivo = $file_save : false;
+            $file_save = Helpers::saveImage($request->file('archivo'), 'productos',$item->file);
+            $file_save ? $item->file = $file_save : false;
 
             if (isset($request->gallery)){
                 $images = Helpers::saveMultipleImage($request->gallery, 'productos');
@@ -125,21 +118,21 @@ class ProductController extends Controller
 
 //            $item->setTranslations('text', (array) json_decode($request->text));
 //            $item->setTranslations('slug', ['es'=> str::slug($request->title)]);
-            $item_inter->orden   = $request->order;
-            $item_inter->slug   = str::slug($request->title);
-//            $item->gallery   = @$images;
-            isset($request->featured) ? $item_inter->destacado = 1 : $item_inter->destacado = 0;
-            $item_inter->categoria_id   = $request->family_id;
+            $item->order   = $request->order;
+            $item->slug   = str::slug($request->title);
+           $item->gallery   = @$images;
+            isset($request->featured) ? $item->featured = 1 : $item->featured = 0;
+            $item->family_id   = $request->family_id;
 
 //            $item->slug    = str::slug($request->title);
 //            $item->save();
-            $item_inter->save();
+            $item->save();
             $productos = collect(json_decode($request->productos));
 
 //
 //            productos relacionados
             if (count($productos) > 0){
-                $item_inter->related()->sync($productos->pluck('id'));
+                $item->related()->sync($productos->pluck('id'));
             }
 
             DB::commit();

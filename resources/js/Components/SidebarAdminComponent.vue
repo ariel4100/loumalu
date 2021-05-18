@@ -350,36 +350,20 @@
                         ],
                         ruta: route('adm.content.index',{ section: 'contacto'}),
                     },
+                 
                     {
-                        nombre: 'Novedades y Ofertas',
-                        icon: '<i class="far fa-newspaper"></i>',
-                        submenu: [
-                            {
-                                nombre: 'Categorias',
-                                ruta: route('adm.categorias.index'),
-                            },
-                            {
-                                nombre: 'Novedad',
-                                ruta: route('adm.noticias.index'),
-                            },
-                        ],
-                        ruta: route('adm.content.index',{ section: 'contacto'}),
+                        nombre: 'Galeria',
+                        icon: '<i class="fas fa-building"></i>',
+                        submenu: [],
+                        ruta: route('adm.content.index',{ section: 'galeria'}),
                     },
                     {
-                        nombre: 'Descargas',
-                        icon: '<i class="fas fa-download"></i>',
-                        submenu: [
-                            {
-                                nombre: 'Contenido',
-                                ruta: route('adm.content.index',{ section: 'descargas'}),
-                            },
-                            {
-                                nombre: 'Descargas',
-                                ruta: route('adm.descargas.index'),
-                            },
-                        ],
-                        ruta: route('adm.content.index',{ section: 'contacto'}),
+                        nombre: 'Asistencia Tecnica',
+                        icon: '<i class="fas fa-building"></i>',
+                        submenu: [],
+                        ruta: route('adm.content.index',{ section: 'asistencia'}),
                     },
+                    
                     {
                         nombre: 'Contacto',
                         icon: '<i class="fas fa-fw fa-cog"></i>',

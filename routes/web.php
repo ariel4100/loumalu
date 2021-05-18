@@ -42,10 +42,9 @@ Route::get('link', function () {
 //Secciones
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('nosotros', [FrontendController::class, 'empresa'])->name('empresa');
-Route::get('descargas', [FrontendController::class, 'descargas'])->name('descargas');
-Route::get('buscador', [FrontendController::class, 'buscador'])->name('buscador');
-Route::get('buscador-pro', [FrontendController::class, 'buscador_pro'])->name('buscador.pro');
-Route::get('buscador-pro2', [FrontendController::class, 'buscador_pro2'])->name('buscador.pro2');
+Route::get('galeria', [FrontendController::class, 'galeria'])->name('galeria');
+Route::get('asistencia-tecnica', [FrontendController::class, 'asistencia'])->name('asistencia');
+Route::get('presupuesto', [FrontendController::class, 'presupuesto'])->name('presupuesto');
 Route::get('contacto', [FrontendController::class, 'contacto'])->name('contacto');
 Route::post('contacto', [MailController::class, 'contacto'])->name('mail.contacto');
 Route::post('presupuesto', [MailController::class, 'presupuesto'])->name('mail.presupuesto');

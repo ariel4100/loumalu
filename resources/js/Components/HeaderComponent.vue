@@ -1,15 +1,15 @@
 <template>
-    <header>
-        <div class="bg-primario">
+    <header class="" :class="['home','empresa'].includes($page.currentRouteName) ? 'fixed-top' : ''" >
+        <div class=" ">
             <div class="container">
                 <div class="d-flex justify-content-md-end  text-white">
                     <div class="d-flex align-items-center py-2">
-                        <div class="md-form input-group  my-0">
-                            <input type="text" class="form-control ph-white text-white"  v-on:keyup.enter="buscar()" placeholder="Buscando..." v-model="nombre" aria-describedby="material-addon2">
-                            <div class="input-group-append">
-                                <span class="input-group-text md-addon text-white" id="material-addon2" @click="buscar()"><i class="fas fa-search"></i></span>
-                            </div>
-                        </div>
+                            <li class="nav-item dropdown d-block d-md-none">
+                                <a  class="border text-white text-nowrap py-1 nav-link text-uppercase" data-toggle="modal" data-target="#login" >
+                                    simulá tu ambiente
+                                </a>
+                            </li>
+
 
                         <template v-if="$page.auth.check == false">
                             <li class="nav-item dropdown d-none d-md-block">
@@ -48,19 +48,27 @@
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white py-0">
+        <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-0">
             <div class="container">
-                <a class="navbar-brand" :href="route('home')">
-                    <img :src="$page.header" alt="" class="img-fluid" style="max-width: 300px;">
-                </a>
+                
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto text-center text-start">
-                        <li class="nav-item" v-for="item in menu" v-if="item.mostrar == 1">
-                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="item.url.split(',').includes($page.currentRouteName) ? 'activo' : ''" :href="route(item.route)">{{ t(item.nombre) }}</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+                    <ul class="navbar-nav m-auto text-center text-start">
+                        <li class="nav-item" v-for="item in menu.slice(0,5)" v-if="item.mostrar == 1">
+                            <a class="nav-link  fw-medium text-uppercase py-md-4" :class="['home','empresa'].includes($page.currentRouteName) ? 'text-white' : 'text-dark'" :href="route(item.route)">{{ t(item.nombre) }}</a>
+                            <hr v-if="item.url.split(',').includes($page.currentRouteName)" width="20px" class="pt-1 m-auto bg-dark">
+                        </li>
+                    </ul>
+                    <a class="navbar-brand m-0" :href="route('home')">
+                        <img :src="$page.header" alt="" class="img-fluid" style="max-width: 300px;">
+                    </a>
+                    <ul class="navbar-nav m-auto text-center text-start">
+                        <li class="nav-item" v-for="item in menu.slice(5)" v-if="item.mostrar == 1">
+                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="['home','empresa'].includes($page.currentRouteName) ? 'text-white' : 'text-dark'" :href="route(item.route)">{{ t(item.nombre) }}</a>
+                            <hr v-if="item.url.split(',').includes($page.currentRouteName)" width="20px" class="pt-1 m-auto bg-dark">
                         </li>
                     </ul>
                 </div>

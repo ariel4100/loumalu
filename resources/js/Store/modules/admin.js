@@ -53,7 +53,7 @@ const actions = {
             cancelButtonText: 'No'
         }).then((result) => {
             if (result.value) {
-                inertia.delete(data).then(() => {
+                axios.delete(data).then((res) => {
                     // Swal.fire({
                     //     icon: 'success',
                     //     title: 'Se elimino correctamente',

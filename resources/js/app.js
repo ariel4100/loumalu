@@ -72,13 +72,13 @@ Vue.mixin({
         return {
             menu: [
                 {
-                    nombre: 'Inicio',
+                    nombre: 'Home',
                     route: 'home',
                     url: 'home',
-                    mostrar: 0,
+                    mostrar: 1,
                 },
                 {
-                    nombre: 'NOSOTROS',
+                    nombre: 'Empresa',
                     route: 'empresa',
                     url: 'empresa',
                     mostrar: 1,
@@ -90,15 +90,27 @@ Vue.mixin({
                     mostrar: 1,
                 },
                 {
-                    nombre: 'NOVEDADES Y OFERTAS',
+                    nombre: 'Simulador',
                     route: 'novedades',
                     url: 'blog,novedades,novedad',
                     mostrar: 1,
                 },
                 {
-                    nombre: 'DESCARGAS',
-                    route: 'descargas',
-                    url: 'descargas',
+                    nombre: 'Galeria',
+                    route: 'galeria',
+                    url: 'galeria',
+                    mostrar: 1,
+                },
+                {
+                    nombre: 'Asistencia Tecnica',
+                    route: 'asistencia',
+                    url: 'asistencia',
+                    mostrar: 1,
+                },
+                {
+                    nombre: 'Solicitud de Presupuesto',
+                    route: 'presupuesto',
+                    url: 'presupuesto',
                     mostrar: 1,
                 },
                 {

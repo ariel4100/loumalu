@@ -1,7 +1,21 @@
 <template>
     <web-layout class="">
-        <buscador
-        ></buscador>
+         <div class="bg-primario">
+            <div class="container">
+                <h5 class="section-title ">
+                    <i class="fas fa-home"></i>
+                    <a :href="route('familias')" class="text-white">
+                        {{ t('Productos') }}
+                    </a>
+                    <a v-if="familia" :href="route('subfamilias',{ slug: familia.slug })" class="text-white">
+                        {{ (familia ? '| '+familia.title : '') }}
+                    </a>
+                    <a v-if="familia" :href="route('productos',{ slug: familia.slug })" class="text-white">
+                        {{ (familia ? '| '+familia.title : '') }}
+                    </a>
+                </h5>
+            </div>
+        </div>
         <!-- <div class=" " v-if="sidenav == 1">
             <div class="container">
                 <h5 class="section-title ">
@@ -19,13 +33,13 @@
 
         <div v-if="sidenav == 1" class="container mb-5">
             <div class="row">
-                <!-- <div class="col-lg-3 col-md-4">
+                <div class="col-lg-3 col-md-4">
                     <sidenav
                             :familia-id="familia.id"
                             :familias="familias"
                     ></sidenav>
-                </div> -->
-                <div class="col-lg-12 col-md-12">
+                </div>
+                <div class="col-lg-9 col-md-8">
                     <div class="row">
                         <template v-for="item in productos">
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
@@ -40,7 +54,7 @@
             <div class="row">
                 <template v-for="item in familias">
                     <div class="col-sm-6 col-md-3 col-lg-3 mb-5">
-                        <product-card :item="item"  ></product-card>
+                        <product-card :item="item"></product-card>
                     </div>
                 </template>
             </div>

@@ -101,11 +101,9 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function descargas()
+    public function galeria()
     {
-        $sliders = Slider::where('section','descargas')->get();
-        $descargas = Download::orderBy('order')->get();
-        $contenido = Content::with('block')->where('section','descargas')->first();
+        $contenido = Content::with('block')->where('section','galeria')->first();
         $contenidoMap =  $contenido->Block->map(function ($item) {
             return [
                 'title' => $item->title,
@@ -115,27 +113,35 @@ class FrontendController extends Controller
             ];
         });
 
-        return Inertia::render('Web/Descargas', [
-            'sliders' => $sliders->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'text' => $item->text,
-                    'order' => $item->order,
-                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
-                ];
-            }),
+        return Inertia::render('Web/Galeria', [
+ 
             'timelines' => $contenidoMap->where('type','timeline')->values(),
             'imagenes' => $contenidoMap->where('type','img')->values(),
             'bloques' => $contenidoMap->whereNull('type'),
             'contenido' => $contenido,
-            'descargas' => $descargas->map(function ($item) {
-                return [
-                    'title' => $item->title,
-                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
-                    'file' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
-                ];
-            }),
+ 
+
+        ]);
+    }
+    public function asistencia()
+    {
+        $contenido = Content::with('block')->where('section','asistencia')->first();
+        $contenidoMap =  $contenido->Block->map(function ($item) {
+            return [
+                'title' => $item->title,
+                'text' => $item->text,
+                'type' => $item->type,
+                'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
+            ];
+        });
+
+        return Inertia::render('Web/Asistencia', [
+ 
+            'textos' => $contenidoMap->where('type','texto')->values(),
+            'imagenes' => $contenidoMap->where('type','img')->values(),
+            'bloques' => $contenidoMap->whereNull('type'),
+            'contenido' => $contenido,
+ 
 
         ]);
     }
@@ -170,7 +176,7 @@ class FrontendController extends Controller
         $familia = Family::where("slug",$slug)->first();
    
 
-    //    $productos = $familia->productos;
+       $familias = Family::with('productos')->get();
         $productos =  Product::where("family_id",$familia->id)->get();
 
 
@@ -214,7 +220,7 @@ class FrontendController extends Controller
         return Inertia::render('Web/Product/Family', [
             'familia' => $familia->only('title','id','slug'),
             'sidenav' => 1,
-            'familias' => [],
+            'familias' => $familias,
             'productos' => $productos->map(function ($item) use($imagen_familia){
                 return [
                     'id' => $item->id,
@@ -225,7 +231,7 @@ class FrontendController extends Controller
                     'order' => $item->order,
                     'ruta' => route('producto',$item->slug),
                     'imagef' => $imagen_familia,
-                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : null,
+                    'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
                 ];
             }),
         ])->withViewData(['title' => $familia->title]);
@@ -238,12 +244,12 @@ class FrontendController extends Controller
         $producto = Product::with('family')->where("slug",$slug)->first();
     //    dd($producto);
         $familia = $producto->family;
-        // $familias = Family::with('productos')->orderBy('code','DESC')->get();
+        $familias = Family::with('productos')->orderBy('order')->get();
 
         $galeria = collect($producto->gallery)->map(function ($item) {
             return Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
         });
-//        $productos = @$producto->related ?? collect([]);
+       $productos = @$producto->related ?? collect([]);
 
 
         $imagen_familia = $producto->family->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($producto->family->image) : null;
@@ -275,7 +281,7 @@ class FrontendController extends Controller
         */
         $removes = [];
 
-        $productos[] = $producto;
+        // $productos[] = $producto;
 
         // echo "<h5>".$producto->code." - ".$producto->title."</h5>";
         // foreach($producto->magic_code as $m){
@@ -296,126 +302,40 @@ class FrontendController extends Controller
             'gallery' => $galeria,
             'producto' => $producto_intertrade,
             'medidas' => $medidas,
-            // 'familias' => $familias->map(function ($item) {
-            //     return [
-            //         'id' => $item->id,
-            //         'title' => $item->title,
-            //         'ruta' => route('producto',$item->slug),
-            //         'productos' => $item->productos->map(function ($item) {
-            //             return [
-            //                 'id' => $item->id,
-            //                 'title' => $item->title,
-            //                 'ruta' => route('producto',$item->slug),
-            //             ];
-            //         }),
-            //     ];
-            // }),
-//            'productos' => $productos->map(function ($item) {
-//
-//                return [
-//                    'id' => $item->id,
-//                    'title' => $item->nombre,
-//                    'price' => $item->precio,
-//                    'code' => $item->codigo,
-//                    'marca' => $item->marca,
-//                    'text' => $item->desccripcion,
-//                    'order' => $item->orden,
-//                    'ruta' => route('producto',$item->slug),
-//                    'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
-//                ];
-//            }),
+            'familias' => $familias->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'ruta' => route('producto',$item->slug),
+                    'productos' => $item->productos->map(function ($item) {
+                        return [
+                            'id' => $item->id,
+                            'title' => $item->title,
+                            'ruta' => route('producto',$item->slug),
+                        ];
+                    }),
+                ];
+            }),
+           'productos' => $productos->map(function ($item) {
+
+               return [
+                   'id' => $item->id,
+                   'title' => $item->nombre,
+                   'price' => $item->precio,
+                   'code' => $item->codigo,
+                   'marca' => $item->marca,
+                   'text' => $item->desccripcion,
+                   'order' => $item->orden,
+                   'ruta' => route('producto',$item->slug),
+                   'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
+               ];
+           }),
 
         ])->withViewData(['title' => $producto->nombre]);
     }
 
-    public function novedades($slug = '')
-    {
-        if ($slug){
-            $lang = app()->getLocale();
-            $category = Category::where("slug->$lang",$slug)->first();
-            $novedades = $category->news;
-
-        }else{
-            $novedades = News::orderBy('order')->get();
-
-        }
-        $categorias = Category::where('section','blog')->orderBy('order')->get();
-
-        return Inertia::render('Web/Novedades', [
-            'novedades' => $novedades->map(function ($item){
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'text' => $item->text,
-                    'categoria' => $item->category->title ?? 'Otro',
-                    'category_id' => $item->category_id,
-                    'slug' => $item->slug,
-                    'ruta' => route('novedad',$item->slug),
-                    'date' => $item->created_at->format('d-m-Y'),
-                    'image' => $item->galley ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->galley[0]) : '',
-                ];
-            }),
-            'categorias' => $categorias->map(function ($item){
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'slug' => $item->slug,
-                    'category_news' => route('novedades',$item->slug),
-                    'news_count' => $item->news->count(),
-                ];
-            }),
-
-        ])->withViewData(['title' => @$category->title ?? 'BLOG']);
-    }
-
-    public function novedad($slug)
-    {
-//        dd(app()->getLocale());
-        $lang = app()->getLocale();
-        $news = News::where("slug->$lang",$slug)->first();
-
-        $sliders = collect($news->galley)->map(function ($item) {
-            return [
-                'image' => $item ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item) : '',
-            ];
-        });
-//        dd($slug);
-        $categoria = $news->category;
-        $categorias = Category::where('section','blog')->orderBy('order')->get();
-        return Inertia::render('Web/Novedad', [
-            'categorias' => $categorias->map(function ($item){
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'slug' => $item->slug,
-                    'category_news' => route('novedades',$item->slug),
-                    'news_count' => $item->news->count(),
-                ];
-            }),
-            'novedad' => $news->only('id', 'title', 'text', 'image','date'),
-            'categoria' => $categoria->only('title'),
-            'sliders' => $sliders,
-        ])->withViewData(['title' => $news->title]);
-    }
-
-    public function contacto()
-    {
-        $sliders = Slider::where('section','contacto')->get();
-        $contenido = Content::with('block')->where('section','contacto')->first();
-
-        return Inertia::render('Web/Contacto', [
-            'sliders' => $sliders->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'text' => $item->text,
-                    'order' => $item->order,
-                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
-                ];
-            }),
-            'contenido' => $contenido->only('title'),
-        ]);
-    }
+ 
+ 
 
     public function buscador(Request $request)
     {
@@ -584,177 +504,13 @@ class FrontendController extends Controller
             }),
         ]);
     }
-    public function tests(Request $request){
-    
-        $productName = $request->get('code');
-
-        
-        $prods = Product::where('code', 'LIKE', $productName.'%')
-            ->orWhere('title', 'like', '%'.$productName.'%')
-            ->orWhere('code', 'like', '%'.$productName.'%') // faltan filtro ed marca y rubro
-            ->get();
-            
-            
-            
-        $prods->append('magic_code');
-        $prods->append('check_subprod');
-        /*
-        $filtered = $prods->reject(function ($item) {
-            return $item->check_subprod == true;
-        });
-        
-        dd($filtered->pluck('title'));
-        */
-        $removes = [];
-        foreach($prods as $p){
-            //dd($p->check_subprod);
-            
-            
-            if(!in_array($p->id, $removes)){
-
-            $productos[] = $p;
-
-            echo "<h5>".$p->code." - ".$p->title."</h5>";
-            foreach($p->magic_code as $m){
-
-                $removes[] = $m->id;
-                echo "<br>----".$m->code." - ".$m->title;
-                
-                
-            }
-              echo "<hr>";
-            }
-          
-            
-        }
-
-        $productos = collect($productos);
-        
-        return Inertia::render('Web/BuscadorPro', [
-            'productos' => $productos->map(function ($item) {
-
-                return [
-                    'id' => $item->id,
-                    
-                    'title' => $item->title,
-                    'price' => $item->price,
-                    'code' => $item->code,
-                    'marca' => $item->marca,
-                    'text' => $item->description,
-                    'order' => $item->order,
-                    'ruta' => route('producto',$item->slug),
-                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
-                ];
-            }),
-        ]);
-    }
-
-    public function buscador_pro2(Request $request)
+    public function presupuesto()
     {
-    //    dd($request->all());
-//        $productos_con_familia = ProductIntertrade::get();
-        $productName = $request->nombre;
-        $productos = [];
-        //filtra por marca y rubro
-        if ($request->marca && $request->familia && $request->nombre == null){
-            $productos = Product::where('marca',$request->marca)->where('family_id',$request->familia)->get();
-        }
-        //filtra por los 3
-        if ($request->marca && $request->familia && $request->nombre){
-            // $productos = Product::where('marca', $request->marca)
-            // ->where('family_id',$request->familia)
-            // ->where('title', 'like', '%'.$productName.'%')
-            // ->where('code', 'like', '%'.$productName.'%')
-            // ->get();
-
-            $productos = Product::familia($request->familia)->marca($request->marca)->where(function($query) use ($productName){
-                $query->where('title', 'LIKE', '%'.$productName.'%')
-                      ->orWhere('code', 'LIKE', '%'.$productName.'%');
-            })->get();
-            
-        }
-        //filtra por rubro
-        if ($request->familia  && $request->marca == null && $request->nombre  == null){
-            $productos = Product::where('family_id',$request->familia)->get();
-        }
-        //filtra por marca
-        if ($request->marca && $request->familia == null && $request->nombre  == null){
-            $productos = Product::where('marca',$request->marca)->get();
-        }
-        //filtra por nombre
-        if ($request->nombre && $request->familia == null && $request->marca   == null){
-            $productName = $request->nombre;
-            $productos =  Product::where('title', 'like', '%'.$productName.'%')
-            ->orwhere('code', 'like', '%'.$productName.'%')
-            ->orwhere('marca', 'like', '%'.$productName.'%')
-            ->get();
-            // dd($productos);
-            // $productos = Product::all()->filter(function ($item) use ($productName) {
-            //     // replace stristr with your choice of matching function
-
-            //     if (false !== stristr($item->title, $productName)){
-            //         return $item;
-            //     }
-            //     if (false !== stristr($item->codigo, $productName)){
-            //         return $item;
-            //     }
-                
-            // });
-        }
-        // dd($productos);
-        // $productos->append('magic_code');
-        // $productos->append('check_subprod');
-        // /*
-        // $filtered = $prods->reject(function ($item) {
-        //     return $item->check_subprod == true;
-        // });
+    
         
-        // dd($filtered->pluck('title'));
-        // */
-        // $removes = [];
-        // foreach($productos as $p){
-        //     //dd($p->check_subprod);
-            
-            
-        //     if(!in_array($p->id, $removes)){
-
-        //     $medidas[] = $p;
-
-        //     // echo "<h5>".$p->code." - ".$p->title."</h5>";
-        //     foreach($p->magic_code as $m){
-
-        //         $removes[] = $m->id;
-        //         // echo "<br>----".$m->code." - ".$m->title;
-                
-                
-        //     }
-        //     //   echo "<hr>";
-        //     }
-          
-            
-        // }
-
-        // $productos = collect($medidas);
-        
-
-      
-        return response()->json([
-            'productos' => $productos->map(function ($item) {
-
-                return [
-                    'id' => $item->id,
-                    'rubro' => $item->family ? $item->family->title : '',
-                    'producto' => $item->title,
-                    'precio' => floatval($item->price),
-                    'codigo' => $item->code,
-                    'marca' => $item->marca,
-                    'cantidad' => 0,
-                    'stock' => intval($item->stock),
-                    'unidad' => intval($item->unit) ? $item->unit : 1,
-                    'ruta' => route('producto',$item->slug),
-                    'image' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
-                ];
-            }),
+        return Inertia::render('Web/Presupuesto', [
+             
         ]);
     }
+ 
 }

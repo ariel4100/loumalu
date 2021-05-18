@@ -53,9 +53,9 @@
                             <i class="far fa-edit"></i>
                         </button>
 
-<!--                        <button @click="del(row.item)" class="btn btn-danger btn-circle">-->
-<!--                            <i class="fas fa-trash"></i>-->
-<!--                        </button>-->
+                       <button @click="del(row.item)" class="btn btn-danger btn-circle"> 
+                           <i class="fas fa-trash"></i>
+                       </button>
 
                     </template>
                 </b-table>
@@ -184,7 +184,21 @@
                 this.$root.$emit('bv::show::modal','modal-prevent-closing')
             },
             del(id){
-                this.eliminar(route('adm.familias.destroy',{id: id}))
+                 Swal.fire({
+                    title: '¿Estas seguro de eliminar?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.value) {
+                        this.$inertia.get(route('adm.familias.elim',id),{
+                            onSuccess: () => {
+                                 location.reload()
+                            },
+                        }) 
+                    }
+                })
             },
         },
     }

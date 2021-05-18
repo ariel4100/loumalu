@@ -7,7 +7,7 @@
             <div class="card-header">
                 <modal
                         title="Producto"
-
+                        title-button="Agregar Producto"
                         @ok="add()"
                         @hidden="reset()"
                 >
@@ -17,19 +17,8 @@
                                 <label for="">Titulo</label>
                                 <input type="text" v-model="product.title" class="form-control">
                             </div>
-                            <div class="col-md-4 form-group">
-                                <label for="">Codigo</label>
-                                <input type="text" v-model="product.cod" class="form-control">
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label for="">Marca</label>
-                                <input type="text" v-model="product.marca" class="form-control">
-                            </div>
-                            <div class="col-md-2 form-group">
-                                <label for="">Stock</label>
-                                <input type="number" min="0" v-model="product.stock" class="form-control">
-                            </div>
+                            
+                          
                             <div class="col-md-4 form-group">
                                 <label for="">Orden</label>
                                 <input type="text" v-model="product.order" class="form-control">
@@ -47,11 +36,11 @@
                     </template>
                     <template #default>
                         <div class="row">
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label for="">Precio</label>
                                 <money v-model="product.price" class="form-control" v-bind="money"></money>
 
-                            </div>
+                            </div> -->
                             <div class="col-md-6 form-group">
                                 <label for="">Familias</label>
 <!--                                <multiselect v-model="familia_selected" :options="familias" placeholder="Familia" label="title" track-by="id"></multiselect>-->
@@ -79,10 +68,7 @@
 <!--                                        :model.sync="product.productos"-->
 <!--                                ></select-multiple>-->
 <!--                            </div>-->
-                            <div class="col-md-2 form-group">
-                                <label for="">Unidad</label>
-                                <input type="number" min="0" v-model="product.unidad" class="form-control">
-                            </div>
+                          
 <!--                            <div class="form-group col-md-6 d-flex align-items-end">-->
 <!--                                <div class="custom-control custom-switch">-->
 <!--                                    <input type="checkbox" class="custom-control-input" v-model="product.stock" :true-value="1" :false-value="0" id="customSwitch1">-->
@@ -93,10 +79,10 @@
                                 <label>Archivo</label>
                                 <image-custom :model.sync="product.file"></image-custom>
                             </div>
-<!--                            <div class="col-md-12" >-->
-<!--                                <label>Agregar fotos</label>-->
-<!--                                <custom-gallery   label="" :model.sync="product.gallery" :link="0" class=""></custom-gallery>-->
-<!--                            </div>-->
+                           <div class="col-md-12" >
+                               <label>Agregar fotos</label>
+                               <custom-gallery   label="" :model.sync="product.gallery" :link="0" class=""></custom-gallery>
+                           </div>
                         </div>
                     </template>
                 </modal>

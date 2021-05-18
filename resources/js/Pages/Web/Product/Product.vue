@@ -1,52 +1,49 @@
 <template>
     <web-layout class="">
-            <buscador
-        ></buscador>
-        <!-- <div class=" ">
+      
+        <div class="bg-primario">
             <div class="container">
-                <h5 class="section-title text-color">
+                <h5 class="section-title  text-white">
                     <i class="fas fa-home"></i>
-                    <a :href="route('familias')" class="text-color">
-                        {{ t('PRODUCTOS') }}
+                    <a :href="route('familias')" class=" text-white">
+                        <em>{{ t('Productos') }}</em>
                     </a>
-                    <a v-if="familia" :href="route('productos',{ slug: familia.slug })" class="text-color">
-                        {{ (familia ? '| '+familia.title : '') }}
+                    <a v-if="familia" :href="route('productos',{ slug: familia.slug })" class=" text-white">
+                        <em>{{ (familia ? '| '+familia.title : '') }}</em>
                     </a>
-                    {{ (producto ? '| '+producto.title : '') }}
+                    <em>{{ (producto ? '| '+producto.title : '') }}</em>
                 </h5>
             </div>
-        </div> -->
+        </div>
         <div class="container my-5">
             <div class="row">
-                <!-- <div class="col-md-3 ">
+                <div class="col-md-3 ">
                     <sidenav
                             :familia-id="familia.id"
                             :producto-id="producto.id"
                             :familias="familias"
                     ></sidenav>
-                </div> -->
-                <div class="col-md-12 ">
+                </div>
+                <div class="col-md-9 ">
                     <div class="row">
                         <div class="col-md-6 mb-5 border justify-content-center align-items-center d-flex">
                             <!-- <img :src="'uploads/imagenes/'+producto.code+'.jpg'" alt="" class="img-fluid"> -->
-                            <template v-if="producto.file">
+                            <!-- <template v-if="producto.file">
                                 <img @error="replaceByDefault($event, null)" :src="producto.file"   class="w-100 d-block">
 
                             </template>
                             <template v-else>
                                 <img @error="replaceByDefault($event,producto)" :src="$page.appUrl+'/uploads/imagenes/'+producto.code+'-001.jpg'"   class="w-100 d-block 2">
-                            </template>
-<!--                            <carousel :images="gallery"  producto="1" arrows="1"></carousel>-->
+                            </template> -->
+                           <carousel :images="gallery"  producto="1" arrows="1"></carousel>
                         </div>
                         <div class="col-md-6 mb-5">
-                            <h4 class="text-secundario font-weight-bold">
+                            <h4 class=" font-weight-bold">
                                 {{ producto.title }}
                             </h4>
-                            <p> {{ producto.code }}</p>
-                            <h6 class="text-uppercase"><b>MARCA:</b> {{ producto.marca }}</h6>
                             <div class="" v-html="producto.text"></div>
-                            <a v-if="producto.file" :href="producto.file" download   class="btn btn-secundario">DESCARGAR FICHA  </a>
-                            <a :href="route('contacto')" class="btn btn-secundario mx-0 text-white">CONSULTAR</a>
+                            <a v-if="producto.file" :href="producto.file" download   class="btn btn-outline-primario">DESCARGAR FICHA  </a>
+                            <a :href="route('presupuesto')" class="btn btn-primario mx-0 text-white">Solicitud de presupuesto</a>
                         </div>
                         <div class="col-md-12" v-if="medidas.length > 0">
                              <h4 class="text-secundario font-weight-bold">
@@ -77,18 +74,18 @@
                         <div class="col-md-8 mb-5" v-if="producto.video">
                             <iframe width="100%" height="300" :src="'https://www.youtube.com/embed/'+producto.video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
-<!--                        <div class="col-md-12" v-if="productos.length > 0">-->
-<!--                            <h5 class="text-secundario">Productos relacionados</h5>-->
-<!--                            <hr   class="mt-1 bg-secundario">-->
-<!--                            <div class="row">-->
-<!--                                <template v-for="item in productos">-->
-<!--                                    <div class="col-md-4 col-sm-6 col-lg-4 mb-4">-->
-<!--                                        <product-card :item="item" type="1"></product-card>-->
+                       <div class="col-md-12" v-if="productos.length > 0">
+                           <h5 class="text-secundario">Productos relacionados</h5>
+                           <hr   class="mt-1 bg-secundario">
+                           <div class="row">
+                               <template v-for="item in productos">
+                                   <div class="col-md-4 col-sm-6 col-lg-4 mb-4">
+                                       <product-card :item="item" type="1"></product-card>
 
-<!--                                    </div>-->
-<!--                                </template>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                                   </div>
+                               </template>
+                           </div>
+                       </div>
                     </div>
                 </div>
             </div>
@@ -110,6 +107,7 @@
             gallery: Array,
             medidas: Array,
             familias: Array,
+            productos: Array,
             producto: Object,
             familia: Object,
         },
