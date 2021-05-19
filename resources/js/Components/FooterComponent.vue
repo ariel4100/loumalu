@@ -42,7 +42,7 @@
                                 <div class="d-flex justify-content-center justify-content-md-start flex-md-row flex-column text-white">
                                     <ul class="list-group mb-4 mb-md-0 mr-md-3 text-white">
                                         <li class="list-group-item bg-transparent border-0 fz-15 d-flex align-items-center px-0 py-1 mb-2 flex-md-row flex-column">
-                                            <i class="fas fa-map-marker-alt fa-lg text-secundario mr-md-3 mt-2 mr-2"></i>
+                                            <i class="fas fa-map-marker-alt fa-lg text-white mr-md-3 mt-2 mr-2"></i>
                                             <div class="">
                                                 <h6 class="font-weight-bold">Dirección</h6>
                                                 <a :href="item.link" v-for="item in $page.direcciones.slice(0,1)" target="_blank" class="text-white  hover-link" style="white-space: pre-line;">{{ item.address }}</a>
@@ -54,9 +54,9 @@
                             <div class="col-md-6">
                                 <ul class="list-group mb-4 mb-md-0 text-white">
                                     <li class="list-group-item bg-transparent border-0 fz-15 d-flex align-items-center px-0 py-1 mb-2 flex-md-row flex-column">
-                                        <i class="fas fa-phone-volume text-secundario fa-lg mr-md-3 mb-2"></i>
+                                        <i class="fas fa-phone-volume text-white fa-lg mr-md-3 mb-2"></i>
                                         <div class="d-flex flex-column">
-                                                <h6 class="font-weight-bold">Dirección</h6>
+                                                <h6 class="font-weight-bold">Llámenos al </h6>
 
                                             <template v-for="item in $page.telefonos">
                                                 <template v-if="item.type == 'tel'">
@@ -72,8 +72,10 @@
                             <div class="col-md-6  ">
                                 <ul class="list-group mb-4 mb-md-0 text-white">
                                     <li class="list-group-item bg-transparent border-0 d-flex fz-15 px-0 py-1 mb-2 flex-md-row flex-column">
-                                        <i class="fas fa-envelope fa-lg text-secundario mr-md-3 mt-2"></i>
+                                        <i class="fas fa-envelope fa-lg text-white mr-md-3 mt-2"></i>
                                         <div class="">
+                                                <h6 class="font-weight-bold">Escríbanos a </h6>
+
                                             <a :href="'mailto:'+item.email" class="text-white hover-link" v-for="item in $page.emails.slice(0,3)">
                                                 {{ item.email }}
                                             </a>
@@ -90,11 +92,15 @@
                     <!-- Grid column -->
 
                    
-                    <div class="col-md-2 col-lg-2 mx-auto mb-md-0 mb-4">
+                    <div class="col-md-12 col-lg-12 d-flex justify-content-between align-items-center py-3" style="border-top: 2px solid white;">
+                        <div class="">
+                        <img :src="$page.footer" alt="" class="img-fluid ">
+
+                        </div>
                         <div class="d-flex justify-content-center justify-content-md-start flex-md-row flex-column text-white">
                             <ul class="list-group mb-4 mb-md-0 text-white">
-                                <li class="list-group-item bg-transparent border-0 fz-15 d-flex align-items-center px-0 py-1 mb-2 flex-md-row flex-column">
-                                    <a :href="item.link" target="_blank" class="px-2 py-1 text-white" v-for="item in $page.redes">
+                                <li class="list-group-item bg-transparent border-0 fz-15 d-flex align-items-center px-0 py-1 mb-2 flex-md-row  ">
+                                    <a :href="item.link" target="_blank" class="mx-2 py-1 text-white" style="border: 2px solid;border-radius: 50%;height: 35px;width: 35px;display: flex;justify-content: center;align-items: center;" v-for="item in $page.redes">
                                         <i class="" :class="item.type"></i>
                                     </a>
                                 </li>

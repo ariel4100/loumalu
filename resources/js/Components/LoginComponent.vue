@@ -4,7 +4,7 @@
             <div class="arrow-up d-none d-md-block"></div>
 
             <div class="text-center">
-                <p v-if="error != ''" class="text-terciario mb-0">{{ error }}</p>
+                <p v-if="error != ''" class="text-white mb-0">{{ error }}</p>
                 <div class="form-group pt-3">
                     <input type="text" class="form-control" :placeholder="t('Usuario')" v-model="user.username">
                 </div>
@@ -24,13 +24,13 @@
                 <!--</div>-->
                 <!--<i class="fas fa-circle-notch fa-spin p-1"></i>-->
                 <div class="py-3">
-                    <a v-if="loader == 1" @click="login()" class="btn btn-secundario btn-block text-white">{{ t('Ingresar') }}</a>
-                    <a v-if="loader == 0" class="btn btn-secundario btn-block text-white" >{{ t('Verificando') }} <i class="fas fa-sync fa-spin text-white"></i></a>
-                    <a v-if="loader == 2" class="btn btn-success btn-block text-white" >{{ t('Ingresando') }} <i class="fas fa-sync fa-spin"></i></a>
+                    <a v-if="loader == 1" @click="login()" class="btn btn-primario btn-block text-white">{{ t('Ingresar') }}</a>
+                    <a v-if="loader == 0" class="btn btn-primario btn-block text-white" >{{ t('Verificando') }} <i class="fas fa-sync fa-spin text-white"></i></a>
+                    <a v-if="loader == 2" class="btn btn-primario btn-block text-white" >{{ t('Ingresando') }} <i class="fas fa-sync fa-spin"></i></a>
                 </div>
                 <div class="">
                     <!-- Button trigger modal -->
-                    <a  class="text-color p-0" data-toggle="modal" data-target="#register">
+                    <a  class="text-white p-0" data-toggle="modal" data-target="#register">
                         {{ t('Crear nueva cuenta') }}
                     </a>
 

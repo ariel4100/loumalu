@@ -44,6 +44,7 @@ Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('nosotros', [FrontendController::class, 'empresa'])->name('empresa');
 Route::get('galeria', [FrontendController::class, 'galeria'])->name('galeria');
 Route::get('asistencia-tecnica', [FrontendController::class, 'asistencia'])->name('asistencia');
+Route::get('simulador', [FrontendController::class, 'simulador'])->name('simulador');
 Route::get('presupuesto', [FrontendController::class, 'presupuesto'])->name('presupuesto');
 Route::get('contacto', [FrontendController::class, 'contacto'])->name('contacto');
 Route::post('contacto', [MailController::class, 'contacto'])->name('mail.contacto');

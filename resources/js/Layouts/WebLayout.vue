@@ -20,7 +20,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div v-if="errors.length > 0" class="alert alert-danger">
+                        <div v-if="Object.keys(errors).length > 0" class="alert alert-danger">
                             <p v-for="(item,key) in errors">
                                 {{ item.length > 0 ? item[0] : '' }}
                             </p>
@@ -50,10 +50,10 @@
                                 <label for="">{{ t('Teléfono') }}</label>
                                 <input type="text" class="form-control" v-model="registro.telefono" required>
                             </div>
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label for="">{{ t('Fecha de Nacimiento') }}</label>
                                 <input type="date" class="form-control" v-model="registro.fecha_nac" required>
-                            </div>
+                            </div> -->
                             <div class="col-md-6 form-group">
                                 <label for="">{{ t('DNI') }}</label>
                                 <input type="text" class="form-control" v-model="registro.dni" required>

@@ -91,8 +91,8 @@ Vue.mixin({
                 },
                 {
                     nombre: 'Simulador',
-                    route: 'novedades',
-                    url: 'blog,novedades,novedad',
+                    route: 'simulador',
+                    url: 'simulador',
                     mostrar: 1,
                 },
                 {

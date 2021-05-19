@@ -57,7 +57,7 @@ class FrontendController extends Controller
                     'title' => $item->title,
                     'order' => $item->order,
                     'ruta' => route('productos',$item->slug),
-                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
+                    'image' => $item->video ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->video) : '',
                 ];
             }),
             'destacados_p' => $destacados_productos->map(function ($item) {
@@ -147,6 +147,18 @@ class FrontendController extends Controller
             'bloques' => $contenidoMap->whereNull('type'),
             'contenido' => $contenido,
  
+
+        ]);
+    }
+    public function simulador()
+    {
+ 
+        $familias = Family::with('productos')->get();
+
+        return Inertia::render('Web/Simulador', [
+ 
+            'familias' => $familias,
+  
 
         ]);
     }

@@ -108,11 +108,13 @@ class ProductController extends Controller
             isset($request->stock) ? $item->stock = 1 : $item->stock = 0;
 
 //            dd('aca');
-            $file_save = Helpers::saveImage($request->file('archivo'), 'productos',$item->file);
+            $file_save = Helpers::saveImage($request->file('archivo'), 'productos/file',$item->file);
             $file_save ? $item->file = $file_save : false;
 
             $file_save = Helpers::saveImage($request->file('banner'), 'productos',$item->banner);
             $file_save ? $item->banner = $file_save : false;
+            // $file_save = Helpers::saveImage($request->file('video'), 'productos/home',$item->video);
+            // $file_save ? $item->video = $file_save : false;
 
             if (isset($request->gallery)){
                 $images = Helpers::saveMultipleImage($request->gallery, 'productos');

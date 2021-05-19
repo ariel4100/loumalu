@@ -8,20 +8,23 @@
             <div v-if="$page.flash.error" class="alert alert-danger">
                 {{ $page.flash.error }}
             </div>
-            <h2 class="text-secundario text-uppercase">
-                {{ t('Contactanos')}}
-            </h2>
+          
             <div class="row">
                 <div class="col-md-4">
+                      <h3 class="text-primario font-weight-bold  ">
+                        {{ t('Contacto')}}
+                    </h3>
+                    <hr class="bg-primario  ">
+
                     <p>
                         {{ t('Para mayor información, no dude en contactarse mediante el formulario o a través de nuestras vías de comunicación.')}}
                     </p>
 
                     <ul class="list-group">
-                        <li class="list-group-item border-0 d-flex align-items-start">
-                            <i class="fas fa-map-marker-alt fa-lg text-secundario mt-2 mr-2"></i>
+                        <li class="list-group-item pl-0 border-0 d-flex align-items-center">
+                            <i class="fas fa-map-marker-alt fa-lg text-primario mt-2 mr-2"></i>
                             <div class="">
-                                <h6 class="text-secundario  font-weight-bold">{{ t('Dirección')}}</h6>
+                                <!-- <h6 class="text-primario  font-weight-bold">{{ t('Dirección')}}</h6> -->
 
                                 <template v-for="item in $page.direcciones.slice(0,1)">
                                     <a :href="item.link" target="_blank" class="text-muted hover-color" style="white-space: pre-line;">{{ item.address }}</a>
@@ -29,20 +32,12 @@
 
                             </div>
                         </li>
-                        <li class="list-group-item border-0 d-flex align-items-start">
-                            <i class="fas fa-envelope fa-lg text-secundario mr-2"></i>
-                            <div class="">
-                                <h6 class="text-secundario  font-weight-bold">E-mail</h6>
-                                <template v-for="item in $page.emails.slice(0,3)">
-                                    <a :href="'mailto:'+item.email" target="_blank" class="text-muted hover-color">{{ item.email }}</a>
-                                </template>
-                            </div>
-                        </li>
+                        
 
-                        <li class="list-group-item border-0 d-flex align-items-start">
+                        <li class="list-group-item pl-0 border-0 d-flex align-items-center">
                             <i class="fab fa-whatsapp fa-lg  mr-2" style="color: #0DC143"></i>
                             <div class="d-flex flex-column">
-                                <h6 class="text-secundario  font-weight-bold mb-0 mt-1">{{ t('Whats App comercial')}}</h6>
+                                <!-- <h6 class="text-secundario  font-weight-bold mb-0 mt-1">{{ t('Whats App comercial')}}</h6> -->
                                 <template v-for="item in $page.telefonos">
                                     <template v-if="item.type == 'wha'">
                                         <a :href="'https://wa.me/'+item.numero" class="text-muted">
@@ -52,16 +47,25 @@
                                 </template>
                             </div>
                         </li>
-                        <li class="list-group-item border-0 d-flex align-items-start">
-                            <i class="fas fa-phone-volume fa-lg text-secundario  mr-2"></i>
+                        <li class="list-group-item pl-0 border-0 d-flex align-items-center">
+                            <i class="fas fa-phone-volume fa-lg text-primario  mr-2"></i>
                             <div class="d-flex flex-column">
-                                <h6 class="text-secundario  font-weight-bold">{{ t('Llámenos al')}} </h6>
+                                <!-- <h6 class="text-secundario  font-weight-bold">{{ t('Llámenos al')}} </h6> -->
                                 <template v-for="item in $page.telefonos">
                                     <template v-if="item.type == 'tel'">
                                         <a :href="'tel:'+item.numero" class="text-muted">
                                             {{ item.numero_visible }}
                                         </a>
                                     </template>
+                                </template>
+                            </div>
+                        </li>
+                        <li class="list-group-item pl-0 border-0 d-flex align-items-center">
+                            <i class="fas fa-envelope fa-lg text-primario mr-2"></i>
+                            <div class="">
+                                <!-- <h6 class="text-primario  font-weight-bold">E-mail</h6> -->
+                                <template v-for="item in $page.emails.slice(0,3)">
+                                    <a :href="'mailto:'+item.email" target="_blank" class="text-muted hover-color">{{ item.email }}</a> <br>    
                                 </template>
                             </div>
                         </li>
@@ -86,8 +90,8 @@
                         </div>
 
                         <div class="col-md-12 text-right">
-                            <button v-if="loading == true" type="button" class="btn btn-secundario btn-rounded text-white">Enviando <i class="fas fa-sync fa-spin"></i></button>
-                            <button v-if="loading == 0" @click="enviar()" class="btn btn-secundario btn-rounded text-white">{{ t('Enviar') }}</button>
+                            <button v-if="loading == true" type="button" class="btn btn-primario  px-5 text-white">Enviando <i class="fas fa-sync fa-spin"></i></button>
+                            <button v-if="loading == 0" @click="enviar()" class="btn btn-primario px-5  text-white">{{ t('Enviar') }}</button>
                         </div>
                     </div>
                 </div>

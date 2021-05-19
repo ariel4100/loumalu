@@ -4,10 +4,10 @@
         <section class="bg-primario">
             <div class="container">
                 <div class="row  py-5" v-for="(item,index) in textos" :key="index">
-                    <div class="col-md-3 " >
+                    <div class="col-md-3" >
                         <h5 class=" text-white  ">{{ item.title }}</h5>
                     </div>
-                    <div class="col-md-6  " >
+                    <div class="col-md-6" >
                         
                         <div class="text-white pl-3" style="border-left: 3px solid white;" v-html="item.text"></div>
                     </div>
@@ -19,6 +19,27 @@
                 </div>
             </div>
         </section>
+        
+        <div class=" " style="background-color:rgba(190, 202, 214,0.4);" v-if="destacados.length > 0">
+            <div class="container-fluid ">
+                <div class="row">
+                    <template v-for="item in destacados">
+                        <div class="col-md-6   p-0">
+                            <div class="position-relative">
+                                <img :src="item.image" :alt="item.title" class="img-fluid w-100">
+                                <div class="position-absolute" style="bottom: 0px">
+                                    <div class="px-4 px-md-0 pb-4 pl-md-5 pb-md-5">
+                                        <h2 class="text-white mb-n4">{{ item.title }}</h2>
+                                        <img :src="$page.appUrl+'/imagenes/flecha.png'" style="width: 370px;" alt="" class="img-fluid">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
         <div class="container my-5" v-if="destacados_p.length > 0">
             <div class="">
                 <h5 class="pb-3 text-uppercase   font-weight-bold">Nuestros Productos</h5>
@@ -30,25 +51,6 @@
                         <product-card :item="item" type="1"></product-card>
                     </div>
                 </template>
-            </div>
-        </div>
-        <div class="py-5 " style="background-color:rgba(190, 202, 214,0.4);" v-if="destacados.length > 0">
-            <div class="container ">
-                <div class="d-md-flex d-none pb-4 justify-content-center align-items-center">
-                    <hr class="bg-dark m-0 w-100">
-                    <h5 class="m-0 text-nowrap px-3 font-weight-bold">Principales Categorías de Productos</h5>
-                    <hr class="bg-dark m-0 w-100">
-                </div>
-                <div class="d-block d-md-none mb-4">
-                    <h5 class="m-0 font-weight-bold">Principales Categorías de Productos</h5>
-                </div>
-                <div class="row">
-                    <template v-for="item in destacados">
-                        <div class="col-md-3 mb-4">
-                            <product-card :item="item"></product-card>
-                        </div>
-                    </template>
-                </div>
             </div>
         </div>
     

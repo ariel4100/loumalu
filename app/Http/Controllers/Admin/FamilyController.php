@@ -37,6 +37,7 @@ class FamilyController extends Controller
                     'order' => $item->order,
 //                    'child_families' => $item->childFamilies,
                     'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
+                    'video' => $item->video ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->video) : '',
                 ];
             }),
 
@@ -58,6 +59,8 @@ class FamilyController extends Controller
 
             $file_save = Helpers::saveImage($request->file('image'), 'familias',$item->image);
             $file_save ? $item->image = $file_save : false;
+            $file_save = Helpers::saveImage($request->file('video'), 'familias/home',$item->video);
+            $file_save ? $item->video = $file_save : false;
 
 //            $item->setTranslations('title', (array) json_decode($request->title));
 //            if ($request->text){

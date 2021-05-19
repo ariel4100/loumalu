@@ -8,7 +8,7 @@
             <div class="card-header">
                 <modal
                         title="Rubro"
-                        title-button=""
+                        title-button="Agregar Familia"
                         @ok="add()"
                         @hidden="reset()"
                 >
@@ -41,6 +41,10 @@
                             <div class="form-group col-md-6">
                                 <label>Imagen</label>
                                 <image-custom :model.sync="category.image"></image-custom>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Imagen de Home</label>
+                                <image-custom :model.sync="category.video"></image-custom>
                             </div>
                         </div>
                     </template>
@@ -115,6 +119,7 @@
                   padre_id: '',
                   featured: 0,
                   image: '',
+                  video: '',
                   order: '',
               },
           }
@@ -159,6 +164,7 @@
                     featured: 0,
                     hijo: [],
                     image: '',
+                    video: '',
                     order: '',
                 };
             },
@@ -169,6 +175,7 @@
                 data.append('title', this.category.title)
                 data.append('text', JSON.stringify(this.category.text) || '')
                 data.append('image', this.category.image || '')
+                data.append('video', this.category.video || '')
                 data.append('featured', this.category.featured || '')
                 data.append('padre_id', this.category.padre_id || '')
                 // data.append('hijo', this.category.hijo || '')
