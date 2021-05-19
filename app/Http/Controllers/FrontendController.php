@@ -30,6 +30,15 @@ class FrontendController extends Controller
         $destacados_productos = Product::where('featured',1)->orderBy('order')->get();
         $marcas = Content::where('section','inicio')->first()->Block;
         $sliders = Slider::where('section','inicio')->get();
+        $contenido = Content::with('block')->where('section','inicio')->first();
+        $contenidoMap =  $contenido->Block->map(function ($item) {
+            return [
+                'title' => $item->title,
+                'text' => $item->text,
+                'type' => $item->type,
+                'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
+            ];
+        });
 //        dd($destacados_productos);
         //$novedades = News::orderBy('order')->limit(3)->get();
         return Inertia::render('Web/Home', [
@@ -62,12 +71,8 @@ class FrontendController extends Controller
                     'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
                 ];
             }),
-            'marcas' => $marcas->map(function ($item) {
-                return [
-                    'title' => $item->title,
-                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
-                ];
-            }),
+            'textos' => $contenidoMap->where('type','texto')->values(),
+            'bloques' => $contenidoMap->whereNull('type'),
         ]);
     }
     public function empresa()
@@ -307,25 +312,20 @@ class FrontendController extends Controller
                     'id' => $item->id,
                     'title' => $item->title,
                     'ruta' => route('producto',$item->slug),
-                    'productos' => $item->productos->map(function ($item) {
-                        return [
-                            'id' => $item->id,
-                            'title' => $item->title,
-                            'ruta' => route('producto',$item->slug),
-                        ];
-                    }),
+                    'productos' => $item->productos 
                 ];
             }),
            'productos' => $productos->map(function ($item) {
 
                return [
                    'id' => $item->id,
-                   'title' => $item->nombre,
+                   'title' => $item->title,
                    'price' => $item->precio,
                    'code' => $item->codigo,
                    'marca' => $item->marca,
-                   'text' => $item->desccripcion,
+                   'text' => $item->text,
                    'order' => $item->orden,
+                   'slug' => $item->slug,
                    'ruta' => route('producto',$item->slug),
                    'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
                ];
@@ -334,7 +334,24 @@ class FrontendController extends Controller
         ])->withViewData(['title' => $producto->nombre]);
     }
 
- 
+    public function contacto()
+    {
+        $sliders = Slider::where('section','contacto')->get();
+        $contenido = Content::with('block')->where('section','contacto')->first();
+
+        return Inertia::render('Web/Contacto', [
+            'sliders' => $sliders->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'text' => $item->text,
+                    'order' => $item->order,
+                    'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->image) : '',
+                ];
+            }),
+            'contenido' => $contenido->only('title'),
+        ]);
+    }
  
 
     public function buscador(Request $request)

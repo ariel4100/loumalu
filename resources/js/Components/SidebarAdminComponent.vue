@@ -60,19 +60,16 @@
                     Zona Clientes
                 </div>
                 <li class="nav-item">
-                    <inertia-link class="nav-link" :href="route('adm.content.index',{ section: 'pop-up'})">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Pop-Up</span>
-                    </inertia-link>
+<!--             
                     <inertia-link class="nav-link" :href="route('adm.content.index',{ section: 'carrito'})">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Carrito</span>
-                    </inertia-link>
+                    </inertia-link> -->
                     <inertia-link class="nav-link" :href="route('adm.clientes.index')">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Clientes</span>
                     </inertia-link>
-                    <inertia-link class="nav-link" :href="route('adm.monitoreo.index')">
+                    <!-- <inertia-link class="nav-link" :href="route('adm.monitoreo.index')">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Monitoreo</span>
                     </inertia-link>
@@ -88,7 +85,7 @@
                     <inertia-link class="nav-link" :href="route('adm.content.index',{ section: 'reclamos'})">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Reclamos</span>
-                    </inertia-link>
+                    </inertia-link> -->
                 </li>
                 <div class="sidebar-heading">
                     Configuración

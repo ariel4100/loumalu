@@ -75,8 +75,8 @@
                             <iframe width="100%" height="300" :src="'https://www.youtube.com/embed/'+producto.video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                        <div class="col-md-12" v-if="productos.length > 0">
-                           <h5 class="text-secundario">Productos relacionados</h5>
-                           <hr   class="mt-1 bg-secundario">
+                           <h5 class="text-primario">Productos relacionados</h5>
+                           <hr   class="mt-1 ">
                            <div class="row">
                                <template v-for="item in productos">
                                    <div class="col-md-4 col-sm-6 col-lg-4 mb-4">

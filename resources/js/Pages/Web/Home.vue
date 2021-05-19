@@ -1,18 +1,30 @@
 <template>
     <web-layout class="">
-        <carousel :images="sliders" height="400px"></carousel>
-        <buscador
-        ></buscador>
+        <carousel :images="sliders" ></carousel>
+        <section class="bg-primario">
+            <div class="container">
+                <div class="row  py-5" v-for="(item,index) in textos" :key="index">
+                    <div class="col-md-3 " >
+                        <h5 class=" text-white  ">{{ item.title }}</h5>
+                    </div>
+                    <div class="col-md-6  " >
+                        
+                        <div class="text-white pl-3" style="border-left: 3px solid white;" v-html="item.text"></div>
+                    </div>
+                    <div class="col-md-3 text-center " >
+                        <a href="" class="btn btn-outline-white">
+                            simulá tu ambiente <i class="fas fa-long-arrow-alt-right fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
         <div class="container my-5" v-if="destacados_p.length > 0">
-            <div class="d-md-flex d-none pb-4 justify-content-center align-items-center">
-                <hr class="bg-dark m-0 w-100">
-                <h5 class="m-0 text-nowrap px-3 font-weight-bold">Nuestros Productos Destacados</h5>
-                <hr class="bg-dark m-0 w-100">
+            <div class="">
+                <h5 class="pb-3 text-uppercase   font-weight-bold">Nuestros Productos</h5>
             </div>
-            <div class="d-block d-md-none mb-4">
-                <h5 class="m-0 font-weight-bold">Nuestros Productos Destacados</h5>
-            </div>
-            <div class="row">
+        
+            <div class="row my-4">
                 <template v-for="item in destacados_p">
                     <div class="col-md-3 mb-5">
                         <product-card :item="item" type="1"></product-card>
@@ -39,25 +51,7 @@
                 </div>
             </div>
         </div>
-        <div class="container my-5">
-            <div class="d-md-flex d-none pb-4 justify-content-center align-items-center">
-                <hr class="bg-dark m-0 w-100">
-                <h5 class="m-0 text-nowrap px-3 font-weight-bold">Distribuidores De Las Marcas Líderes</h5>
-                <hr class="bg-dark m-0 w-100">
-            </div>
-            <div class="d-block d-md-none mb-4">
-                <h5 class="m-0 font-weight-bold">Distribuidores De Las Marcas Líderes</h5>
-            </div>
-            <div class="" style="overflow: hidden;">
-                <slick ref="slick" :options="slickOptions">
-                    <div v-for="(item,key) in marcas" class="">
-                        <div class="col my-3">
-                            <img :src="item.image" :alt="item.title" class="img-fluid mx-auto">
-                        </div>
-                    </div>
-                </slick>
-            </div>
-        </div>
+    
 
 
     </web-layout>
@@ -76,6 +70,7 @@
         props: {
             sliders: Array,
             marcas: Array,
+            textos: Array,
             destacados: Array,
             destacados_p: Array,
         },

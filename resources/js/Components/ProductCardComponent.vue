@@ -26,7 +26,7 @@
                 
             </div>
             <div class="">
-                <h5 class="mt-2 font-weight-bold text-dark">{{ item.title || 'TITULO' }}</h5>
+                <h5 class="mt-2 font-weight-bold text-dark">{{ item.title  }}</h5>
             </div>
         </a>
         <a v-if="type == 'blog'" :href="item.ruta" class="p-0  nav-link">
@@ -43,7 +43,7 @@
   
                 </div>
             <div class="py-3">
-                <h5 class="mt-1  font-weight-bold">{{ item.title|| 'Titulo' }}</h5>
+                <h5 class="mt-1  font-weight-bold">{{ item.title   }}</h5>
             </div>
         </a>
 
@@ -66,7 +66,7 @@
                 </template>    
             </div>
             <div class=" py-3">
-                <h5 class="mt-2 font-weight-bold text-dark ">{{ item.title || 'TITULO' }}</h5>
+                <h5 class="mt-2 font-weight-bold text-dark ">{{ item.title   }}</h5>
 
             </div>
         </a>

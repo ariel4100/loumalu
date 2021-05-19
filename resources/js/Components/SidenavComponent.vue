@@ -6,10 +6,10 @@
                    <!-- <span onclick="location.href='{{ route('producto.subfamilias',$item->slug) }}'"></span> -->
                     {{ item.title }}
 
-                    <i class="fas fa-plus ml-auto" style="font-size: 8px"></i>
+                    <!-- <i class="fas fa-plus ml-auto" style="font-size: 8px"></i> -->
                 </a>
-                <ul class="list-unstyled collapse " :class="familiaId == item.id ? 'show ' : ''" style="background-color: #F8F8F8" :id="'categoria_'+key">
-                    <li class="pt-3 border-bottom pl-3 pr-2"  v-for="producto in item.productos"><a :href="route('producto',producto.slug)" :class="productoId == producto.id ? 'text-secundario' : 'text-color'">{{ producto.title }} </a></li>
+                <ul class="list-unstyled collapse " :class="familiaId == item.id ? 'show ' : ''" style="background-color: #F6F6F6" :id="'categoria_'+key">
+                    <li class="py-2 border-bottom pl-3 pr-2"  v-for="producto in item.productos" :style="productoId == producto.id ? 'background-color: #DBDBDB' : ''" ><a :href="route('producto',producto.slug)" :class="productoId == producto.id ? 'text-primario' : 'text-color'">{{ producto.title }} </a></li>
                 </ul>
             </li>
         </ul>

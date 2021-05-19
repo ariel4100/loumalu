@@ -52,22 +52,23 @@
                                     </option>
                                 </select>
                             </div>
-
-                        </div>
-                        <div class="row">
+                             <div class="col-md-6 form-group">
+                               <label for="">Productos Relacionados</label>
+                               <select-multiple
+                                       :data="productos_detalle"
+                                       :model.sync="product.productos"
+                               ></select-multiple>
+                           </div>
                             <div class="form-group col-md-6 d-flex align-items-end">
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" v-model="product.featured" :true-value="1" :false-value="0" id="customSwitch1">
                                     <label class="custom-control-label" for="customSwitch1">Mostrar en la Sección Principal?</label>
                                 </div>
                             </div>
-<!--                            <div class="col-md-10 form-group">-->
-<!--                                <label for="">Productos Relacionados</label>-->
-<!--                                <select-multiple-->
-<!--                                        :data="productos_detalle"-->
-<!--                                        :model.sync="product.productos"-->
-<!--                                ></select-multiple>-->
-<!--                            </div>-->
+                        </div>
+                        <div class="row">
+                            
+                          
                           
 <!--                            <div class="form-group col-md-6 d-flex align-items-end">-->
 <!--                                <div class="custom-control custom-switch">-->
@@ -78,6 +79,10 @@
                             <div class="form-group col-md-6">
                                 <label>Archivo</label>
                                 <image-custom :model.sync="product.file"></image-custom>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Foto de Simulador</label>
+                                <image-custom :model.sync="product.banner"></image-custom>
                             </div>
                            <div class="col-md-12" >
                                <label>Agregar fotos</label>
@@ -290,6 +295,7 @@
                   productos: [],
                   gallery: [],
                   file: '',
+                  banner: '',
                   order: '',
               },
           }
@@ -322,9 +328,9 @@
             reset(){
                 this.product = {
                     id: '',
-                    title: {},
-                    description: {},
-                    text: { es: ''},
+                    title: '',
+                    description: '',
+                    text: '',
                     text_video: {},
                     family_id: '',
                     video: '',
@@ -332,6 +338,7 @@
                     banner: '',
                     gallery: [],
                     file: '',
+                    banner: '',
                     order: '',
                     featured: 0,
                 };
@@ -369,6 +376,7 @@
                 data.append('productos', JSON.stringify(this.product.productos || []))
                 data.append('family_id', this.product.family_id || '')
                 data.append('archivo', this.product.file || '')
+                data.append('banner', this.product.banner || '')
                 data.append('order', this.product.order || '')
                 data.append('price', this.product.price || '')
                 data.append('marca', this.product.marca || '')

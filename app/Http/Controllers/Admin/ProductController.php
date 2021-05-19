@@ -35,7 +35,7 @@ class ProductController extends Controller
 
 
 //        dd($categoriasconhijos);
-//        $productos_con_detalle = Product::orderBy('order')->get();
+       $productos_con_detalle = Product::orderBy('order')->get();
         $productos = Product::with('family')->get();
 //        $productos_aguila = Product::on(env('aguila'))->get();
 //        dd($productos );
@@ -62,12 +62,13 @@ class ProductController extends Controller
 //                        'title' => $value->product_intertrade->nombre,
 //                    ];
 //                }) : [],
-               'gallery' => collect(@$item->product->gallery ?? [])->map(function ($item) {
+               'gallery' => collect(@$item->gallery ?? [])->map(function ($item) {
                    $url_image =  Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item);
 //                        dd($item);
                    return $url_image;
                }),
                 'file' => @$item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->file) : '',
+                'banner' => @$item->banner ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->banner) : '',
 
             ];
         });
@@ -75,12 +76,12 @@ class ProductController extends Controller
         return Inertia::render('Admin/Product', [
             'familias' => $familiasMap,
             'productos' => $productos_ordered->sortBy('order')->values()->all(),
-//            'productos_detalle' => $productos_con_detalle->map(function ($value) {
-//                return [
-//                    'id' => $value->id,
-//                    'title' => $value->nombre ?? 'otro',
-//                ];
-//            }),
+           'productos_detalle' => $productos_con_detalle->map(function ($value) {
+               return [
+                   'id' => $value->id,
+                   'title' => $value->title ?? 'otro',
+               ];
+           }),
 
         ]);
 
@@ -109,6 +110,9 @@ class ProductController extends Controller
 //            dd('aca');
             $file_save = Helpers::saveImage($request->file('archivo'), 'productos',$item->file);
             $file_save ? $item->file = $file_save : false;
+
+            $file_save = Helpers::saveImage($request->file('banner'), 'productos',$item->banner);
+            $file_save ? $item->banner = $file_save : false;
 
             if (isset($request->gallery)){
                 $images = Helpers::saveMultipleImage($request->gallery, 'productos');
