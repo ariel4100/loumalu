@@ -2,12 +2,12 @@
     <app-layout>
 
         <template #header>
-            Rubros
+            Familia
         </template>
         <div class="card">
             <div class="card-header">
                 <modal
-                        title="Rubro"
+                        title="Familia"
                         title-button="Agregar Familia"
                         @ok="add()"
                         @hidden="reset()"

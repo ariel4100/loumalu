@@ -337,7 +337,7 @@
                         icon: '<i class="fas fa-cart-plus"></i>',
                         submenu: [
                             {
-                                nombre: 'Rubros',
+                                nombre: 'Familias',
                                 ruta: route('adm.familias.index'),
                             },
                             {

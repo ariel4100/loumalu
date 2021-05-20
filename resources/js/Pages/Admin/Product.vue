@@ -186,7 +186,7 @@
                     <tr>
                         <th scope="col">Codigo</th>
                         <th scope="col">Titulo</th>
-                        <th scope="col">Rubro</th>
+                        <th scope="col">Familia</th>
                         <th scope="col">Marca</th>
                         <th scope="col">Orden</th>
                         <th scope="col">Acciones</th>
@@ -264,9 +264,8 @@
           return {
               fields: [
                   { key: 'title', label: 'Titulo', sortable: false, sortDirection: 'desc' },
-                  { key: 'cod', label: 'Codigo', sortable: false, class: 'text-center' },
-                  { key: 'name_family', label: 'Rubro', sortable: false, class: 'text-center' },
-                  { key: 'marca', label: 'Marca', sortable: false, class: 'text-center' },
+                  { key: 'name_family', label: 'Familia', sortable: false, class: 'text-center' },
+                  { key: 'order', label: 'Orden', sortable: false, class: 'text-center' },
 
                   { key: 'actions', label: 'Acciones' }
               ],
