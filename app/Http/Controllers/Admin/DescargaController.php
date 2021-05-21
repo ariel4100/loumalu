@@ -76,4 +76,10 @@ class DescargaController extends Controller
         session()->flash('message', 'Se elimino correctamente.');
         return Redirect::route('adm.descargas.index');
     }
+    public function elim($id)
+    {
+        Download::find($id)->delete();
+        session()->flash('message', 'Se elimino correctamente.');
+        return Redirect::route('adm.descargas.index');
+    }
 }

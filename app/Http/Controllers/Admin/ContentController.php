@@ -225,4 +225,36 @@ class ContentController extends Controller
 
     }
 
+
+    public function destroy_block($id)
+    {
+        try {
+            DB::beginTransaction();
+            $item = Block::find($id);
+            $section = $item->content->section;
+
+            if ($item->image){
+                Storage::disk(env('DEFAULT_STORAGE_DISK'))->delete($item->image);
+            }
+            $item->delete();
+            DB::commit();
+            session()->flash('message', 'Se elimino correctamente.');
+
+            return Redirect::route('adm.content.index',$section);
+//            return response()->json([
+//                'status' => 'success',
+//                'message' => __('slider.destroy.success')
+//            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'message' => __('slider.destroy.error-default'),
+                'errors' => [
+                    $e->getMessage()
+                ]
+            ]);
+        }
+    }
+
 }

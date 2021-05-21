@@ -138,15 +138,7 @@
                     cancelButtonText: 'No'
                 }).then((result) => {
                     if (result.value) {
-                        this.$inertia.delete(route('adm.descargas.destroy',{id: id})).then(() => {
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Se elimino correctamente',
-                            //     showConfirmButton: false,
-                            //     timer: 2000
-                            // })
-
-                        })
+                        this.$inertia.get(route('adm.descargas.elim',  id )) 
                     }
                 })
 

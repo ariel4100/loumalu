@@ -138,7 +138,7 @@
             </section>
             
             <div class="card-body">
-                <block v-if="['inicio','empresa','descargas'].includes($page.contenido.section)"
+                <block v-if="[ 'empresa','descargas'].includes($page.contenido.section)"
                        :model.sync="bloques"
                 ></block>
                 <block v-if="['empresa','inicio','asistencia'].includes($page.contenido.section)" :model.sync="timelines"
@@ -146,7 +146,7 @@
                        only="text"
                        type="texto"
                 ></block>
-                <block v-if="['empresa','inicio','galeria'].includes($page.contenido.section)"
+                <block v-if="['empresa', 'galeria'].includes($page.contenido.section)"
                        :model.sync="images"
                        btn-title="Agregar Imagen"
                        only="image"
