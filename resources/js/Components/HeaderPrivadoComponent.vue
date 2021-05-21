@@ -1,23 +1,52 @@
 <template>
     <header>
-        <div class="bg-primario">
+        <div class="bg-white">
             <div class="container">
-                <div class="d-flex justify-content-md-end  text-white">
+                <div class="d-flex justify-content-md-between">
+                    <div class="d-flex align-items-center">
+                        <a :href="item.link" target="_blank" class="px-2  text-dark" v-for="item in $page.redes">
+                            <i class="" :class="item.type"></i>
+                        </a>
+                    </div>
                     <div class="d-flex align-items-center py-2">
-                        <div class="md-form input-group  my-0">
-                            <input type="text" class="form-control ph-white text-white" placeholder="Buscando..." aria-describedby="material-addon2">
-                            <div class="input-group-append">
-                                <span class="input-group-text md-addon text-white" id="material-addon2"><i class="fas fa-search"></i></span>
-                            </div>
-                        </div>
+                         
+                        <a  class="border bg-primario text-white  text-nowrap py-1 mr-3 nav-link text-uppercase"  data-toggle="modal" data-target="#login" >
+                            Descargas
+                        </a>
+                        <a  class="border text-dark  text-nowrap py-1 nav-link text-uppercase"  data-toggle="modal" data-target="#login" >
+                            simulá tu ambiente
+                        </a>
+                             
 
+
+                        <template v-if="$page.auth.check == false">
+                            <li class="nav-item dropdown d-none d-md-block">
+                                <a  class="    text-nowrap py-1 nav-link text-uppercase"  data-toggle="dropdown">
+                                    Zona Privada
+                                </a>
+                                <form class="dropdown-menu dropdown-menu-right login-menu " style="min-width: 15rem !important; background-color:#0270B9;">
+                                    <login-component
+                                            class=""
+                                    ></login-component>
+                                </form>
+                            </li>
+                            <li class="nav-item dropdown d-block d-md-none">
+                                <a  class="border   text-nowrap py-1 nav-link text-uppercase" data-toggle="modal" data-target="#login" >
+                                    Zona Privada
+                                </a>
+<!--                                <a class="nav-link py-md-4 text-white text-uppercase bg-terciario" data-toggle="modal" data-target="#login">-->
+<!--                                    <i class="fas fa-user mr-2  text-white"></i> {{ t('Ingresar') }}-->
+<!--                                </a>-->
+                            </li>
+                        </template>
                         <template v-if="$page.auth.check == true">
                             <div class="dropdown">
-                                <a class="nav-link text-white texx dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ $page.auth.user.username.toUpperCase() || 'CLIENTE'}}  <i class="fas fa-user mr-2  text-dark"></i>
+                                <a class="nav-link text-dark texx dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Bienvenido, {{ $page.auth.user.username.toUpperCase() || 'CLIENTE'}}  
+                                    <!-- <i class="fas fa-user mr-2  text-dark"></i> -->
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" :href="route('privada.home')">Pedidos</a>
+                                    <a class="dropdown-item" :href="route('privada.home')">Descargas</a>
                                     <a class="dropdown-item" @click="logout()">Salir</a>
                                 </div>
                             </div>
@@ -26,38 +55,31 @@
 
                     </div>
                 </div>
+              
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white py-0">
+       <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-0">
             <div class="container">
-                <a class="navbar-brand" :href="route('home')">
-                    <img :src="$page.header" alt="" class="img-fluid" style="max-width: 300px;">
-                </a>
+                
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto text-center text-start">
-                        <li class="nav-item" >
-                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="'familias' == $page.currentRouteName ? 'activo' : ''" :href="route('familias')">PRODUCTOS</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+                    <ul class="navbar-nav m-auto text-center text-start">
+                        <li class="nav-item" v-for="item in menu.slice(0,5)" v-if="item.mostrar == 1">
+                            <a class="nav-link  fw-medium text-uppercase py-md-4" :class="['home','empresa'].includes($page.currentRouteName) ? 'text-white' : 'text-dark'" :href="route(item.route)">{{ t(item.nombre) }}</a>
+                            <hr v-if="item.url.split(',').includes($page.currentRouteName)" width="20px" class="pt-1 m-auto bg-dark">
                         </li>
-                        <li class="nav-item" >
-                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="'privada.home' == $page.currentRouteName ? 'activo' : ''" :href="route('privada.home')">PEDIDOS</a>
+                    </ul>
+                    <a class="navbar-brand m-0" :href="route('home')">
+                        <img :src="$page.header" alt="" class="img-fluid" style="max-width: 300px;">
+                    </a>
+                    <ul class="navbar-nav m-auto text-center text-start">
+                        <li class="nav-item" v-for="item in menu.slice(5)" v-if="item.mostrar == 1">
+                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="['home','empresa'].includes($page.currentRouteName) ? 'text-white' : 'text-dark'" :href="route(item.route)">{{ t(item.nombre) }}</a>
+                            <hr v-if="item.url.split(',').includes($page.currentRouteName)" width="20px" class="pt-1 m-auto bg-dark">
                         </li>
-                        <li class="nav-item" >
-                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="'privada.carrito' == $page.currentRouteName ? 'activo' : ''" :href="route('privada.carrito')">CARRITO</a>
-                        </li>
-                        <li class="nav-item" >
-                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="'privada.estado.cuenta' == $page.currentRouteName ? 'activo' : ''" :href="route('privada.estado.cuenta')">ESTADO DE PEDIDOS</a>
-                        </li>
-                        <li class="nav-item" >
-                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="'privada.envios' == $page.currentRouteName ? 'activo' : ''" :href="route('privada.envios')">ENVIOS</a>
-                        </li>
-                        <li class="nav-item" >
-                            <a class="nav-link fw-medium text-uppercase py-md-4" :class="'privada.reclamos' == $page.currentRouteName ? 'activo' : ''" :href="route('privada.reclamos')">RECLAMOS</a>
-                        </li>
-
                     </ul>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <template>
-    <header class="" :class="['home','empresa'].includes($page.currentRouteName) ? 'fixed-top' : ''" >
+    <header class="" :style="['home','empresa'].includes($page.currentRouteName) ? 'position: absolute;width: 100%; z-index: 222;' : ''" >
         <div class=" ">
             <div class="container" v-if="['home','empresa'].includes($page.currentRouteName)">
                
@@ -42,7 +42,7 @@
                                     {{ $page.auth.user.username.toUpperCase() || 'CLIENTE'}}  <i class="fas fa-user mr-2  text-dark"></i>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" :href="route('privada.home')">Pedidos</a>
+                                    <a class="dropdown-item" :href="route('privada.home')">Descargas</a>
                                     <a class="dropdown-item" @click="logout()">Salir</a>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="d-flex align-items-center py-2">
                          
-                        <a  class="border text-dark  text-nowrap py-1 nav-link text-uppercase"  data-toggle="modal" data-target="#login" >
+                        <a  :href="route('simulador')" class="border text-dark  text-nowrap py-1 nav-link text-uppercase"    >
                             simulá tu ambiente
                         </a>
                              
@@ -90,11 +90,12 @@
                         </template>
                         <template v-if="$page.auth.check == true">
                             <div class="dropdown">
-                                <a class="nav-link text-white texx dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ $page.auth.user.username.toUpperCase() || 'CLIENTE'}}  <i class="fas fa-user mr-2  text-dark"></i>
+                                <a class="nav-link text-dark   dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Bienvenido, {{ $page.auth.user.username.toUpperCase() || 'CLIENTE'}}  
+                                    <!-- <i class="fas fa-user mr-2  text-dark"></i> -->
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" :href="route('privada.home')">Pedidos</a>
+                                    <a class="dropdown-item" :href="route('privada.home')">Descargas</a>
                                     <a class="dropdown-item" @click="logout()">Salir</a>
                                 </div>
                             </div>
@@ -105,7 +106,7 @@
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-0">
+        <nav class="navbar shadow-none navbar-expand-lg navbar-light bg-transparent py-0">
             <div class="container">
                 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

@@ -69,6 +69,10 @@
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Clientes</span>
                     </inertia-link>
+                    <inertia-link class="nav-link" :href="route('adm.descargas.index')">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Descargas</span>
+                    </inertia-link>
                     <!-- <inertia-link class="nav-link" :href="route('adm.monitoreo.index')">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Monitoreo</span>

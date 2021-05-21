@@ -443,12 +443,6 @@ ul li a.nav-link {
   transition: 0.2s ease;
 }
 
-ul li a.nav-link:hover {
-  transition: 0.2s ease;
-  color: white !important;
-  background-color: #100A0A;
-}
-
 .activo {
   color: white !important;
   background-color: #100A0A !important;
@@ -517,12 +511,6 @@ ul li a.nav-link:hover {
   border: 0;
   border-bottom: 3px solid #E53935;
   color: #E53935 !important;
-}
-
-.nav-tabs .nav-link:hover {
-  color: #E53935 !important;
-  border: 0;
-  border-bottom: 3px solid #E53935;
 }
 
 .nav-tabs .nav-link-custom {
@@ -824,7 +812,7 @@ ul li a.nav-link:hover {
   align-items: center;
   text-align: center;
   color: white;
-  background-color: rgba(187, 38, 44, 0.47);
+  background-color: rgba(0, 84, 139, 0.47);
   padding: 10px 10px;
   transition: 0.2s ease-in;
   opacity: 0;

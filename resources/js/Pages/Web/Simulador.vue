@@ -8,13 +8,27 @@
         <section class="container my-5">
             <div class="row">
                 <div class="col-md-1 text-center">
-                    <div class="mb-3" v-for="(item,index) in familias" :key="index">
+                    <div class="mb-3 border-bottom" v-for="(item,index) in familias" :key="index">
                         <div @click="showItem(item)" class="">
                             <img :src="$page.appUrl+'/imagenes/simulador.png'" alt="" class="img-fluid mx-auto">
-                            <h5 class="my-2">
+                            <h6 class="my-2 text-uppercase">
                                 {{ item.title }}
-                            </h5>
+                            </h6>
 
+                        </div>
+                    </div>
+                    <div class="mb-3  border-bottom"  >
+                        <div @click="restart()" class="">
+                            <img :src="$page.appUrl+'/imagenes/camera.png'" alt="" class="img-fluid mx-auto">
+                           <h6 class="my-2">
+                                DETALLE
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="pb-3 border-bottom"  >
+                        <div @click="restart()" class="">
+                            <img :src="$page.appUrl+'/imagenes/bin.png'" alt="" class="img-fluid mx-auto">
+                         
                         </div>
                     </div>
                 </div>
@@ -46,9 +60,10 @@
     export default {
         props: {
             familias: Array,
+            productos_f: Array,
             textos: Array,
             descargas: Array,
-            producto: Object,
+            producto_f: Object,
         },
         data(){
           return {
@@ -64,11 +79,16 @@
             'image-custom': ImageFile,
         },
         created(){
-
+            this.getFirst()
         },
         methods: {
+
+            restart(){
+                location.reload()
+            },
             getFirst(){
-                this.producto
+                this.productos = this.productos_f
+                this.simulador = this.$page.appUrl+'/storage/'+this.producto_f.banner
             },
             showItem(item){
 

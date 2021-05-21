@@ -48,13 +48,13 @@ ul li a.nav-link{
   //border-bottom: 2px solid transparent;
 }
 
-ul li a.nav-link:hover{
-  transition: 0.2s ease;
+// ul li a.nav-link:hover{
+//   transition: 0.2s ease;
 
-  color: white !important;
-  background-color: #100A0A;
-  //border-bottom: 2px solid $primary-color;
-}
+//   color: white !important;
+//   background-color: #100A0A;
+//   //border-bottom: 2px solid $primary-color;
+// }
 .activo{
   color: white !important;
   background-color: #100A0A !important;
@@ -125,11 +125,11 @@ ul li a.nav-link:hover{
     border-bottom: 3px solid $tertiary-color;
     color: $tertiary-color !important;
   }
-  .nav-link:hover{
-    color: $tertiary-color !important;
-    border: 0;
-    border-bottom: 3px solid $tertiary-color;
-  }
+  // .nav-link:hover{
+  //   color: $tertiary-color !important;
+  //   border: 0;
+  //   border-bottom: 3px solid $tertiary-color;
+  // }
   .nav-link:focus{
 
   }
@@ -320,7 +320,7 @@ ul li a.nav-link:hover{
     align-items: center;
     text-align: center;
     color: white;
-    background-color: rgba(187,38,44,47%);
+    background-color: rgba(0,84,139,47%);
     padding: 10px 10px;
     transition: 0.2s ease-in;
     opacity: 0;

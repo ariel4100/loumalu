@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\Content;
+use App\Models\Download;
 
 class ClientController extends Controller
 {
@@ -35,26 +36,18 @@ class ClientController extends Controller
     {
 //        dd(auth()->guard('client')->user());
         $auth = auth()->guard('client')->user();
-        $modal = Content::where('section','pop-up')->first()->data;
 
 //        $productos = Product::with('product_intertrade')->orderBy('order')->get();
-        $productos = Product::with('family')->limit(500)->get() ;
+        $descargas = Download::get();
 
     //    dd($productos );
         return Inertia::render('Client/Pedidos', [
-            'modal' => $modal,
-            'productos' => $productos->map(function ($item) {
+            'descargas' => $descargas->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'rubro' => $item->family ? $item->family->title : '',
-                    'producto' => $item->title,
-                    'precio' => floatval($item->price),
-                    'codigo' => $item->code,
-                    'marca' => $item->marca,
-                    'cantidad' => 0,
-                    'stock' => intval($item->stock),
-                    'unidad' => intval($item->unit) ? $item->unit : 1,
+                    'title' => $item->title,
                     'image' => $item->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url(@$item->image) : '',
+                    'file' => $item->file ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url(@$item->file) : '',
                 ];
             }),
 //            'sliders' => $sliders->map(function ($item) {

@@ -30,6 +30,16 @@
         @if($data['empresa'])<li><strong>Empresa:</strong>{{ @$data['empresa'] }}</li>@endif
         <li><strong>Email:</strong> {{ @$data['email'] }}</li>
         @if($data['telefono'])<li><strong>Teléfono:</strong>{{ @$data['telefono'] }}</li>@endif
+        @if($data['revestimiento'])<li><strong>Tipo de Revestimiento:</strong>{{ @$data['revestimiento'] }}</li>@endif
+        @if($data['variante'] == '1')
+        <li><strong>Radio:</strong>{{ @$data['radio'] }}</li>
+        @else
+        <li><strong>Altura Min:</strong>{{ @$data['altura_min'] }}</li>
+        <li><strong>Altura Max:</strong>{{ @$data['altura_max'] }}</li>
+        <li><strong>Ancho:</strong>{{ @$data['ancho'] }}</li>
+        <li><strong>Largo:</strong>{{ @$data['largo'] }}</li>
+
+        @endif
         <br>
         <br>
         <h4>Mensaje :</h4>

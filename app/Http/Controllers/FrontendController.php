@@ -154,11 +154,23 @@ class FrontendController extends Controller
     {
  
         $familias = Family::with('productos')->limit(2)->get();
+        $productos = Family::with('productos')->first()->productos;
         $producto = Family::with('productos')->first()->productos->first();
 
         // dd($producto);
         return Inertia::render('Web/Simulador', [
-            'producto' => $producto,
+            'productos_f' => $productos->map(function ($item){
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'text' => $item->text,
+                    'order' => $item->order,
+                    'ruta' => route('producto',$item->slug),
+                    'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
+                    'image_simulador' => $item->banner ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->banner) : '',
+                ];
+            }),
+            'producto_f' => $producto,
             'familias' => $familias->map(function ($item) {
                 return [
                     'id' => $item->id,
@@ -214,13 +226,7 @@ class FrontendController extends Controller
 
        $familias = Family::with('productos')->get();
         $productos =  Product::where("family_id",$familia->id)->get();
-
-
-        
-        $imagen_familia = $familia->image ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($familia->image) : null;
-
-        $productos->append('magic_code');
-        $productos->append('check_subprod');
+ 
         /*
         $filtered = $prods->reject(function ($item) {
             return $item->check_subprod == true;
@@ -228,36 +234,13 @@ class FrontendController extends Controller
         
         dd($filtered->pluck('title'));
         */
-        $removes = [];
-        foreach($productos as $p){
-            //dd($p->check_subprod);
-            
-            
-            if(!in_array($p->id, $removes)){
-
-            $medidas[] = $p;
-
-            // echo "<h5>".$p->code." - ".$p->title."</h5>";
-            foreach($p->magic_code as $m){
-
-                $removes[] = $m->id;
-                // echo "<br>----".$m->code." - ".$m->title;
-                
-                
-            }
-            //   echo "<hr>";
-            }
-          
-            
-        }
-
-        $productos = collect($medidas);
+ 
         //    dd($productos);
         return Inertia::render('Web/Product/Family', [
             'familia' => $familia->only('title','id','slug'),
             'sidenav' => 1,
             'familias' => $familias,
-            'productos' => $productos->map(function ($item) use($imagen_familia){
+            'productos' => $productos->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'code' => $item->code,
@@ -266,7 +249,6 @@ class FrontendController extends Controller
                     'text' => $item->text,
                     'order' => $item->order,
                     'ruta' => route('producto',$item->slug),
-                    'imagef' => $imagen_familia,
                     'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
                 ];
             }),
@@ -555,8 +537,10 @@ class FrontendController extends Controller
     public function presupuesto()
     {
     
-        
+        $productos = Family::with('productos')->first()->productos;
+
         return Inertia::render('Web/Presupuesto', [
+            'productos' => $productos,
              
         ]);
     }

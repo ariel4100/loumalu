@@ -2,7 +2,7 @@
     <b-container fluid>
         <!-- User Interface controls -->
         <b-row class="justify-content-between mb-4" v-if="search !== false">
-            <b-col lg="6" class="my-1">
+            <!-- <b-col lg="6" class="my-1">
                 <b-form-group
                         label="Buscar:"
                         label-cols="2"
@@ -22,7 +22,7 @@
                         </b-input-group-append>
                     </b-input-group>
                 </b-form-group>
-            </b-col>
+            </b-col> -->
 
 <!--            <b-col lg="6" class="my-1">-->
 <!--                <b-form-group-->

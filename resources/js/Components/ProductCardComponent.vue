@@ -1,7 +1,7 @@
 <template>
     <div>
         <a v-if="type == 1" :href="item.ruta" class="p-0  nav-link">
-            <div class="product-card position-relative ">
+            <div class="product-card border position-relative ">
                 <div class="product-card__mask">
                     <div class="">
                         <!--                        <h5 class="my-2 text-left  text-white">{{ item.title }}</h5>-->
@@ -30,7 +30,7 @@
             </div>
         </a>
         <a v-if="type == 'blog'" :href="item.ruta" class="p-0  nav-link">
-            <div class="product-card position-relative">
+            <div class="product-card border position-relative">
                 <div class="product-card__mask">
                     <div class="">
                         <!--                        <h5 class="my-2 text-left  text-white">{{ item.title }}</h5>-->
@@ -48,7 +48,7 @@
         </a>
 
         <a v-if="type == undefined" :href="item.ruta" class="p-0  nav-link">
-            <div class="product-card position-relative bg-white">
+            <div class="product-card border position-relative bg-white">
                 <div class="product-card__mask">
                     <div class="">
 <!--                        <h5 class="my-2 text-left  text-white">{{ item.title }}</h5>-->

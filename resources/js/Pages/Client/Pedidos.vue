@@ -1,97 +1,30 @@
 <template>
     <client-layout class="">
-        <div class="" style="background-color: #F9F9F9">
-            <div class="container py-5">
-                <div class="row justify-content-center">
-                    <div class="col-md-2 mb-md-0 mb-4">
-                        <select v-model="marca"  class="form-control">
-                            <option value="" selected >Marca</option>
-                            <option :value="item" v-for="(item,index) in marcas" :key="index">
-                                {{item}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 mb-md-0 mb-4">
-                        <select v-model="familia" id="" class="form-control">
-                            <option value="" selected>Rubro</option>
-                            <option :value="item.id" v-for="(item,index) in familias" :key="index">
-                                {{ item.title || ''}}
-                            </option>
-                        </select>
-                    </div>
-                    <!--                <div class="col-md-2 mb-md-0 mb-4">-->
-                    <!--                    <select name="" id="" class="form-control">-->
-                    <!--                        <option value="" selected>Rubro</option>-->
-                    <!--                    </select>-->
-                    <!--                </div>-->
-                    <div class="col-md-3 mb-md-0 mb-4">
-                        <input type="text" v-model="nombre" class="form-control" placeholder="Ingrese una descripción">
-                    </div>
-                    <div class="col-md-2 mb-md-0 mb-4 text-center text-md-left">
-                        <a @click="Buscar()"  class="btn btn-secundario m-0">
-                            <i class="fas fa-search mr-2"></i>
-                            buscar
+         <section class="bg-primario py-3">
+            <div class="container">
+                <h6 class="text-white text-italic m-0"><em>Descargas</em></h6>
+            </div>
+        </section>
+        <div class="container wow fadeIn py-4" :data-wow-delay="'0.2s'">
+            <div class="row">
+                <div class="col-md-3 mt-4" v-for="(item,index) in descargas">
+                    <img :src="item.image" alt="" class="img-fluid">
+                    <!-- <div class=" " style="min-height: 75px">
+                        <hr width="60" class="mt-1 bg-primario">
+                        <h6 class="mt-4 pl-2 font-weight-bold mt-md-3 text-primario" v-html="item.title"></h6>
+                    </div> -->
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h6 class="mt-4 pl-2 font-weight-bold mt-md-3 text-primario" v-html="item.title"></h6>
+                     
+                        <a :href="item.file" download   class="m-1">
+                            <i class="fas fa-file-download text-primario   p-2"></i>
+                            <!-- <i class="fas fa-download  text-white bg-primary p-2 rounded-circle"></i> -->
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container my-5">
-            <table-custom
-                    :items="filteredItems"
-                    :onlyShow="mostrar"
-                    :fields="fields"
-                    :search="false"
-            >
-                    <template #action="{ item }">
-                        <button @click="addToCart(item)" class="btn btn-success text-white" >
-                            AGREGAR
-                        </button>
-                    </template>
-                <template #stock="{ item }">
-                    <div class="p-4" :id="item.id">
-                        <button class="btn btn-dark" @click="verificarStock(item)" type="button">
-                            <i class="fas fa-traffic-light text-white"></i>
-                        </button>
-                    </div>
-                </template>
-                <template #cantidad="{ item }">
-                    <input type="number" class="form-control"  min="0" :step="item.unidad" v-model="item.cantidad">
-                </template>
-            </table-custom>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            <div class="modal-body">
-                <div class=" " v-html="modal.texto">
-                    
-                </div>
-                <!-- <ul class="list-unstyled">
-
-                    <li>Pasos:
-                        <ul>
-                        <li>Iniciar sessión en la web.</li>
-                        <li>Inscribirse en los cursos.</li>
-                        <li>Espera la notificación ó mail que vamos a enviarte.</li>
-                        <li>Listo, la solicitud estara en proceso.</li>
-                        <li>NOTA: en caso de cambiar el curso, puede modificar el curso hasta el 27 de Febrero.</li>
-                        </ul>
-                    </li>
-
-                </ul> -->
-            </div>
-
-            </div>
-        </div>
-        </div>
+    
     </client-layout>
 </template>
 
@@ -105,7 +38,7 @@
 
     export default {
         props: {
-            sliders: Array,
+            descargas: Array,
             productos: Array,
             modal: Object,
             contenido: Object,

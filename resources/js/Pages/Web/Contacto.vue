@@ -88,7 +88,6 @@
                         <div class="col-md-12 form-group">
                             <textarea name="" class="form-control" v-model="mail.mensaje" :placeholder="t('Mensaje')" cols="30" rows="10"></textarea>
                         </div>
-
                         <div class="col-md-12 text-right">
                             <button v-if="loading == true" type="button" class="btn btn-primario  px-5 text-white">Enviando <i class="fas fa-sync fa-spin"></i></button>
                             <button v-if="loading == 0" @click="enviar()" class="btn btn-primario px-5  text-white">{{ t('Enviar') }}</button>

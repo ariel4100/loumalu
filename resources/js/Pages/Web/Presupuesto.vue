@@ -90,6 +90,9 @@
                          <div class="col-md-12 mt-3">
                             <select v-model="mail.revestimiento" id="" class="form-control"  >
                                 <option value="0" disabled selected>Tipo de revestimiento</option>
+                                <option :value="item.title" v-for="(item,index) in productos" :key="index">
+                                    {{ item.title }}
+                                </option>
                             </select>
                         </div>
                         <div class="col-md-12 text-right mt-4">
@@ -134,7 +137,7 @@
 
     export default {
         props: {
-            sliders: Array,
+            productos: Array,
             bloques: Array,
             contenido: Object,
         },
@@ -224,6 +227,12 @@
                         asunto: '',
                         telefono: '',
                         mensaje: '',
+                        altura_min: '',
+                        altura_max: '',
+                        ancho: '',
+                        largo: '',
+                        revestimiento: '0',
+                        variante: '1',
                     },
                         this.file = 0
                         this.step = 1
