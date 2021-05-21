@@ -20,7 +20,7 @@
                     </template>
                     <template v-else>
                     
-                        <img @error="replaceByDefault($event,item)" :src="$page.appUrl+'/uploads/imagenes/'+item.code+'-001.jpg'" alt="" class="d-block w-100">
+                        <img @error="replaceByDefault($event,item)" :src="$page.appUrl+'/uploads/imagenes/'+item.code+'-001.jpg'" alt="" class="d-block  ">
                     </template>
                 </template>
                 
@@ -97,14 +97,14 @@
               replaceByDefault(e,item) {
                  let imageUrl = this.$page.appUrl+'/uploads/imagenes/'+item.code+'-001.JPG';
                   if(item == null){
-                    e.target.src = 'http://osolelaravel.com/intertrade/storage/uploads/logo/Grupo%20429.png'
+                    e.target.src = 'http://loumalu.osolelaravel.com/storage/uploads/logo/loumalu_140.png'
                   }else{
                     this.imageExists(imageUrl, (exists) => {
                         // console.log(['ssssssssssssssssssss',exists])
                         if(exists){
                             e.target.src = this.$page.appUrl+'/uploads/imagenes/'+item.code+'-001.JPG'
                         }else{
-                            e.target.src = 'http://osolelaravel.com/intertrade/storage/uploads/logo/Grupo%20429.png'
+                            e.target.src = 'http://loumalu.osolelaravel.com/storage/uploads/logo/loumalu_140.png'
                         }
                         // console.log('RESULT: url=' + imageUrl + ', exists=' + exists);
                     });

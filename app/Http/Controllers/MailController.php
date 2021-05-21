@@ -35,8 +35,8 @@ class MailController extends Controller
         $subject = env('APP_NAME').' - Mensaje de Contacto de la Pagina Web';
 //        dd($request->all());
 
-       $for = ['soporte@osole.es'];
-        // $for = ['emona@emona.com.ar'];
+    //    $for = ['soporte@osole.es'];
+        $for = ['iventas@loumalu.com.ar'];
 
         Mail::send('mail.contacto', $data, function($msj) use($subject,$for,$file){
             $msj->from(env('MAIL_FROM_ADDRESS'),env('APP_NAME'));
@@ -59,8 +59,9 @@ class MailController extends Controller
         $subject = env('APP_NAME').' - Mensaje de Presupuesto de la Pagina Web';
 //        dd($request->all());
 
-       $for = ['soporte@osole.es'];
-        // $for = ['emona@emona.com.ar'];
+    //    $for = ['soporte@osole.es'];
+    $for = ['iventas@loumalu.com.ar'];
+
         Mail::send('mail.presupuesto', $data, function($msj) use($subject,$for,$file){
             $msj->from("iventas@loumalu.com.ar",env('APP_NAME'));
             $msj->replyTo($for);
