@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 //})->name('home');
 
 //Secciones
-Route::get('pedidos', [ClientController::class, 'pedidos'])->name('home');
+Route::get('descargas', [ClientController::class, 'pedidos'])->name('home');
 Route::get('carrito', [ClientController::class, 'carrito'])->name('carrito');
 Route::get('estado-cuenta', [ClientController::class, 'estado_cuenta'])->name('estado.cuenta');
 Route::get('envios', [ClientController::class, 'envios'])->name('envios');

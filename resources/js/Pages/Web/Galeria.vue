@@ -7,12 +7,12 @@
                 </h6>
             </div>
         </div>
-         <div class="" style="overflow: hidden;">
+         <div class="container" style="overflow: hidden;">
             <slick ref="slick" :options="slickOptions2" class="slider-for">
                 <div v-for="(item,key) in imagenes" class="">
-                    <div class="col my-3 ">
+                    <div class="  my-3 ">
                         <div class="position-relative">
-                            <img :src="item.image" :alt="item.title" class="img-fluid mx-auto ">
+                            <img :src="item.image" :alt="item.title" class="img-fluid w-100">
                             <div class="d-flex position-absolute" style="bottom: 0px; right: 0px;">
                                 <span class="p-3 bg-dark" @click="prev()">
                                     <i class="fas fa-arrow-left fa-lg text-white"></i>
@@ -27,7 +27,7 @@
                 </div>
             </slick>
         </div>
-         <div class="" style="overflow: hidden;">
+         <div class="container" style="overflow: hidden;">
             <slick ref="slick" :options="slickOptions" class="slider-nav">
                 <div v-for="(item,key) in imagenes" class="">
                     <div class="col my-3">

@@ -10,10 +10,10 @@
                     </div>
                     <div class="d-flex align-items-center py-2">
                          
-                        <a  class="border bg-primario text-white  text-nowrap py-1 mr-3 nav-link text-uppercase"  data-toggle="modal" data-target="#login" >
+                        <a :href="route('privada.home')" class="border bg-primario text-white  text-nowrap py-1 mr-3 nav-link text-uppercase"  data-toggle="modal" data-target="#login" >
                             Descargas
                         </a>
-                        <a  class="border text-dark  text-nowrap py-1 nav-link text-uppercase"  data-toggle="modal" data-target="#login" >
+                        <a :href="route('simulador')" class="border text-dark  text-nowrap py-1 nav-link text-uppercase"   >
                             simulá tu ambiente
                         </a>
                              

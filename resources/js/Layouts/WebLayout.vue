@@ -46,15 +46,15 @@
                                 <label for="">{{ t('Clave') }}</label>
                                 <input type="password" class="form-control" v-model="registro.password"  required>
                             </div>
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label for="">{{ t('Teléfono') }}</label>
                                 <input type="text" class="form-control" v-model="registro.telefono" required>
-                            </div>
+                            </div> -->
                             <!-- <div class="col-md-6 form-group">
                                 <label for="">{{ t('Fecha de Nacimiento') }}</label>
                                 <input type="date" class="form-control" v-model="registro.fecha_nac" required>
                             </div> -->
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label for="">{{ t('DNI') }}</label>
                                 <input type="text" class="form-control" v-model="registro.dni" required>
                             </div>
@@ -65,11 +65,11 @@
                             <div class="col-md-6 form-group">
                                 <label for="">{{ t('Domicilio') }}</label>
                                 <input type="text" class="form-control" v-model="registro.domicilio" required>
-                            </div>
-                            <div class="col-md-6 form-group">
+                            </div> -->
+                            <!-- <div class="col-md-6 form-group">
                                 <label for="">{{ t('Código Postal') }}</label>
                                 <input type="text" class="form-control" v-model="registro.cp" required>
-                            </div>
+                            </div> -->
 
                             <div class="col-md-12 text-right">
                                 <button type="submit" v-if="loader == 1" class="btn btn-primario text-white">{{ t('Registrar') }}</button>

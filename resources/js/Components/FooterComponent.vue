@@ -20,7 +20,9 @@
                     <div class="col-md-2 col-lg-2  mx-auto mb-4">
                         <!-- Content -->
                         <h5 class="font-weight-bold">PRODUCTOS</h5>
-                        
+                         <p v-for="item in $page.familias_global" class="mb-1">
+                            <a :href="route('productos',item.slug)" class="fz-14 hover-link">{{  t(item.title) }}</a>
+                        </p>
                         <!-- <img :src="$page.footer" alt="" class="img-fluid "> -->
 
                     </div>
@@ -120,7 +122,7 @@
 
 <script>
     export default {
-        props:['title'],
+        props:['title','familias_global'],
         data() {
             return {
                 email: ''

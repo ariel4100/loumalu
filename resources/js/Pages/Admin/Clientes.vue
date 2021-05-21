@@ -20,6 +20,10 @@
                                 <input type="text" v-model="user.name" class="form-control">
                             </div>
                             <div class="col-md-6 form-group">
+                                <label for="">Apellido </label>
+                                <input type="text" v-model="user.surname" class="form-control">
+                            </div>
+                            <div class="col-md-6 form-group">
                                 <label for="">Usuario</label>
                                 <input type="text" v-model="user.username" class="form-control">
                             </div>
@@ -86,6 +90,7 @@
               user: {
                   id: '',
                   name:'',
+                  surname:'',
                   username:'',
                   email: '',
                   password: '',
@@ -104,6 +109,7 @@
                 this.user = {
                     id: '',
                     name:'',
+                    surname:'',
                     username:'',
                     email: '',
                     password: '',
