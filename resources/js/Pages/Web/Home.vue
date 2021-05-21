@@ -28,7 +28,7 @@
                             <div class="position-relative">
                                 <img :src="item.image" :alt="item.title" class="img-fluid w-100">
                                 <div class="position-absolute" style="bottom: 0px">
-                                    <div class="px-4 px-md-0 pb-4 pl-md-5 pb-md-5">
+                                    <a :href="item.ruta" class="px-4 px-md-0 pb-4 pl-md-5 pb-md-5">
                                         <h2 class="text-white mb-n4">{{ item.title }}</h2>
                                         <img :src="$page.appUrl+'/imagenes/flecha.png'" style="width: 370px;" alt="" class="img-fluid">
 
