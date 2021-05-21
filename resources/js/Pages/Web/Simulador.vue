@@ -5,27 +5,35 @@
                 <h6 class="text-white text-italic m-0"><em>Simulador</em></h6>
             </div>
         </section>
-        <div class="container my-5">
-            <div class="accordion" id="accordionExample">
-                <div class=""  v-for="(item,index) in textos" :key="index">
-                    <div class="card-header bg-white py-2" id="headingOne">
-                    <h2 class="mb-0">
-                        <button class="btn shadow-none px-0 btn-block text-left text-dark hover-link" style="padding: 0px !important" type="button" data-toggle="collapse" :data-target="'#collapseOne'+index" aria-expanded="true" aria-controls="collapseOne">
-                         {{ item.title }}
-                        </button>
-                    </h2>
-                    </div>
+        <section class="container my-5">
+            <div class="row">
+                <div class="col-md-1 text-center">
+                    <div class="mb-3" v-for="(item,index) in familias" :key="index">
+                        <div @click="showItem(item)" class="">
+                            <img :src="$page.appUrl+'/imagenes/simulador.png'" alt="" class="img-fluid mx-auto">
+                            <h5 class="my-2">
+                                {{ item.title }}
+                            </h5>
 
-                    <div :id="'collapseOne'+index" class="collapse" :class="index == 0 ? 'show' : ''" style="padding: 0px !important" aria-labelledby="headingOne" data-parent="#accordionExample">
-                    <div class="card-body">
-                        <div class="" v-html="item.text"></div>
-                    </div>
+                        </div>
                     </div>
                 </div>
-                
+                <div class="col-md-2 text-center" style="overflow-y: auto; max-height: 600px">
+                    <div class="mb-3" v-for="(item,index) in productos" :key="index">
+                        <div @click="showSimulador(item)" class="">
+                            <img :src="item.image" alt="" class="img-fluid mx-auto">
+                            <h6 class="my-2">
+                                {{ item.title }}
+                            </h6>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <img :src="simulador" alt="" class="img-fluid w-100">
+                </div>
             </div>
-       
-        </div>
+        </section>
     </web-layout>
 </template>
 
@@ -37,21 +45,15 @@
     import Modal from '../../Components/ModalComponent'
     export default {
         props: {
-            sliders: Array,
-            bloques: Array,
+            familias: Array,
             textos: Array,
             descargas: Array,
-            contenido: Object,
+            producto: Object,
         },
         data(){
           return {
-              text:'',
-              slider: {
-                  title: '',
-                  text: '',
-                  order: '',
-                  image: '',
-              },
+              simulador:'',
+              productos: []
           }
         },
         components: {
@@ -61,7 +63,21 @@
             Carousel,
             'image-custom': ImageFile,
         },
+        created(){
+
+        },
         methods: {
+            getFirst(){
+                this.producto
+            },
+            showItem(item){
+
+                this.productos = item.productos
+            },
+            showSimulador(item){
+
+                this.simulador = item.image_simulador
+            },
             saveContent(){
                 let data = {
                     id: this.contenido.id,

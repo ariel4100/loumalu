@@ -153,11 +153,30 @@ class FrontendController extends Controller
     public function simulador()
     {
  
-        $familias = Family::with('productos')->get();
+        $familias = Family::with('productos')->limit(2)->get();
+        $producto = Family::with('productos')->first()->productos->first();
 
+        // dd($producto);
         return Inertia::render('Web/Simulador', [
- 
-            'familias' => $familias,
+            'producto' => $producto,
+            'familias' => $familias->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'ruta' => route('producto',$item->slug),
+                    'productos' => $item->productos->map(function ($item){
+                        return [
+                            'id' => $item->id,
+                            'title' => $item->title,
+                            'text' => $item->text,
+                            'order' => $item->order,
+                            'ruta' => route('producto',$item->slug),
+                            'image' => $item->gallery ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->gallery[0]) : '',
+                            'image_simulador' => $item->banner ? Storage::disk(env('DEFAULT_STORAGE_DISK'))->url($item->banner) : '',
+                        ];
+                    }), 
+                ];
+            }),
   
 
         ]);

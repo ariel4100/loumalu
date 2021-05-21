@@ -206,9 +206,9 @@
 <!--                            <button @click="duplicate(item)" class="btn btn-info btn-circle">-->
 <!--                                <i class="far fa-clone"></i>-->
 <!--                            </button>-->
-<!--                            <button @click="del(item)" class="btn btn-danger btn-circle">-->
-<!--                                <i class="fas fa-trash"></i>-->
-<!--                            </button>-->
+                           <button @click="del(item)" class="btn btn-danger btn-circle">
+                               <i class="fas fa-trash"></i>
+                           </button>
                         </td>
                     </tr>
                     </tbody>
@@ -230,6 +230,9 @@
                             <button @click="edit(row.item)" data-target="#category" class="btn btn-warning btn-circle" data-toggle="modal">
                                 <i class="far fa-edit"></i>
                             </button>
+                               <button @click="del(row.item)" class="btn btn-danger btn-circle">
+                               <i class="fas fa-trash"></i>
+                           </button>
                         </template>
                     </b-table>
                     <b-pagination
@@ -428,7 +431,7 @@
                     cancelButtonText: 'No'
                 }).then((result) => {
                     if (result.value) {
-                        this.$inertia.delete(route('adm.productos.destroy',{id: id})).then(() => {
+                        this.$inertia.get(route('adm.productos.elim',id )).then(() => {
                             // Swal.fire({
                             //     icon: 'success',
                             //     title: 'Se elimino correctamente',

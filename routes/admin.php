@@ -43,6 +43,7 @@ Route::resource('categorias', CategoryController::class);
 Route::resource('noticias', NewsController::class);
 Route::resource('descargas', DescargaController::class);
 Route::resource('productos', ProductController::class);
+Route::get('/destroy/producto/{id}', [ProductController::class, 'elim'])->name('productos.elim');
 Route::resource('usuarios', UserController::class);
 Route::resource('envios', EnviosController::class);
 Route::resource('clientes', ClientController::class);

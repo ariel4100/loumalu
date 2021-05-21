@@ -55,7 +55,7 @@ class Helpers
                         //limpio el dominio y obtengo solo el path del file
                         $path = explode('storage/', $value)[1];
                         $images[$key] = $path;
-                        $images[$key]['title'] = $value['title'];
+                        // $images[$key]['title'] = $value['title'];
 
                     }
 

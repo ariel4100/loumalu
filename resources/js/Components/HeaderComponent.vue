@@ -10,19 +10,18 @@
                         </a>
                     </div>
                     <div class="d-flex align-items-center py-2">
-                            <li class="nav-item dropdown d-block d-md-none">
-                                <a  class="border text-white text-nowrap py-1 nav-link text-uppercase"  data-toggle="modal" data-target="#login" >
-                                    simulá tu ambiente
-                                </a>
-                            </li>
+                              
+                        <a  :href="route('simulador')" class="border  text-white  text-nowrap py-1 nav-link text-uppercase"   >
+                            simulá tu ambiente
+                        </a>
 
 
                         <template v-if="$page.auth.check == false">
                             <li class="nav-item dropdown d-none d-md-block">
-                                <a  class="border text-white text-nowrap py-1 nav-link text-uppercase"  data-toggle="dropdown">
-                                    Zona de clientes
+                                <a  class="  text-white text-nowrap py-1 nav-link text-uppercase"  data-toggle="dropdown">
+                                    Zona Privada
                                 </a>
-                                <form class="dropdown-menu dropdown-menu-right login-menu bg1" style="min-width: 15rem !important;">
+                                <form class="dropdown-menu dropdown-menu-right login-menu bg1" style="min-width: 15rem !important; background-color:#0270B9;">
                                     <login-component
                                             class=""
                                     ></login-component>
@@ -30,7 +29,7 @@
                             </li>
                             <li class="nav-item dropdown d-block d-md-none">
                                 <a  class="border text-white text-nowrap py-1 nav-link text-uppercase" data-toggle="modal" data-target="#login" >
-                                    Zona de clientes
+                                    Zona Privada
                                 </a>
 <!--                                <a class="nav-link py-md-4 text-white text-uppercase bg-terciario" data-toggle="modal" data-target="#login">-->
 <!--                                    <i class="fas fa-user mr-2  text-white"></i> {{ t('Ingresar') }}-->

@@ -197,4 +197,13 @@ class ProductController extends Controller
         session()->flash('message', 'Se elimino correctamente.');
         return Redirect::route('adm.productos.index');
     }
+    public function elim($id)
+    {
+        $item = Product::find(trim($id));
+        // dd($item);
+
+        $item->delete();
+        session()->flash('message', 'Se elimino correctamente.');
+        return Redirect::back();
+    }
 }
