@@ -40,7 +40,7 @@
 <!--                </b-form-group>-->
 <!--            </b-col>-->
 
-            <b-col sm="2" md="3" class="my-1">
+            <!-- <b-col sm="2" md="3" class="my-1">
                 <b-form-group
                         label="Mostrar"
                         label-cols-sm="7"
@@ -59,7 +59,7 @@
                             :options="pageOptions"
                     ></b-form-select>
                 </b-form-group>
-            </b-col>
+            </b-col> -->
 
         </b-row>
 

@@ -7,7 +7,7 @@
             <div class="card-header">
                 <modal
                         title="Metadatos"
-                        title-button="Agregar Metadato"
+                        title-button=""
                         @ok="add()"
                         @hidden="reset()"
                 >
