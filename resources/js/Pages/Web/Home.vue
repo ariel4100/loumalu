@@ -32,7 +32,7 @@
                                         <h2 class="text-white mb-n4">{{ item.title }}</h2>
                                         <img :src="$page.appUrl+'/imagenes/flecha.png'" style="width: 370px;" alt="" class="img-fluid">
 
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
