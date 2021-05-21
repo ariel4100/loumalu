@@ -14,6 +14,18 @@
                         <P>
                             Manténgase informado de todas nuestras nuevas colecciones, noticias y eventos especiales a través de nuestra newsletter y nuestros perfiles en redes sociales.
                         </P>
+                        <!-- <div class="d-flex align-items-center">
+                            <input v-model="email" type="text" class="form-control" placeholder="Ingrese su correo electrónico*">
+                            <i class="fas fa-paper-plane fa-lg p-2 border"></i>
+                        </div> -->
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            <input v-model="email" type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Ingrese su correo electrónico">
+                            <div @click="enviar()" class="input-group-text">
+                                <i class="fas fa-paper-plane fa-lg  "></i>
+                            </div>
+                            </div>
+                        </div>
                         <!-- <img :src="$page.footer" alt="" class="img-fluid "> -->
 
                     </div>
