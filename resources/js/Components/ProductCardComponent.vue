@@ -20,7 +20,7 @@
                     </template>
                      
                 </template> -->
-                                    <img :src="item.image" :alt="item.title" class="img-fluid">
+                                    <img :src="item.image" :alt="item.title" class="d-block w-100">
 
             </div>
             <div class="">
