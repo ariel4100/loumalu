@@ -9,7 +9,7 @@
                         <!--                        <a :href="item.ruta" class="btn btn-white  btn-rounded text-secundario">VER MÁS</a>-->
                     </div>
                 </div>
-                <template v-if="item.imagef">
+                <!-- <template v-if="item.imagef">
                     <img @error="replaceByDefault($event,null)" :src="item.imagef" :alt="item.title" class="d-block w-100 dsadadas">
 
                 </template>
@@ -18,12 +18,10 @@
                         <img @error="replaceByDefault($event,null)" :src="item.image" :alt="item.title" class="d-block w-100 dsadadas">
 
                     </template>
-                    <template v-else>
-                    
-                        <img @error="replaceByDefault($event,item)" :src="$page.appUrl+'/uploads/imagenes/'+item.code+'-001.jpg'" alt="" class="d-block  ">
-                    </template>
-                </template>
-                
+                     
+                </template> -->
+                                    <img :src="item.image" :alt="item.title" class="img-fluid">
+
             </div>
             <div class="">
                 <h5 class="mt-2 font-weight-bold text-dark">{{ item.title  }}</h5>
@@ -60,10 +58,7 @@
                     <img @error="replaceByDefault($event,null)" :src="item.image" :alt="item.title" class="img-fluid">
 
                 </template>
-                <template v-else>
-                    <img @error="replaceByDefault($event,item)" :src="$page.appUrl+'/uploads/imagenes/'+item.code+'-001.jpg'" alt="" class="img-fluid">
-
-                </template>    
+                  
             </div>
             <div class=" py-3">
                 <h5 class="mt-2 font-weight-bold text-dark ">{{ item.title   }}</h5>
@@ -95,21 +90,9 @@
         },
         methods: {
               replaceByDefault(e,item) {
-                 let imageUrl = this.$page.appUrl+'/uploads/imagenes/'+item.code+'-001.JPG';
-                  if(item == null){
+                   if(item == null){
                     e.target.src = 'http://loumalu.osolelaravel.com/storage/uploads/logo/loumalu_140.png'
-                  }else{
-                    this.imageExists(imageUrl, (exists) => {
-                        // console.log(['ssssssssssssssssssss',exists])
-                        if(exists){
-                            e.target.src = this.$page.appUrl+'/uploads/imagenes/'+item.code+'-001.JPG'
-                        }else{
-                            e.target.src = 'http://loumalu.osolelaravel.com/storage/uploads/logo/loumalu_140.png'
-                        }
-                        // console.log('RESULT: url=' + imageUrl + ', exists=' + exists);
-                    });
-                      
-                  }
+                  } 
             },
             imageExists(url, callback) {
                 var img = new Image();
