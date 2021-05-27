@@ -89,12 +89,7 @@ Vue.mixin({
                     url: 'familias,subfamilias,productos,producto',
                     mostrar: 1,
                 },
-                {
-                    nombre: 'Simulador',
-                    route: 'simulador',
-                    url: 'simulador',
-                    mostrar: 1,
-                },
+              
                 {
                     nombre: 'Galeria',
                     route: 'galeria',
