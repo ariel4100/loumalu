@@ -371,6 +371,12 @@
                         submenu: [],
                         ruta: route('adm.content.index',{ section: 'contacto'}),
                     },
+                    {
+                        nombre: 'Newsletter',
+                        icon: '<i class="fas fa-fw fa-cog"></i>',
+                        submenu: [],
+                        ruta: route('adm.newsletter.index'),
+                    },
                 ],
              }
         },

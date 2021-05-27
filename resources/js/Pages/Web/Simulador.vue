@@ -18,12 +18,12 @@
                         </div>
                     </div>
                     <div class="mb-3  border-bottom"  >
-                        <div @click="restart()" class="">
+                        <a href="#exampleModal"  class="" data-toggle="modal"   >
                             <img :src="$page.appUrl+'/imagenes/camera.png'" alt="" class="img-fluid mx-auto">
-                           <h6 class="my-2">
+                           <h6 class="my-2 text-dark">
                                 DETALLE
                             </h6>
-                        </div>
+                        </a>
                     </div>
                     <div class="pb-3 border-bottom"  >
                         <div @click="restart()" class="">
@@ -48,6 +48,26 @@
                 </div>
             </div>
         </section>
+
+
+
+        <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">DETALLE</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <img :src="simulador" alt="" class="img-fluid w-100">
+      </div>
+ 
+    </div>
+  </div>
+</div>
     </web-layout>
 </template>
 
