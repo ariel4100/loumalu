@@ -17,6 +17,7 @@ class Helpers
             }elseif($file->isValid()) {
                 if (is_string($file_before) && $file_before != null){
                     Storage::disk(env('DEFAULT_STORAGE_DISK'))->delete($file_before);
+                    dd('entra aca');
                 }
 
                 $path = Storage::disk(env('DEFAULT_STORAGE_DISK','public'))->putFileAs("uploads/$route", $file,$file->getClientOriginalName());
