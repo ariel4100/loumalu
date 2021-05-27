@@ -15,10 +15,10 @@ class Helpers
                 // 0 para q la condicion no guarde, y lo deje como esta
                 return 0;
             }elseif($file->isValid()) {
-                if (is_string($file_before) && $file_before != null){
-                    Storage::disk(env('DEFAULT_STORAGE_DISK'))->delete($file_before);
-                    dd('entra aca');
-                }
+                // if (is_string($file_before) && $file_before != null){
+                //     Storage::disk(env('DEFAULT_STORAGE_DISK'))->delete($file_before);
+                //     // dd('entra aca');
+                // }
 
                 $path = Storage::disk(env('DEFAULT_STORAGE_DISK','public'))->putFileAs("uploads/$route", $file,$file->getClientOriginalName());
 //                $path = $file->storeAs("uploads/$route",$file->getClientOriginalName(),env('DEFAULT_STORAGE_DISK'));
